@@ -22,7 +22,7 @@ public class UserTest {
 
     @Test
     public void testData() {
-        System.out.print(userService.insertUser("123","001"));
+        System.out.print(userService.userLogin("123","123456"));
     }
 
 }
