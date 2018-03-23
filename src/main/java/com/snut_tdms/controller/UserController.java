@@ -5,11 +5,9 @@ import com.snut_tdms.model.po.UserRole;
 import com.snut_tdms.service.UserService;
 import com.snut_tdms.util.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
@@ -20,6 +18,7 @@ import java.util.HashMap;
  * Created by huankai on 2018/3/23.
  */
 @Controller
+@Scope("prototype")
 @RequestMapping("/user")
 public class UserController {
     private UserService userService;
@@ -31,7 +30,7 @@ public class UserController {
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     @ResponseBody
-    public String login(@RequestParam("username") String username,@RequestParam("password") String password, HttpSession session){
+    public String login(@RequestParam("username") String username, @RequestParam("password") String password, HttpSession session){
         Map<String,Object> jsonMap = new HashMap<>();
         Map<String,Object> result = userService.userLogin(username,password);
         StatusCode code = (StatusCode)result.get("StatusCode");
