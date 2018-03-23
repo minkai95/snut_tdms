@@ -2,6 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.snut_tdms.dao.UserDao">
 
+    <resultMap id="userRole" type="com.snut_tdms.model.po.UserRole">
+        <id column="username" jdbcType="VARCHAR" javaType="java.lang.String" property="user.username"/>
+        <result column="password" jdbcType="VARCHAR" javaType="java.lang.String" property="user.password"/>
+        <result column="idCard" jdbcType="VARCHAR" javaType="java.lang.String" property="user.idCard"/>
+        <result column="firstLogin" jdbcType="VARCHAR" javaType="java.lang.Integer" property="user.firstLogin"/>
+        <result column="roleId" jdbcType="VARCHAR" javaType="java.lang.String" property="role.id"/>
+        <result column="roleName" jdbcType="VARCHAR" javaType="java.lang.String" property="role.name"/>
+    </resultMap>
+    
     <insert id="insertUser" parameterType="java.util.Map">
         INSERT INTO `user`(username) VALUES(
           #{username}
@@ -10,5 +19,19 @@
           #{username},#{roleId}
         )
     </insert>
+
+    <select id="selectUserByUsername" parameterType="java.lang.String" resultMap="userRole">
+        SELECT
+          `user`.username,
+          `user`.password,
+          `user`.id_card as idCard,
+          `user`.first_login as firstLogin,
+          role.id as roleId,
+          role.name as roleName
+          FROM user_role
+          LEFT JOIN `user` ON `user`.username = user_role.user
+          LEFT JOIN role ON role.id = user_role.role
+          WHERE `user`.username = #{0}
+    </select>
 
 </mapper>
