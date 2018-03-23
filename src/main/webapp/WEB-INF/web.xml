@@ -12,10 +12,6 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>classpath:spring-mybatis.xml</param-value>
     </context-param>
-    <context-param>
-        <param-name/>
-        <param-value/>
-    </context-param>
 
     <!-- 注册ServletContext监听器，创建容器对象，并且将ApplicationContext对象放到Application域中 -->
     <listener>
@@ -38,6 +34,16 @@
     </filter>
     <filter-mapping>
         <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- 跨域过滤器 -->
+    <filter>
+        <filter-name>crossFilter</filter-name>
+        <filter-class>com.snut_tdms.interceptor.CrossFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>crossFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
