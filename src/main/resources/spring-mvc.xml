@@ -32,7 +32,6 @@
             <mvc:exclude-mapping path="/user/sessionError"/>
             <mvc:exclude-mapping path="/user/forgetPassWord"/>
             <mvc:exclude-mapping path="/user/logout"/>
-            <mvc:exclude-mapping path="/user/login/**"/>
             <!--Session失效拦截-->
             <bean class="com.snut_tdms.interceptor.SessionInterceptor"/>
         </mvc:interceptor>

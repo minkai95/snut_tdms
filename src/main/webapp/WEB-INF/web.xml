@@ -37,16 +37,6 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-    <!-- 跨域过滤器 -->
-    <filter>
-        <filter-name>crossFilter</filter-name>
-        <filter-class>com.snut_tdms.interceptor.CrossFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>crossFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
     <!-- spring mvc servlet-->
     <servlet>
         <servlet-name>SpringMVC</servlet-name>

@@ -18,7 +18,6 @@ import java.util.HashMap;
  * Created by huankai on 2018/3/23.
  */
 @Controller
-@Scope("prototype")
 @RequestMapping("/user")
 public class UserController {
     private UserService userService;
