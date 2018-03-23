@@ -1,0 +1,79 @@
+.wrapper{
+    width: 100%;
+}
+header{
+    display: flex;
+    width: 100%;
+    height: 80px;
+    background-color: #3894C7;
+}
+.headerLeft{
+    min-width: 200px;
+    height: 80px;
+    line-height: 80px;
+    text-indent: 40px;
+    font-size: 20px;
+    font-family: "Microsoft Yahei";
+    color: #D0ECF0;
+}
+.headerRight{
+    flex: 10;
+    height: 80px;
+    line-height: 80px;
+    font-size: 14px;
+    font-family: "Microsoft Yahei";
+}
+.welcome{
+    float: right;
+    height: 80px;
+    margin-right: 40px;
+    line-height: 80px;
+    font-size: 14px;
+    font-family: "Microsoft Yahei";
+    color: #D0ECF0;
+}
+.middle{
+    width: 100%;
+    height: 556px;
+    display: flex;
+}
+.leftContent{
+    min-width: 180px;
+    height: 556px;
+    flex: 2;
+    background-color: #4F575A;
+}
+.rightContent{
+    flex: 13;
+    height: 556px;
+    background-color: #ECEFF4;
+    word-break: break-all;
+}
+.aside li a{
+    display: block;
+    width: 100%;
+    height: 45px;
+    line-height: 45px;
+    text-decoration: none;
+    text-indent: 15px;
+    color: #BABCBC;
+    font-size: 16px;
+    font-family: "Microsoft Yahei";
+}
+.aside li a:hover{
+    background-color: #5D6A73;
+    cursor: pointer;
+}
+.asideAddClass{
+    color: #E6E4E7 !important;
+    background-color: #5D6A73;
+}
+.aside li a i{
+    margin-right: 10px;
+}
+
+.mainFrame{
+    width: 100%;
+    height: 556px;
+    border: none;
+}
