@@ -1,7 +1,7 @@
 .existPublicDataList{
     width: 98%;
     height: 568px;
-    margin: 50px auto 0;
+    margin: 40px auto 0;
 }
 
 .dataClass{
@@ -9,7 +9,7 @@
     min-width: 80px;
     height:40px;
     border-radius: 50% 0 0 50%;
-    box-shadow: 4px 3px 5px #ccc;
+    box-shadow: 5px 5px 6px #636363;
     margin: 30px 50px 0 0;
 }
 .icon{
@@ -51,12 +51,31 @@
      background-color: #00B9B3;
  }
 .bgcTwo{
-    background-color: #31BA86;
+    background-color: #339900;
 }
 .bgcThree{
     background-color: #FCA726;
 }
+.bgcApplying{
+    background-color: #ccc;
+    border: 2px dashed #989898;
+}
 .applyDataName{
     width: 440px;
     margin-left: 17px;
+}
+.applying{
+    border-top: 2px solid #ccc;
+    position: absolute;
+    top: 400px;
+    width: 97%;
+    border-top: 2px dashed #ccc;
+}
+
+.applyingDataClass{
+    float: left;
+    min-width: 80px;
+    height:40px;
+    border-radius: 50% 0 0 50%;
+    margin: 30px 50px 0 0;
 }

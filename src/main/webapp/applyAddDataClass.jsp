@@ -10,60 +10,133 @@
             <p class="publicDataTitle">教师公共资料类目</p>
             <div class="teacherUpload">
                 <p class="uploadTitle">管理学院已有公共资料类目</p>
-                <a src="javaScript: void(0)" class="upload" data-toggle="modal" data-target="#myModal"><i class=" icon-plus-sign"></i>申请新增公共资料类目</a>
+                <a href="javaScript: void(0)" class="upload" data-toggle="modal" data-target="#myModal"><i class=" icon-plus-sign"></i>申请新增公共资料类目</a>
             </div>
         </div>
         <div class="existPublicDataList">
             <div class="dataClass">
-                <div class="icon bgcTwo">
-                    <i class="icon-circle-blank iconLogo"></i>
+                <div class="icon">
+                    <i class="icon-circle iconLogo"></i>
                 </div>
-                <div class="dataClassCont bgcTwo">
+                <div class="dataClassCont">
                     <div class="className">试卷</div>
                 </div>
             </div>
 
             <div class="dataClass">
-                <div class="icon bgcOne">
-                    <i class="icon-circle-blank iconLogo"></i>
+                <div class="icon">
+                    <i class="icon-circle iconLogo"></i>
                 </div>
-                <div class="dataClassCont bgcOne">
+                <div class="dataClassCont">
                     <div class="className">试卷试卷试卷试卷</div>
                 </div>
              </div>
             <div class="dataClass">
-                <div class="icon bgcThree">
-                    <i class="icon-circle-blank iconLogo"></i>
+                <div class="icon">
+                    <i class="icon-circle iconLogo"></i>
                 </div>
-                <div class="dataClassCont bgcThree">
+                <div class="dataClassCont">
                     <div class="className">论文</div>
                 </div>
             </div>
 
             <div class="dataClass">
-                <div class="icon bgcOne">
-                    <i class="icon-circle-blank iconLogo"></i>
+                <div class="icon">
+                    <i class="icon-circle iconLogo"></i>
                 </div>
-                <div class="dataClassCont bgcOne">
+                <div class="dataClassCont">
                     <div class="className">试卷试卷试卷试卷</div>
                 </div>
             </div>
 
             <div class="dataClass">
-                <div class="icon bgcOne">
-                    <i class="icon-circle-blank iconLogo"></i>
+                <div class="icon">
+                    <i class="icon-circle iconLogo"></i>
                 </div>
-                <div class="dataClassCont bgcOne">
+                <div class="dataClassCont">
                     <div class="className">试卷试卷试卷试卷</div>
                 </div>
             </div>
 
             <div class="dataClass">
-                <div class="icon bgcOne">
-                    <i class="icon-circle-blank iconLogo"></i>
+                <div class="icon">
+                    <i class="icon-circle iconLogo"></i>
                 </div>
-                <div class="dataClassCont bgcOne">
+                <div class="dataClassCont">
                     <div class="className">试卷试卷试卷试卷</div>
+                </div>
+            </div>
+
+            <div class="dataClass">
+                <div class="icon">
+                    <i class="icon-circle iconLogo"></i>
+                </div>
+                <div class="dataClassCont">
+                    <div class="className">试卷试卷试卷试卷</div>
+                </div>
+            </div>
+
+            <div class="dataClass">
+                <div class="icon">
+                    <i class="icon-circle iconLogo"></i>
+                </div>
+                <div class="dataClassCont">
+                    <div class="className">试卷试卷试卷试卷</div>
+                </div>
+            </div>
+
+            <div class="dataClass">
+                <div class="icon">
+                    <i class="icon-circle iconLogo"></i>
+                </div>
+                <div class="dataClassCont">
+                    <div class="className">试卷试卷试卷试卷</div>
+                </div>
+            </div>
+
+            <div class="dataClass">
+                <div class="icon">
+                    <i class="icon-circle iconLogo"></i>
+                </div>
+                <div class="dataClassCont">
+                    <div class="className">试卷试卷试卷试卷</div>
+                </div>
+            </div>
+
+            <div class="dataClass">
+                <div class="icon">
+                    <i class="icon-circle iconLogo"></i>
+                </div>
+                <div class="dataClassCont">
+                    <div class="className">试卷试卷试卷试卷</div>
+                </div>
+            </div>
+
+            <div class="dataClass">
+                <div class="icon">
+                    <i class="icon-circle iconLogo"></i>
+                </div>
+                <div class="dataClassCont">
+                    <div class="className">试卷试卷试卷试卷</div>
+                </div>
+            </div>
+            <div class="applying">
+                <p class="uploadTitle">待审核类目</p>
+                <div class="applyingDataClass">
+                    <div class="icon">
+                        <i class="icon-circle iconLogo"></i>
+                    </div>
+                    <div class="dataClassCont">
+                        <div class="className">试卷试卷试卷试卷</div>
+                    </div>
+                </div>
+                <div class="applyingDataClass">
+                    <div class="icon">
+                        <i class="icon-circle iconLogo"></i>
+                    </div>
+                    <div class="dataClassCont">
+                        <div class="className">试卷试卷试卷试卷</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -88,5 +161,15 @@
             </div>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            $('.dataClass:nth-child(3n-1)').addClass('bgcOne');
+            $('.dataClass:nth-child(3n+1)').addClass('bgcTwo');
+            $('.dataClass:nth-child(3n)').addClass('bgcThree');
+
+            $('.applyingDataClass').addClass('bgcApplying');
+        })
+    </script>
 </body>
 </html>
