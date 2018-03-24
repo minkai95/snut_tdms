@@ -22,6 +22,32 @@
         <result column="departmentCode" jdbcType="VARCHAR" javaType="java.lang.String" property="department.code"/>
         <result column="departmentName" jdbcType="VARCHAR" javaType="java.lang.String" property="department.name"/>
     </resultMap>
+    <resultMap id="systemNotice" type="com.snut_tdms.model.po.SystemNotice">
+        <id column="id" jdbcType="VARCHAR" javaType="java.lang.String" property="id"/>
+        <result column="name" jdbcType="VARCHAR" javaType="java.lang.String" property="name"/>
+        <result column="content" jdbcType="VARCHAR" javaType="java.lang.String" property="content"/>
+        <result column="date" jdbcType="VARCHAR" javaType="java.sql.Timestamp" property="date"/>
+        <result column="username" jdbcType="VARCHAR" javaType="java.lang.String" property="user.username"/>
+        <result column="password" jdbcType="VARCHAR" javaType="java.lang.String" property="user.password"/>
+        <result column="idCard" jdbcType="VARCHAR" javaType="java.lang.String" property="user.idCard"/>
+        <result column="firstLogin" jdbcType="VARCHAR" javaType="java.lang.Integer" property="user.firstLogin"/>
+        <result column="idCard" jdbcType="VARCHAR" javaType="java.lang.String" property="user.idCard"/>
+        <result column="roleId" jdbcType="VARCHAR" javaType="java.lang.String" property="role.id"/>
+        <result column="roleName" jdbcType="VARCHAR" javaType="java.lang.String" property="role.name"/>
+    </resultMap>
+    <resultMap id="dataClass" type="com.snut_tdms.model.po.DataClass">
+        <id column="id" jdbcType="VARCHAR" javaType="java.lang.String" property="id"/>
+        <result column="name" jdbcType="VARCHAR" javaType="java.lang.String" property="name"/>
+        <result column="roleId" jdbcType="VARCHAR" javaType="java.lang.String" property="role.id"/>
+        <result column="roleName" jdbcType="VARCHAR" javaType="java.lang.String" property="role.name"/>
+        <result column="username" jdbcType="VARCHAR" javaType="java.lang.String" property="user.username"/>
+        <result column="password" jdbcType="VARCHAR" javaType="java.lang.String" property="user.password"/>
+        <result column="idCard" jdbcType="VARCHAR" javaType="java.lang.String" property="user.idCard"/>
+        <result column="firstLogin" jdbcType="VARCHAR" javaType="java.lang.Integer" property="user.firstLogin"/>
+        <result column="departmentCode" jdbcType="VARCHAR" javaType="java.lang.String" property="department.code"/>
+        <result column="departmentName" jdbcType="VARCHAR" javaType="java.lang.String" property="department.name"/>
+        <result column="flag" jdbcType="VARCHAR" javaType="java.lang.Integer" property="flag"/>
+    </resultMap>
 
     <insert id="insertLog" parameterType="com.snut_tdms.model.po.Log">
         INSERT INTO log VALUES (
@@ -31,6 +57,16 @@
           #{time},
           #{operationUser.username},
           #{operatedUser.username}
+        )
+    </insert>
+    <insert id="insertDataClass" parameterType="com.snut_tdms.model.po.DataClass">
+        INSERT INTO data_class VALUES (
+          #{id},
+          #{name},
+          #{role.id},
+          #{user.username},
+          #{department.code},
+          #{flag}
         )
     </insert>
 
@@ -78,6 +114,52 @@
           LEFT JOIN `user` ON `user`.username = user_info.user
           LEFT JOIN department ON department.code = user_info.department
           WHERE `user`.username = #{0}
+    </select>
+    <select id="selectSystemNotice" parameterType="java.util.Map" resultMap="systemNotice">
+         SELECT
+            system_notice.id,
+            system_notice.`name`,
+            content,
+            `date`,
+            user1.username as username,
+            user1.password,
+            user1.id_card as idCard,
+            user1.first_login as firstLogin,
+            role.id as roleId,
+            role.name as roleName
+         FROM system_notice
+         LEFT JOIN `user` as user1 ON user1.username = system_notice.user
+         LEFT JOIN role ON role.id = system_notice.role
+         WHERE
+            (SELECT department.code FROM user_info
+            LEFT JOIN department ON department.code = user_info.department
+            LEFT JOIN `user` as user2 ON user_info.user = user2.username
+            WHERE user2.username = user1.username) = #{departmentCode}
+         <if test="roleId != null and roleId!= ''">
+            AND role.id = #{roleId}
+         </if>
+    </select>
+    <select id="selectDataClass" parameterType="java.util.Map" resultMap="dataClass">
+        SELECT
+          data_class.id,
+          data_class.`name`,
+          role.id as roleId,
+          role.name as roleName,
+          `user`.username,
+          `user`.password,
+          `user`.id_card as idCard,
+          `user`.first_login as firstLogin,
+          department.code as departmentCode,
+          department.name as departmentName,
+          data_class.flag
+          FROM data_class
+          LEFT JOIN role ON data_class.role = role.id
+          LEFT JOIN `user` ON data_class.`user` = `user`.username
+          LEFT JOIN department ON data_class.department = department.code
+        WHERE department.code = #{departmentCode} AND data_class.flag != '2'
+        <if test="roleId != null and roleId!= ''">
+            AND role.id = #{roleId}
+        </if>
     </select>
 
 </mapper>

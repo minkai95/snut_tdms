@@ -1,16 +1,15 @@
 package com.snut_tdms.service;
 
 import com.snut_tdms.dao.UserDao;
-import com.snut_tdms.model.po.Log;
-import com.snut_tdms.model.po.User;
-import com.snut_tdms.model.po.UserInfo;
-import com.snut_tdms.model.po.UserRole;
+import com.snut_tdms.model.po.*;
 import com.snut_tdms.util.StatusCode;
 import com.snut_tdms.util.SystemUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -40,6 +39,45 @@ public class UserService {
         }else{
             return StatusCode.INSERT_ERROR;
         }
+    }
+
+    /**
+     * 新增资料类型(申请/直接添加)
+     * @param dataClass
+     * @param departmentCode
+     * @param operationUser
+     * @return 状态码
+     */
+    public StatusCode insertDataClass(DataClass dataClass,String departmentCode,User operationUser){
+        List<DataClass> dataClassList = selectDataClass(departmentCode,"");
+        List<String> list = new ArrayList<>();
+        for (DataClass d: dataClassList) {
+            if(d!=null){
+                list.add(d.getName());
+            }
+        }
+        if(!list.contains(dataClass.getName())) {
+            if (userDao.insertDataClass(dataClass) > 0) {
+                Map<String,Object> map = new HashMap<>();
+                map.put("action","insert");
+                map.put("operationUser",operationUser);
+                map.put("operatedUser",dataClass.getUser());
+                if(dataClass.getFlag()==0){
+                    map.put("content","用户申请新增类目！");
+                    insertLog(map);
+                    return StatusCode.APPLY_SUCCESS;
+                }else if (dataClass.getFlag()==1){
+                    map.put("content","管理员新增了一条类目！");
+                    insertLog(map);
+                    return StatusCode.INSERT_SUCCESS;
+                }
+            } else {
+                return StatusCode.APPLY_ERROR;
+            }
+        }else{
+            return StatusCode.DATA_CLASS_ERROR;
+        }
+        return StatusCode.INSERT_ERROR;
     }
 
     /**
@@ -117,6 +155,32 @@ public class UserService {
             map.put("StatusCode",StatusCode.NOT_USER);
         }
         return map;
+    }
+
+    /**
+     * 查询本院公告(roleId为空表示查看所有公告)
+     * @param departmentCode
+     * @param roleId
+     * @return List
+     */
+    public List<SystemNotice> selectSystemNotice(String departmentCode,String roleId){
+        Map<String,Object> map = new HashMap<>();
+        map.put("departmentCode",departmentCode);
+        map.put("roleId",roleId);
+        return userDao.selectSystemNotice(map);
+    }
+
+    /**
+     * 查询本院公共资料类型,如果roleId为空则查询本院所有公共资料类型
+     * @param departmentCode
+     * @param roleId
+     * @return List
+     */
+    public List<DataClass> selectDataClass(String departmentCode,String roleId){
+        Map<String,Object> map = new HashMap<>();
+        map.put("departmentCode",departmentCode);
+        map.put("roleId",roleId);
+        return userDao.selectDataClass(map);
     }
 
     /**
