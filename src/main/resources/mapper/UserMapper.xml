@@ -10,15 +10,44 @@
         <result column="roleId" jdbcType="VARCHAR" javaType="java.lang.String" property="role.id"/>
         <result column="roleName" jdbcType="VARCHAR" javaType="java.lang.String" property="role.name"/>
     </resultMap>
-    
-    <insert id="insertUser" parameterType="java.util.Map">
-        INSERT INTO `user`(username) VALUES(
-          #{username}
-        );
-        INSERT INTO `user_role` VALUES (
-          #{username},#{roleId}
+    <resultMap id="userInfo" type="com.snut_tdms.model.po.UserInfo">
+        <id column="username" jdbcType="VARCHAR" javaType="java.lang.String" property="user.username"/>
+        <result column="password" jdbcType="VARCHAR" javaType="java.lang.String" property="user.password"/>
+        <result column="idCard" jdbcType="VARCHAR" javaType="java.lang.String" property="user.idCard"/>
+        <result column="firstLogin" jdbcType="VARCHAR" javaType="java.lang.Integer" property="user.firstLogin"/>
+        <result column="name" jdbcType="VARCHAR" javaType="java.lang.String" property="name"/>
+        <result column="sex" jdbcType="VARCHAR" javaType="java.lang.String" property="sex"/>
+        <result column="phone" jdbcType="VARCHAR" javaType="java.lang.String" property="phone"/>
+        <result column="email" jdbcType="VARCHAR" javaType="java.lang.String" property="email"/>
+        <result column="departmentCode" jdbcType="VARCHAR" javaType="java.lang.String" property="department.code"/>
+        <result column="departmentName" jdbcType="VARCHAR" javaType="java.lang.String" property="department.name"/>
+    </resultMap>
+
+    <insert id="insertLog" parameterType="com.snut_tdms.model.po.Log">
+        INSERT INTO log VALUES (
+          #{id},
+          #{content},
+          #{action},
+          #{time},
+          #{operationUser.username},
+          #{operatedUser.username}
         )
     </insert>
+
+    <update id="updatePassword" parameterType="com.snut_tdms.model.po.User">
+        UPDATE `user` SET
+          password = #{password},
+          id_card = #{idCard}
+        WHERE username = #{username}
+    </update>
+    <update id="updateUserInfo" parameterType="com.snut_tdms.model.po.UserInfo">
+        UPDATE user_info SET
+          `name` = #{name},
+          sex = #{sex},
+          phone = #{phone},
+          email = #{email}
+        WHERE user_info.`user` = #{user.username}
+    </update>
 
     <select id="selectUserByUsername" parameterType="java.lang.String" resultMap="userRole">
         SELECT
@@ -31,6 +60,23 @@
           FROM user_role
           LEFT JOIN `user` ON `user`.username = user_role.user
           LEFT JOIN role ON role.id = user_role.role
+          WHERE `user`.username = #{0}
+    </select>
+    <select id="selectUserInfoByUsername" parameterType="java.lang.String" resultMap="userInfo">
+        SELECT
+          `user`.username,
+          `user`.password,
+          `user`.id_card as idCard,
+          `user`.first_login as firstLogin,
+          user_info.`name`,
+          sex,
+          phone,
+          email,
+          department.code as departmentCode,
+          department.`name` as departmentName
+          FROM user_info
+          LEFT JOIN `user` ON `user`.username = user_info.user
+          LEFT JOIN department ON department.code = user_info.department
           WHERE `user`.username = #{0}
     </select>
 

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50549
 File Encoding         : 65001
 
-Date: 2018-03-22 23:02:03
+Date: 2018-03-24 13:18:43
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -37,6 +37,10 @@ CREATE TABLE `data` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
+-- Records of data
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for data_class
 -- ----------------------------
 DROP TABLE IF EXISTS `data_class`;
@@ -57,6 +61,10 @@ CREATE TABLE `data_class` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
+-- Records of data_class
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for department
 -- ----------------------------
 DROP TABLE IF EXISTS `department`;
@@ -67,6 +75,10 @@ CREATE TABLE `department` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
+-- Records of department
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for log
 -- ----------------------------
 DROP TABLE IF EXISTS `log`;
@@ -75,11 +87,18 @@ CREATE TABLE `log` (
   `content` varchar(255) DEFAULT NULL,
   `action` varchar(255) DEFAULT NULL,
   `time` datetime DEFAULT NULL,
-  `user` varchar(255) DEFAULT NULL,
+  `operation_user` varchar(255) DEFAULT NULL,
+  `operated_user` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `user` (`user`),
-  CONSTRAINT `log_ibfk_1` FOREIGN KEY (`user`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `log_ibfk_1` (`operation_user`),
+  KEY `operated_user` (`operated_user`),
+  CONSTRAINT `log_ibfk_2` FOREIGN KEY (`operated_user`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `log_ibfk_1` FOREIGN KEY (`operation_user`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of log
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for role
@@ -92,6 +111,37 @@ CREATE TABLE `role` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
+-- Records of role
+-- ----------------------------
+INSERT INTO `role` VALUES ('001', '超级管理员');
+INSERT INTO `role` VALUES ('002', '管理员');
+INSERT INTO `role` VALUES ('003', '学办');
+INSERT INTO `role` VALUES ('004', '教务处');
+INSERT INTO `role` VALUES ('005', '教师');
+
+-- ----------------------------
+-- Table structure for system_notice
+-- ----------------------------
+DROP TABLE IF EXISTS `system_notice`;
+CREATE TABLE `system_notice` (
+  `id` varchar(255) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `content` varchar(255) DEFAULT NULL,
+  `date` datetime DEFAULT NULL,
+  `user` varchar(255) DEFAULT NULL,
+  `role` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `role` (`role`),
+  KEY `system_notice_ibfk_1` (`user`),
+  CONSTRAINT `system_notice_ibfk_1` FOREIGN KEY (`user`) REFERENCES `user_role` (`user`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `system_notice_ibfk_2` FOREIGN KEY (`role`) REFERENCES `user_role` (`role`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of system_notice
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for user
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
@@ -102,6 +152,11 @@ CREATE TABLE `user` (
   `first_login` int(2) DEFAULT '0' COMMENT '0表示第一次登陆',
   PRIMARY KEY (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of user
+-- ----------------------------
+INSERT INTO `user` VALUES ('123', '123456', null, '0');
 
 -- ----------------------------
 -- Table structure for user_info
@@ -121,6 +176,10 @@ CREATE TABLE `user_info` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
+-- Records of user_info
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for user_role
 -- ----------------------------
 DROP TABLE IF EXISTS `user_role`;
@@ -132,6 +191,11 @@ CREATE TABLE `user_role` (
   CONSTRAINT `user_role_ibfk_1` FOREIGN KEY (`user`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `user_role_ibfk_2` FOREIGN KEY (`role`) REFERENCES `role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of user_role
+-- ----------------------------
+INSERT INTO `user_role` VALUES ('123', '001');
 
 -- ----------------------------
 -- Procedure structure for aa
