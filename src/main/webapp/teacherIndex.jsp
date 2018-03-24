@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>管理员首页</title>
+    <title>教师首页</title>
 </head>
 <body>
 <div class="wrapper">
@@ -18,8 +18,8 @@
             <ul class="aside">
                 <li><a href="teacherCurrent.jsp" target="mainFrame" class="asideAddClass"><i class="icon-home"></i>运行首页</a></li>
                 <li><a href="teacherPublicData.jsp" target="mainFrame"><i class="icon-folder-open"></i>公共资料</a></li>
-                <li><a href="#"><i class="icon-briefcase"></i>私有资料</a></li>
-                <li><a href="#"><i class="icon-plus-sign"></i>申请类目</a></li>
+                <li><a href="teacherPersonData.jsp" target="mainFrame"><i class="icon-briefcase"></i>私有资料</a></li>
+                <li><a href="applyAddDataClass.jsp" target="mainFrame"><i class="icon-plus-sign"></i>申请类目</a></li>
                 <li><a href="#"><i class="icon-user"></i>个人中心</a></li>
                 <li><a href="#"><i class="icon-screenshot"></i>资料追踪</a></li>
             </ul>

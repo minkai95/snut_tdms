@@ -1,0 +1,62 @@
+.existPublicDataList{
+    width: 98%;
+    height: 568px;
+    margin: 50px auto 0;
+}
+
+.dataClass{
+    float: left;
+    min-width: 80px;
+    height:40px;
+    border-radius: 50% 0 0 50%;
+    box-shadow: 4px 3px 5px #ccc;
+    margin: 30px 50px 0 0;
+}
+.icon{
+    float: left;
+    width: 40px;
+    height: 40px;
+    border-radius: 50% 0 0 50%;
+    border-right: none;
+}
+.dataClassCont{
+    display: inline-block;
+    min-width: 80px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    vertical-align: top;
+    margin-left: -5px;
+    border-left: none;
+    color: #fff;
+    font-size: 16px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.className{
+    min-width: 80px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    padding: 0 20px 0 10px;
+}
+
+.iconLogo{
+    display: inline-block;
+    margin: 13px;
+    padding-left: 3px;
+    color: #fff;
+}
+.bgcOne{
+     background-color: #00B9B3;
+ }
+.bgcTwo{
+    background-color: #31BA86;
+}
+.bgcThree{
+    background-color: #FCA726;
+}
+.applyDataName{
+    width: 440px;
+    margin-left: 17px;
+}
