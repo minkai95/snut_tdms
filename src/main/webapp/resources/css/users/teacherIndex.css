@@ -4,6 +4,7 @@
 header{
     display: flex;
     width: 100%;
+    min-width: 1040px;
     height: 80px;
     background-color: #3894C7;
 }
@@ -45,6 +46,7 @@ header{
 }
 .rightContent{
     flex: 13;
+    min-width: 860px;
     height: 556px;
     background-color: #ECEFF4;
     word-break: break-all;

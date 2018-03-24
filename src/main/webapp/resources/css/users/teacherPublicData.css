@@ -1,0 +1,23 @@
+.teacherCurrentWrapper{
+    width: 98%;
+    height: 568px;
+    margin: 0 auto;
+}
+.publicDataTitle{
+    margin: 10px 0;
+    padding: 0 0 10px;
+    font-size: 16px;
+    font-family: "Microsoft Yahei";
+    border-bottom: 2px dashed #ccc;
+}
+.uploadTitle{
+    float: left;
+    font-size: 14px;
+    font-family: "Microsoft Yahei";
+    color: #484848;
+}
+.upload{
+    display: block;
+    float: right;
+    margin-right: 40px;
+}
