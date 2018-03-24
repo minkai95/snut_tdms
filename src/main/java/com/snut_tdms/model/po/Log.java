@@ -10,17 +10,19 @@ public class Log {
     private String content;
     private String action;
     private Timestamp time;
-    private User user;
+    private User operationUser;
+    private User operatedUser;
 
     public Log() {
     }
 
-    public Log(String id, String content, String action, Timestamp time, User user) {
+    public Log(String id, String content, String action, Timestamp time, User operationUser, User operatedUser) {
         this.id = id;
         this.content = content;
         this.action = action;
         this.time = time;
-        this.user = user;
+        this.operationUser = operationUser;
+        this.operatedUser = operatedUser;
     }
 
     public String getId() {
@@ -55,12 +57,20 @@ public class Log {
         this.time = time;
     }
 
-    public User getUser() {
-        return user;
+    public User getOperationUser() {
+        return operationUser;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setOperationUser(User operationUser) {
+        this.operationUser = operationUser;
+    }
+
+    public User getOperatedUser() {
+        return operatedUser;
+    }
+
+    public void setOperatedUser(User operatedUser) {
+        this.operatedUser = operatedUser;
     }
 
     @Override
@@ -70,7 +80,8 @@ public class Log {
                 ", content='" + content + '\'' +
                 ", action='" + action + '\'' +
                 ", time=" + time +
-                ", user=" + user +
+                ", operationUser=" + operationUser +
+                ", operatedUser=" + operatedUser +
                 '}';
     }
 
@@ -85,7 +96,8 @@ public class Log {
         if (content != null ? !content.equals(log.content) : log.content != null) return false;
         if (action != null ? !action.equals(log.action) : log.action != null) return false;
         if (time != null ? !time.equals(log.time) : log.time != null) return false;
-        return user != null ? user.equals(log.user) : log.user == null;
+        if (operationUser != null ? !operationUser.equals(log.operationUser) : log.operationUser != null) return false;
+        return operatedUser != null ? operatedUser.equals(log.operatedUser) : log.operatedUser == null;
     }
 
     @Override
@@ -94,7 +106,8 @@ public class Log {
         result = 31 * result + (content != null ? content.hashCode() : 0);
         result = 31 * result + (action != null ? action.hashCode() : 0);
         result = 31 * result + (time != null ? time.hashCode() : 0);
-        result = 31 * result + (user != null ? user.hashCode() : 0);
+        result = 31 * result + (operationUser != null ? operationUser.hashCode() : 0);
+        result = 31 * result + (operatedUser != null ? operatedUser.hashCode() : 0);
         return result;
     }
 }

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50549
 File Encoding         : 65001
 
-Date: 2018-03-22 23:02:03
+Date: 2018-03-24 19:18:55
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -46,7 +46,7 @@ CREATE TABLE `data_class` (
   `role` varchar(255) DEFAULT NULL,
   `user` varchar(255) DEFAULT NULL,
   `department` varchar(255) DEFAULT NULL,
-  `flag` int(255) DEFAULT NULL COMMENT '0表示为公共库，1表示私人库',
+  `flag` int(255) DEFAULT NULL COMMENT '0表示为公共类型未审核,1表示公共类型已审核,2表示私人类型',
   PRIMARY KEY (`id`),
   KEY `role` (`role`),
   KEY `data_class_ibfk_2` (`user`),
@@ -75,10 +75,13 @@ CREATE TABLE `log` (
   `content` varchar(255) DEFAULT NULL,
   `action` varchar(255) DEFAULT NULL,
   `time` datetime DEFAULT NULL,
-  `user` varchar(255) DEFAULT NULL,
+  `operation_user` varchar(255) DEFAULT NULL,
+  `operated_user` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `user` (`user`),
-  CONSTRAINT `log_ibfk_1` FOREIGN KEY (`user`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `log_ibfk_1` (`operation_user`),
+  KEY `operated_user` (`operated_user`),
+  CONSTRAINT `log_ibfk_2` FOREIGN KEY (`operated_user`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `log_ibfk_1` FOREIGN KEY (`operation_user`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -89,6 +92,24 @@ CREATE TABLE `role` (
   `id` varchar(255) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for system_notice
+-- ----------------------------
+DROP TABLE IF EXISTS `system_notice`;
+CREATE TABLE `system_notice` (
+  `id` varchar(255) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `content` varchar(255) DEFAULT NULL,
+  `date` datetime DEFAULT NULL,
+  `user` varchar(255) DEFAULT NULL,
+  `role` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `system_notice_ibfk_1` (`user`),
+  KEY `system_notice_ibfk_2` (`role`),
+  CONSTRAINT `system_notice_ibfk_1` FOREIGN KEY (`user`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `system_notice_ibfk_2` FOREIGN KEY (`role`) REFERENCES `role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
