@@ -14,6 +14,8 @@
 <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/users/teacherIndex.css"/>
 <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/users/teacherCurrent.css"/>
 <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/users/teacherPublicData.css"/>
+<link rel="stylesheet" type="text/css" href="${ctx}/resources/css/users/applyAddDataClass.css"/>
 <%-- 引入JS --%>
 <script type="text/javascript" src="${ctx}/resources/js/jquery/jquery-3.1.1.js"></script>
+<script type="text/javascript" src="${ctx}/resources/js/bootstrap/bootstrap.js"></script>
 
