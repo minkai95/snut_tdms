@@ -21,6 +21,8 @@ public interface UserDao {
 
     int updateUserInfo(UserInfo userInfo);
 
+    int insertData(Data data);
+
     UserRole selectUserByUsername(String username);
 
     UserInfo selectUserInfoByUsername(String username);

@@ -27,9 +27,9 @@ public class UserTest {
         User user =new User("123","1111","11",0);
         Department department = new Department("001","管理学院");
         UserInfo userInfo = new UserInfo(user,"张三","男","155999999","sadsa@qq.com",department);
-        DataClass dataClass = new DataClass("121","资料21",new Role("001","教师"),user,department,1);
+        DataClass dataClass = new DataClass("1218","资料81",new Role("001","教师"),user,department,1);
 
-        System.out.print(userService.insertDataClass(dataClass,"001",user));
+        System.out.print(userService.selectDataClass("001","","(0)","111"));
     }
 
 }

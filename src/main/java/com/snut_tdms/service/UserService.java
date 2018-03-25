@@ -2,16 +2,15 @@ package com.snut_tdms.service;
 
 import com.snut_tdms.dao.UserDao;
 import com.snut_tdms.model.po.*;
+import com.snut_tdms.util.FileUploadUtil;
 import com.snut_tdms.util.StatusCode;
 import com.snut_tdms.util.SystemUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
 
 @Service("userService")
 public class UserService {
@@ -34,10 +33,69 @@ public class UserService {
         Timestamp time = new Timestamp(System.currentTimeMillis());
         User operationUser = (User) map.get("operationUser");
         User operatedUser = (User) map.get("operatedUser");
-        if(userDao.insertLog(new Log(id,content,action,time,operationUser,operatedUser))>0){
+        String description = null;
+        if(map.containsKey("description")) {
+            description = (String) map.get("description");
+        }
+        if(userDao.insertLog(new Log(id,content,action,time,operationUser,operatedUser,description))>0){
             return StatusCode.INSERT_SUCCESS;
         }else{
             return StatusCode.INSERT_ERROR;
+        }
+    }
+
+    /**
+     * 上传文件
+     * @param request 请求数据
+     * @return 状态码
+     */
+    public StatusCode uploadFile(HttpServletRequest request){
+        String id = SystemUtils.getUUID();
+        User user = (User)request.getSession().getAttribute("user");
+        Data data = new Data();
+        data.setId(id);
+        data.setUser(userDao.selectUserByUsername(user.getUsername()).getUser());
+        data.setSubmitTime(new Timestamp(System.currentTimeMillis()));
+        data.setFlag(0);
+        String dataClassId = "";
+        //MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
+        Enumeration<String> enumeration = request.getParameterNames();  //获取请求参数的名称
+        while (enumeration.hasMoreElements()) {
+            String parameterName = enumeration.nextElement();   //获取请求参数的值
+            switch (parameterName) {
+                case "content":
+                    data.setContent(request.getParameter(parameterName));
+                    break;
+                case "dataClassId":
+                    dataClassId = request.getParameter(parameterName);
+                    break;
+            }
+        }
+        DataClass dataClass = selectDataClass(
+                userDao.selectUserInfoByUsername(user.getUsername()).getDepartment().getCode(),
+                userDao.selectUserByUsername(user.getUsername()).getRole().getId(),
+                "(0,1)",dataClassId).get(0);
+        data.setDataClass(dataClass);
+        Map<String,Object> resultMap = FileUploadUtil.upload(request);
+        String src = (String)resultMap.get("src");
+        StatusCode message = (StatusCode)resultMap.get("message");
+        String filename = src == null ? null : src.substring(src.lastIndexOf("\\") + 1);
+        data.setSrc(src);
+        data.setFileName(filename);
+        if(message.getnCode().equals(StatusCode.FILE_UPLOAD_SUCCESS.getnCode())){
+            if(userDao.insertData(data)>0){
+                Map<String,Object> map = new HashMap<>();
+                map.put("content","教师上传了一个文件！");
+                map.put("action","insert");
+                map.put("operationUser",userDao.selectUserByUsername(user.getUsername()).getUser());
+                map.put("operatedUser",userDao.selectUserByUsername(user.getUsername()).getUser());
+                insertLog(map);
+                return StatusCode.FILE_UPLOAD_SUCCESS;
+            }else{
+                return StatusCode.FILE_UPLOAD_ERROR;
+            }
+        }else{
+            return message;
         }
     }
 
@@ -49,7 +107,7 @@ public class UserService {
      * @return 状态码
      */
     public StatusCode insertDataClass(DataClass dataClass,String departmentCode,User operationUser){
-        List<DataClass> dataClassList = selectDataClass(departmentCode,"");
+        List<DataClass> dataClassList = selectDataClass(departmentCode,"","(0,1,2)","");
         List<String> list = new ArrayList<>();
         for (DataClass d: dataClassList) {
             if(d!=null){
@@ -174,12 +232,16 @@ public class UserService {
      * 查询本院公共资料类型,如果roleId为空则查询本院所有公共资料类型
      * @param departmentCode
      * @param roleId
+     * @param flag
+     * @param dataClassId
      * @return List
      */
-    public List<DataClass> selectDataClass(String departmentCode,String roleId){
+    public List<DataClass> selectDataClass(String departmentCode,String roleId,String flag,String dataClassId){
         Map<String,Object> map = new HashMap<>();
         map.put("departmentCode",departmentCode);
         map.put("roleId",roleId);
+        map.put("flag",flag);
+        map.put("dataClassId",dataClassId);
         return userDao.selectDataClass(map);
     }
 

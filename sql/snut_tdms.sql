@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50549
 File Encoding         : 65001
 
-Date: 2018-03-24 19:18:55
+Date: 2018-03-25 19:10:23
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -77,11 +77,12 @@ CREATE TABLE `log` (
   `time` datetime DEFAULT NULL,
   `operation_user` varchar(255) DEFAULT NULL,
   `operated_user` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL COMMENT '选填项',
   PRIMARY KEY (`id`),
   KEY `log_ibfk_1` (`operation_user`),
   KEY `operated_user` (`operated_user`),
-  CONSTRAINT `log_ibfk_2` FOREIGN KEY (`operated_user`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `log_ibfk_1` FOREIGN KEY (`operation_user`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `log_ibfk_1` FOREIGN KEY (`operation_user`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `log_ibfk_2` FOREIGN KEY (`operated_user`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------

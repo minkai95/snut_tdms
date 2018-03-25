@@ -56,7 +56,8 @@
           #{action},
           #{time},
           #{operationUser.username},
-          #{operatedUser.username}
+          #{operatedUser.username},
+          #{description}
         )
     </insert>
     <insert id="insertDataClass" parameterType="com.snut_tdms.model.po.DataClass">
@@ -67,6 +68,19 @@
           #{user.username},
           #{department.code},
           #{flag}
+        )
+    </insert>
+    <insert id="insertData" parameterType="com.snut_tdms.model.po.Data">
+        INSERT INTO `data` VALUES (
+            #{id},
+            #{content},
+            #{fileName},
+            #{src},
+            #{dataClass.id},
+            #{user.username},
+            #{submitTime},
+            #{deleteTime},
+            #{flag}
         )
     </insert>
 
@@ -156,7 +170,13 @@
           LEFT JOIN role ON data_class.role = role.id
           LEFT JOIN `user` ON data_class.`user` = `user`.username
           LEFT JOIN department ON data_class.department = department.code
-        WHERE department.code = #{departmentCode} AND data_class.flag != '2'
+        WHERE department.code = #{departmentCode}
+        <if test="dataClassId != null and dataClassId != ''">
+            AND data_class.id = #{dataClassId}
+        </if>
+        <if test="flag != null and flag!= ''">
+            AND data_class.flag in ${flag}
+        </if>
         <if test="roleId != null and roleId!= ''">
             AND role.id = #{roleId}
         </if>
