@@ -23,7 +23,7 @@ public interface UserDao {
 
     int insertData(Data data);
 
-    int deleteDataByIds(Map<String,Object> ids);
+    int logicalDeleteDataByIds(Map<String,Object> map);
 
     UserRole selectUserByUsername(String username);
 

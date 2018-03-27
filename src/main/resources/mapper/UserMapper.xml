@@ -108,11 +108,6 @@
         )
     </insert>
 
-    <delete id="deleteDataByIds" parameterType="java.util.Map">
-        DELETE FROM `data`
-        WHERE id IN ${ids}
-    </delete>
-
     <update id="updatePassword" parameterType="com.snut_tdms.model.po.User">
         UPDATE `user` SET
           password = #{password},
@@ -126,6 +121,11 @@
           phone = #{phone},
           email = #{email}
         WHERE user_info.`user` = #{user.username}
+    </update>
+    <update id="logicalDeleteDataByIds" parameterType="java.util.Map">
+        UPDATE `data` SET
+          flag = 1
+        WHERE id IN ${ids}
     </update>
 
     <select id="selectUserByUsername" parameterType="java.lang.String" resultMap="userRole">

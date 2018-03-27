@@ -138,13 +138,7 @@ public class UserService {
         return StatusCode.INSERT_ERROR;
     }
 
-    /**
-     * 通过id删除资料
-     * @param idList id列表
-     * @param map 插入日志的数据
-     * @return 成功删除条数
-     */
-    public Integer deleteDataByIds(List<String> idList,Map<String,Object> map){
+    public Integer logicalDeleteDataByIds(List<String> idList, Map<String,Object> map){
         StringBuffer sb = new StringBuffer();
         String[] strArr = idList.toArray(new String[idList.size()]);
         String str = Arrays.toString(strArr);
@@ -153,9 +147,10 @@ public class UserService {
         sb.append(")");
         Map<String,Object> m = new HashMap<>();
         m.put("ids",sb.toString());
-        int count = userDao.deleteDataByIds(m);
+        int count = userDao.logicalDeleteDataByIds(m);
         if(count>0){
-            map.put("content","成功删除了"+count+"份资料！");
+            map.put("content","用户逻辑删除了"+count+"份资料！");
+            map.put("action","logicalDelete");
             insertLog(map);
         }
         return count;
