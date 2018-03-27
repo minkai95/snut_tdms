@@ -24,3 +24,26 @@
 .upload:hover{
     cursor: pointer;
 }
+
+.buttonStyle{
+    position: relative;
+    top: 26px;
+    left: -93px;
+    height: 25px;
+    line-height: 16px;
+}
+.fileBtnStyle{
+    width: 70px;
+    opacity: 0;
+    position: absolute;
+}
+.chooseFile{
+    display: none !important;
+}
+.fileName{
+    width: 90%;
+    margin-left: 57px;
+}
+.chooseFileBtn{
+    margin-top: -33px;
+}

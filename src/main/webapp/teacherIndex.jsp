@@ -20,8 +20,9 @@
                 <li><a href="teacherPublicData.jsp" target="mainFrame"><i class="icon-folder-open"></i>公共资料</a></li>
                 <li><a href="teacherPersonData.jsp" target="mainFrame"><i class="icon-briefcase"></i>私有资料</a></li>
                 <li><a href="applyAddDataClass.jsp" target="mainFrame"><i class="icon-plus-sign"></i>申请类目</a></li>
-                <li><a href="#"><i class="icon-user"></i>个人中心</a></li>
-                <li><a href="#"><i class="icon-screenshot"></i>资料追踪</a></li>
+                <li><a href="personCenter.jsp" target="mainFrame"><i class="icon-user"></i>个人中心</a></li>
+                <li><a href="dataTrace.jsp" target="mainFrame"><i class="icon-screenshot"></i>资料追踪</a></li>
+                <li><a href="teacherNews.jsp" target="mainFrame"><i class="icon-bell-alt"></i>消息通告</a></li>
             </ul>
         </div>
         <div class="rightContent">

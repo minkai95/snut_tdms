@@ -1,0 +1,46 @@
+.personCenter{
+    width: 400px;
+    margin: 30px auto 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 15px #ccc;
+    padding-top: 30px;
+}
+label{
+    width: 90px;
+}
+.button-group{
+    width: 100%;
+    margin: 20px 0;
+    text-align: center;
+}
+.button-group button{
+    display: inline-block;
+    width: 125px;
+}
+.button-group button:nth-child(1){
+    margin-right: 50px;
+}
+
+.letterSpacingThree{
+    letter-spacing: 7px;
+}
+.letterSpacingTwo{
+    letter-spacing: 28px;
+}
+.spanClass{
+    padding-left: 14px;
+}
+.inputClass{
+    border: none;
+    box-shadow: 0 0 0 #fff inset;
+    display: inline-block;
+    width: 200px;
+}
+.inputClass:hover{
+
+    box-shadow: 0 0 6px #ccc;
+}
+.formDiv{
+    margin-left: 50px;
+}
