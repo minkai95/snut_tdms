@@ -48,6 +48,30 @@
         <result column="departmentName" jdbcType="VARCHAR" javaType="java.lang.String" property="department.name"/>
         <result column="flag" jdbcType="VARCHAR" javaType="java.lang.Integer" property="flag"/>
     </resultMap>
+    <resultMap id="data" type="com.snut_tdms.model.po.Data">
+        <id column="id" jdbcType="VARCHAR" javaType="java.lang.String" property="id"/>
+        <result column="content" jdbcType="VARCHAR" javaType="java.lang.String" property="content"/>
+        <result column="fileName" jdbcType="VARCHAR" javaType="java.lang.String" property="fileName"/>
+        <result column="src" jdbcType="VARCHAR" javaType="java.lang.String" property="src"/>
+        <result column="dataClassId" jdbcType="VARCHAR" javaType="java.lang.String" property="dataClass.id"/>
+        <result column="dataClassName" jdbcType="VARCHAR" javaType="java.lang.String" property="dataClass.name"/>
+        <result column="dataClassRoleId" jdbcType="VARCHAR" javaType="java.lang.String" property="dataClass.role.id"/>
+        <result column="dataClassRoleName" jdbcType="VARCHAR" javaType="java.lang.String" property="dataClass.role.name"/>
+        <result column="dataClassUserUsername" jdbcType="VARCHAR" javaType="java.lang.String" property="dataClass.user.username"/>
+        <result column="dataClassUserPassword" jdbcType="VARCHAR" javaType="java.lang.String" property="dataClass.user.password"/>
+        <result column="dataClassUserIdCard" jdbcType="VARCHAR" javaType="java.lang.String" property="dataClass.user.idCard"/>
+        <result column="dataClassUserFirstLogin" jdbcType="VARCHAR" javaType="java.lang.Integer" property="dataClass.user.firstLogin"/>
+        <result column="dataClassDepartmentCode" jdbcType="VARCHAR" javaType="java.lang.String" property="dataClass.department.code"/>
+        <result column="dataClassDepartmentName" jdbcType="VARCHAR" javaType="java.lang.String" property="dataClass.department.name"/>
+        <result column="dataClassFlag" jdbcType="VARCHAR" javaType="java.lang.Integer" property="dataClass.flag"/>
+        <result column="username" jdbcType="VARCHAR" javaType="java.lang.String" property="user.username"/>
+        <result column="password" jdbcType="VARCHAR" javaType="java.lang.String" property="user.password"/>
+        <result column="idCard" jdbcType="VARCHAR" javaType="java.lang.String" property="user.idCard"/>
+        <result column="firstLogin" jdbcType="VARCHAR" javaType="java.lang.Integer" property="user.firstLogin"/>
+        <result column="submitTime" jdbcType="VARCHAR" javaType="java.sql.Timestamp" property="submitTime"/>
+        <result column="deleteTime" jdbcType="VARCHAR" javaType="java.sql.Timestamp" property="deleteTime"/>
+        <result column="flag" jdbcType="VARCHAR" javaType="java.lang.Integer" property="flag"/>
+    </resultMap>
 
     <insert id="insertLog" parameterType="com.snut_tdms.model.po.Log">
         INSERT INTO log VALUES (
@@ -97,6 +121,11 @@
           phone = #{phone},
           email = #{email}
         WHERE user_info.`user` = #{user.username}
+    </update>
+    <update id="logicalDeleteDataByIds" parameterType="java.util.Map">
+        UPDATE `data` SET
+          flag = 1
+        WHERE id IN ${ids}
     </update>
 
     <select id="selectUserByUsername" parameterType="java.lang.String" resultMap="userRole">
@@ -180,6 +209,38 @@
         <if test="roleId != null and roleId!= ''">
             AND role.id = #{roleId}
         </if>
+    </select>
+    <select id="selectDataByUsername" parameterType="java.lang.String" resultMap="data">
+        SELECT
+          `data`.id,
+          content,
+          file_name,
+          src,
+          data_class.id as dataClassId,
+          data_class.name as dataClassName,
+          role.id as dataClassRoleId,
+          role.name as dataClassRoleName,
+          user1.username as dataClassUserUsername,
+          user1.password as dataClassUserPassword,
+          user1.id_card as dataClassUserIdCard,
+          user1.first_login as dataClassUserFirstLogin,
+          department.code as dataClassDepartmentCode,
+          department.name as dataClassDepartmentName,
+          data_class.flag as dataClassFlag,
+          user2.username,
+          user2.password,
+          user2.id_card as idCard,
+          user2.first_login as firstLogin,
+          submit_time as submitTime,
+          delete_time as deleteTime,
+          `data`.flag
+        FROM `data`
+        LEFT JOIN data_class ON `data`.data_class = data_class.id
+        LEFT JOIN role ON data_class.role = role.id
+        LEFT JOIN `user` user1 ON data_class.`user` = user1.username
+        LEFT JOIN department ON data_class.department = department.code
+        LEFT JOIN `user` user2 ON `data`.user = user2.username
+        WHERE user2.username = #{0}
     </select>
 
 </mapper>
