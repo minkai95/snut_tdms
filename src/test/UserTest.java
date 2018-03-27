@@ -5,6 +5,9 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.assertNotNull;
 
 /**
@@ -29,7 +32,12 @@ public class UserTest {
         UserInfo userInfo = new UserInfo(user,"张三","男","155999999","sadsa@qq.com",department);
         DataClass dataClass = new DataClass("1218","资料81",new Role("001","教师"),user,department,1);
 
-        System.out.print(userService.selectDataClass("001","","(0)","111"));
+        List<String> list = new ArrayList<>();
+        list.add("5");
+        list.add("6");
+        list.add("7");
+        list.add("8");
+        System.out.print(userService.deleteDataByIds(list));
     }
 
 }

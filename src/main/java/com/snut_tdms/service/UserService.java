@@ -23,7 +23,7 @@ public class UserService {
 
     /**
      * 用户插入日志记录
-     * @param map
+     * @param map 集合
      * @return 状态码
      */
     public StatusCode insertLog(Map<String,Object> map){
@@ -85,7 +85,7 @@ public class UserService {
         if(message.getnCode().equals(StatusCode.FILE_UPLOAD_SUCCESS.getnCode())){
             if(userDao.insertData(data)>0){
                 Map<String,Object> map = new HashMap<>();
-                map.put("content","教师上传了一个文件！");
+                map.put("content","用户上传了一个文件！");
                 map.put("action","insert");
                 map.put("operationUser",userDao.selectUserByUsername(user.getUsername()).getUser());
                 map.put("operatedUser",userDao.selectUserByUsername(user.getUsername()).getUser());
@@ -101,9 +101,9 @@ public class UserService {
 
     /**
      * 新增资料类型(申请/直接添加)
-     * @param dataClass
-     * @param departmentCode
-     * @param operationUser
+     * @param dataClass 资料类型
+     * @param departmentCode 院系编码
+     * @param operationUser 操作用户
      * @return 状态码
      */
     public StatusCode insertDataClass(DataClass dataClass,String departmentCode,User operationUser){
@@ -139,8 +139,31 @@ public class UserService {
     }
 
     /**
+     * 通过id删除资料
+     * @param idList id列表
+     * @param map 插入日志的数据
+     * @return 成功删除条数
+     */
+    public Integer deleteDataByIds(List<String> idList,Map<String,Object> map){
+        StringBuffer sb = new StringBuffer();
+        String[] strArr = idList.toArray(new String[idList.size()]);
+        String str = Arrays.toString(strArr);
+        sb.append("(");
+        sb.append(str.substring(1,str.length()-1));
+        sb.append(")");
+        Map<String,Object> m = new HashMap<>();
+        m.put("ids",sb.toString());
+        int count = userDao.deleteDataByIds(m);
+        if(count>0){
+            map.put("content","成功删除了"+count+"份资料！");
+            insertLog(map);
+        }
+        return count;
+    }
+
+    /**
      * 用户更新密码
-     * @param user
+     * @param user 用户对象
      * @return 状态码
      */
     public StatusCode updatePassword(User user,User operationUser){
@@ -166,7 +189,7 @@ public class UserService {
 
     /**
      * 用户更新个人信息
-     * @param userInfo
+     * @param userInfo 用户信息
      * @return 状态码
      */
     public StatusCode updateUserInfo(UserInfo userInfo,User operationUser){
@@ -189,8 +212,8 @@ public class UserService {
 
     /**
      * 用户登录功能
-     * @param username
-     * @param password
+     * @param username 用户名
+     * @param password 密码
      * @return Map
      */
     public Map<String, Object> userLogin(String username,String password){
@@ -217,8 +240,8 @@ public class UserService {
 
     /**
      * 查询本院公告(roleId为空表示查看所有公告)
-     * @param departmentCode
-     * @param roleId
+     * @param departmentCode 院系编码
+     * @param roleId 角色ID
      * @return List
      */
     public List<SystemNotice> selectSystemNotice(String departmentCode,String roleId){
@@ -230,10 +253,10 @@ public class UserService {
 
     /**
      * 查询本院公共资料类型,如果roleId为空则查询本院所有公共资料类型
-     * @param departmentCode
-     * @param roleId
-     * @param flag
-     * @param dataClassId
+     * @param departmentCode 院系编码
+     * @param roleId 角色ID
+     * @param flag 备注
+     * @param dataClassId 资料类型ID
      * @return List
      */
     public List<DataClass> selectDataClass(String departmentCode,String roleId,String flag,String dataClassId){
@@ -247,12 +270,20 @@ public class UserService {
 
     /**
      * 根据用户名查询用户资料
-     * @param username
+     * @param username 用户名
      * @return UserInfo
      */
     public UserInfo selectUserInfoByUsername(String username){
         return userDao.selectUserInfoByUsername(username);
     }
 
+    /**
+     * 查询用户自己的资料
+     * @param username 用户名
+     * @return List
+     */
+    public List<Data> selectDataByUsername(String username){
+        return userDao.selectDataByUsername(username);
+    }
 
 }

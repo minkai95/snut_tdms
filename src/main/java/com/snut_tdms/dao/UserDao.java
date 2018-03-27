@@ -23,6 +23,8 @@ public interface UserDao {
 
     int insertData(Data data);
 
+    int deleteDataByIds(Map<String,Object> ids);
+
     UserRole selectUserByUsername(String username);
 
     UserInfo selectUserInfoByUsername(String username);
@@ -30,4 +32,6 @@ public interface UserDao {
     List<SystemNotice> selectSystemNotice(Map<String,Object> map);
 
     List<DataClass> selectDataClass(Map<String,Object> map);
+
+    List<Data> selectDataByUsername(String username);
 }
