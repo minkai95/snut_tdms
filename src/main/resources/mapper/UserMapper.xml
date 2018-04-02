@@ -64,6 +64,7 @@
         <result column="dataClassDepartmentCode" jdbcType="VARCHAR" javaType="java.lang.String" property="dataClass.department.code"/>
         <result column="dataClassDepartmentName" jdbcType="VARCHAR" javaType="java.lang.String" property="dataClass.department.name"/>
         <result column="dataClassFlag" jdbcType="VARCHAR" javaType="java.lang.Integer" property="dataClass.flag"/>
+        <result column="typeContents" jdbcType="VARCHAR" javaType="java.lang.String" property="typeContents"/>
         <result column="username" jdbcType="VARCHAR" javaType="java.lang.String" property="user.username"/>
         <result column="password" jdbcType="VARCHAR" javaType="java.lang.String" property="user.password"/>
         <result column="idCard" jdbcType="VARCHAR" javaType="java.lang.String" property="user.idCard"/>
@@ -101,6 +102,7 @@
             #{fileName},
             #{src},
             #{dataClass.id},
+            #{typeContents},
             #{user.username},
             #{submitTime},
             #{deleteTime},
@@ -227,6 +229,7 @@
           department.code as dataClassDepartmentCode,
           department.name as dataClassDepartmentName,
           data_class.flag as dataClassFlag,
+          typeContents,
           user2.username,
           user2.password,
           user2.id_card as idCard,
