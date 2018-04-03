@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50549
 File Encoding         : 65001
 
-Date: 2018-04-02 14:56:06
+Date: 2018-04-03 16:29:25
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -63,6 +63,7 @@ CREATE TABLE `data_class` (
   `role` varchar(255) DEFAULT NULL,
   `user` varchar(255) DEFAULT NULL,
   `department` varchar(255) DEFAULT NULL,
+  `class_types` varchar(255) DEFAULT NULL,
   `flag` int(255) DEFAULT '0' COMMENT '0表示公共类型未审核,1表示公共类型已审核,2表示私人类型',
   PRIMARY KEY (`id`),
   KEY `role` (`role`),
@@ -151,8 +152,8 @@ CREATE TABLE `type_content` (
   PRIMARY KEY (`id`),
   KEY `class_type` (`class_type`),
   KEY `user` (`user`),
-  CONSTRAINT `type_content_ibfk_2` FOREIGN KEY (`user`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `type_content_ibfk_1` FOREIGN KEY (`class_type`) REFERENCES `class_type` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `type_content_ibfk_1` FOREIGN KEY (`class_type`) REFERENCES `class_type` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `type_content_ibfk_2` FOREIGN KEY (`user`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------

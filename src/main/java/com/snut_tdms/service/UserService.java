@@ -277,8 +277,20 @@ public class UserService {
      * @param username 用户名
      * @return List
      */
-    public List<Data> selectDataByUsername(String username){
-        return userDao.selectDataByUsername(username);
+    public List<Data> selectDataByUsername(String username,String dataClassId){
+        Map<String,Object> map = new HashMap<>();
+        map.put("username",username);
+        map.put("dataClassId",dataClassId);
+        return userDao.selectDataByParams(map);
+    }
+
+    /**
+     * 根据ID查询资料类型下的子分类
+     * @param dataClassId 类型ID
+     * @return list
+     */
+    public  List<ClassType> selectClassTypesByDataClassId(String dataClassId){
+        return userDao.selectClassTypesByDataClassId(dataClassId);
     }
 
 }

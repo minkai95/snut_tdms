@@ -33,5 +33,7 @@ public interface UserDao {
 
     List<DataClass> selectDataClass(Map<String,Object> map);
 
-    List<Data> selectDataByUsername(String username);
+    List<Data> selectDataByParams(Map<String,Object> map);
+
+    List<ClassType> selectClassTypesByDataClassId(String dataClassId);
 }
