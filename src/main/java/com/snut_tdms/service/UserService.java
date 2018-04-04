@@ -76,6 +76,7 @@ public class UserService {
                 userDao.selectUserByUsername(user.getUsername()).getRole().getId(),
                 "(0,1)",dataClassId).get(0);
         data.setDataClass(dataClass);
+        request.setAttribute("departmentCode",selectUserInfoByUsername(user.getUsername()).getDepartment().getCode());
         Map<String,Object> resultMap = FileUploadUtil.upload(request);
         String src = (String)resultMap.get("src");
         StatusCode message = (StatusCode)resultMap.get("message");

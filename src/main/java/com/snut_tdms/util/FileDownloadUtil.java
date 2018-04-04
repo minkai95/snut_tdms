@@ -18,8 +18,9 @@ public class FileDownloadUtil {
         //得到要下载的文件名
         String fileName = request.getParameter("filename");  //23239283cas9_阿凡达.avi
         fileName = new String(fileName.getBytes("iso8859-1"),"UTF-8");
+        String departmentCode = (String) request.getAttribute("departmentCode");
         //上传的文件都是保存在/WEB-INF/upload目录下的子目录当中
-        String fileSaveRootPath = request.getServletContext().getRealPath("\\WEB-INF\\upload");
+        String fileSaveRootPath = request.getServletContext().getRealPath("\\WEB-INF\\upload\\"+departmentCode);
         //通过文件名找出文件的所在目录
         String path = findFileSavePathByFileName(fileName,fileSaveRootPath);
         //得到要下载的文件

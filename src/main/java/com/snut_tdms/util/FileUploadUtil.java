@@ -26,6 +26,7 @@ public class FileUploadUtil {
         String savePath = request.getServletContext().getRealPath("\\WEB-INF\\upload");
         //上传时生成的临时文件保存目录
         String tempPath = request.getServletContext().getRealPath("\\WEB-INF\\temp");
+        String departmentCode = (String) request.getAttribute("departmentCode");
         File tmpFile = new File(tempPath);
         if (!tmpFile.exists()) {
             //创建临时目录
@@ -105,7 +106,7 @@ public class FileUploadUtil {
                     //得到文件保存的名称
                     String saveFilename = makeFileName(filename);
                     //得到文件的保存目录
-                    String realSavePath = makePath(saveFilename, savePath);
+                    String realSavePath = makePath(saveFilename, savePath,departmentCode);
                     //创建一个文件输出流
                     FileOutputStream out = new FileOutputStream(realSavePath + "\\" + saveFilename);
                     //创建一个缓冲区
@@ -158,11 +159,11 @@ public class FileUploadUtil {
      * @param savePath 文件存储路径
      * @return String
      */
-    private static String makePath(String filename,String savePath){
+    private static String makePath(String filename,String savePath,String departmentCode){
         int hashcode = filename.hashCode();
         int dir1 = hashcode & 0xf;  //0--15
         int dir2 = (hashcode & 0xf0)>>4;  //0-15
-        String dir = savePath + "\\" + dir1 + "\\" + dir2;  //upload\2\3  upload\3\5
+        String dir = savePath + "\\" + departmentCode + "\\" + dir1 + "\\" + dir2;  //upload\2\3  upload\3\5
         File fileDir = new File(dir);
         if(!fileDir.exists()){
             boolean mkdirs = fileDir.mkdirs();
