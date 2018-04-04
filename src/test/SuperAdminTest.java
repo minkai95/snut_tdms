@@ -1,9 +1,14 @@
+import com.snut_tdms.model.po.Department;
+import com.snut_tdms.model.po.User;
 import com.snut_tdms.service.DeanOfficeService;
 import com.snut_tdms.service.SuperAdminService;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -24,7 +29,15 @@ public class SuperAdminTest {
 
     @Test
     public void testData() {
-        System.out.print("");
+        List<Department> list = new ArrayList<>();
+        list.add(new Department("ysxy","艺术学院"));
+        list.add(new Department("jfxy","经法学院"));
+        list.add(new Department("001","机械学院"));
+        List<String> list2 = new ArrayList<>();
+        list2.add("ysxy");
+        list2.add("jfxy");
+        list2.add("jxxy");
+        System.out.println(superAdminService.updateDepartmentByCode(new Department("001","管理学院1"),new User("123","456","",1)));
     }
 
 }

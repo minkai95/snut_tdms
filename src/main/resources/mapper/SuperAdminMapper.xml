@@ -1,7 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.snut_tdms.dao.StudentOfficeDao">
+<mapper namespace="com.snut_tdms.dao.SuperAdminDao">
 
+    <insert id="insertDepartmentList" parameterType="java.util.List">
+        INSERT INTO department VALUES
+        <foreach collection="list" item="department" separator=",">
+            (#{department.code},#{department.name})
+        </foreach>
+    </insert>
+
+    <delete id="deleteDepartmentListByCodes" parameterType="java.util.List">
+        DELETE FROM department WHERE code in
+        <foreach collection="list" item="departmentCode" separator="," open="(" close=")">
+            #{departmentCode}
+        </foreach>
+    </delete>
+
+    <update id="updateDepartmentByCode" parameterType="com.snut_tdms.model.po.Department">
+        UPDATE department
+        SET `name` = #{name}
+        WHERE code = #{code}
+    </update>
 
 
 </mapper>

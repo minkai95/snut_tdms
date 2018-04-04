@@ -45,7 +45,7 @@ public class UserTest {
         map.put("operationUser",operationUser);
         map.put("operatedUser",operatedUser);
         map.put("description","上传错了！");
-        System.out.print(userService.selectClassTypesByDataClassId("7"));
+        System.out.print(userService.selectAllDepartment());
     }
 
 }

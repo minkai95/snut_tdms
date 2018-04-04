@@ -31,8 +31,8 @@ public class UserService {
         String content = (String) map.get("content");
         String action = (String) map.get("action");
         Timestamp time = new Timestamp(System.currentTimeMillis());
-        User operationUser = (User) map.get("operationUser");
-        User operatedUser = (User) map.get("operatedUser");
+        User operationUser = userDao.selectUserByUsername(((User) map.get("operationUser")).getUsername()).getUser();
+        User operatedUser = userDao.selectUserByUsername(((User) map.get("operatedUser")).getUsername()).getUser();
         String description = null;
         if(map.containsKey("description")) {
             description = (String) map.get("description");
@@ -291,6 +291,23 @@ public class UserService {
      */
     public  List<ClassType> selectClassTypesByDataClassId(String dataClassId){
         return userDao.selectClassTypesByDataClassId(dataClassId);
+    }
+
+    /**
+     * 查询所有院系
+     * @return list
+     */
+    public List<Department> selectAllDepartment(){
+        return userDao.selectAllDepartment();
+    }
+
+    /**
+     * 根据院系编码查询院系
+     * @param departmentCode 院系编码
+     * @return Department
+     */
+    public Department selectDepartmentByCode(String departmentCode){
+        return userDao.selectDepartmentByCode(departmentCode);
     }
 
 }
