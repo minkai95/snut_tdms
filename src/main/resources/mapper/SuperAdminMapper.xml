@@ -2,11 +2,40 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.snut_tdms.dao.SuperAdminDao">
 
+    <resultMap id="log" type="com.snut_tdms.model.po.Log">
+        <id column="id" jdbcType="VARCHAR" javaType="java.lang.String" property="id"/>
+        <result column="content" jdbcType="VARCHAR" javaType="java.lang.String" property="content"/>
+        <result column="action" jdbcType="VARCHAR" javaType="java.lang.String" property="action"/>
+        <result column="time" jdbcType="VARCHAR" javaType="java.sql.Timestamp" property="time"/>
+        <result column="operationUserUsername" jdbcType="VARCHAR" javaType="java.lang.String" property="operationUser.username"/>
+        <result column="operationUserPassword" jdbcType="VARCHAR" javaType="java.lang.String" property="operationUser.password"/>
+        <result column="operationUserIdCard" jdbcType="VARCHAR" javaType="java.lang.String" property="operationUser.idCard"/>
+        <result column="operationUserFirstLogin" jdbcType="VARCHAR" javaType="java.lang.Integer" property="operationUser.firstLogin"/>
+        <result column="operatedUserUsername" jdbcType="VARCHAR" javaType="java.lang.String" property="operatedUser.username"/>
+        <result column="operatedUserPassword" jdbcType="VARCHAR" javaType="java.lang.String" property="operatedUser.password"/>
+        <result column="operatedUserIdCard" jdbcType="VARCHAR" javaType="java.lang.String" property="operatedUser.idCard"/>
+        <result column="operatedUserFirstLogin" jdbcType="VARCHAR" javaType="java.lang.Integer" property="operatedUser.firstLogin"/>
+        <result column="description" jdbcType="VARCHAR" javaType="java.lang.String" property="description"/>
+    </resultMap>
+    <resultMap id="admin" type="com.snut_tdms.model.po.UserRole">
+        <id column="username" jdbcType="VARCHAR" javaType="java.lang.String" property="user.username"/>
+        <result column="password" jdbcType="VARCHAR" javaType="java.lang.String" property="user.password"/>
+        <result column="idCard" jdbcType="VARCHAR" javaType="java.lang.String" property="user.idCard"/>
+        <result column="firstLogin" jdbcType="VARCHAR" javaType="java.lang.Integer" property="user.firstLogin"/>
+        <result column="roleId" jdbcType="VARCHAR" javaType="java.lang.String" property="role.id"/>
+        <result column="roleName" jdbcType="VARCHAR" javaType="java.lang.String" property="role.name"/>
+    </resultMap>
+
     <insert id="insertDepartmentList" parameterType="java.util.List">
         INSERT INTO department VALUES
         <foreach collection="list" item="department" separator=",">
             (#{department.code},#{department.name})
         </foreach>
+    </insert>
+    <insert id="insertAdmin" parameterType="java.util.Map">
+        INSERT INTO `user`(username) VALUES (#{username});
+        INSERT INTO user_info(`user`,department) VALUES (#{username},#{departmentCode});
+        INSERT INTO user_role VALUES (#{username},'002')
     </insert>
 
     <delete id="deleteDepartmentListByCodes" parameterType="java.util.List">
@@ -15,12 +44,63 @@
             #{departmentCode}
         </foreach>
     </delete>
+    <delete id="deleteAdminByUsernameList" parameterType="java.util.List">
+        DELETE FROM `user` WHERE username in
+        <foreach collection="list" item="username" separator="," open="(" close=")">
+            #{username}
+        </foreach>
+    </delete>
 
     <update id="updateDepartmentByCode" parameterType="com.snut_tdms.model.po.Department">
         UPDATE department
         SET `name` = #{name}
         WHERE code = #{code}
     </update>
+    <update id="updateAdminUserInfo" parameterType="com.snut_tdms.model.po.UserInfo">
+         UPDATE user_info SET
+          `name` = #{name},
+          sex = #{sex},
+          phone = #{phone},
+          email = #{email},
+          department = #{department.code}
+        WHERE user_info.`user` = #{user.username}
+    </update>
+    <update id="resetAdminPassword" parameterType="java.lang.String">
+        UPDATE `user` SET password = '123456' WHERE username = #{0};
+    </update>
 
+    <select id="selectAllLogs" resultMap="log">
+        SELECT
+          id,
+          content,
+          `action`,
+          `time`,
+          user1.username as operationUserUsername,
+          user1.password as operationUserPassword,
+          user1.id_card as operationUserIdCard,
+          user1.first_login as operationUserFirstLogin,
+          user1.username as operatedUserUsername,
+          user1.password as operatedUserPassword,
+          user1.id_card as operatedUserIdCard,
+          user1.first_login as operatedUserFirstLogin,
+          description
+          FROM log
+          LEFT JOIN `user` as user1 ON user1.username =operation_user
+          LEFT JOIN `user` as user2 ON user2.username =operated_user
+          ORDER BY `time` desc
+    </select>
+    <select id="selectAllAdmin" resultMap="admin">
+        SELECT
+          `user`.username,
+          `user`.password,
+          `user`.id_card as idCard,
+          `user`.first_login as firstLogin,
+          role.id as roleId,
+          role.name as roleName
+        FROM user_role
+        LEFT JOIN `user` ON `user`.username = user_role.`user`
+        LEFT JOIN role ON role.id = user_role.role
+        WHERE role.id = '002'
+    </select>
 
 </mapper>

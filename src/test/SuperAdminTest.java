@@ -1,5 +1,6 @@
 import com.snut_tdms.model.po.Department;
 import com.snut_tdms.model.po.User;
+import com.snut_tdms.model.po.UserInfo;
 import com.snut_tdms.service.DeanOfficeService;
 import com.snut_tdms.service.SuperAdminService;
 import org.junit.Before;
@@ -34,10 +35,10 @@ public class SuperAdminTest {
         list.add(new Department("jfxy","经法学院"));
         list.add(new Department("001","机械学院"));
         List<String> list2 = new ArrayList<>();
-        list2.add("ysxy");
-        list2.add("jfxy");
-        list2.add("jxxy");
-        System.out.println(superAdminService.updateDepartmentByCode(new Department("001","管理学院1"),new User("123","456","",1)));
+        list2.add("999");
+        User admin = new User("999","999","61250111111111",1);
+        UserInfo userInfo = new UserInfo(admin,"王五","男","15599999999","dsa@qq.con",new Department("002","体育学院"));
+        System.out.println(superAdminService.resetAdminPassword("999",new User("123","4546","123",1)));
     }
 
 }
