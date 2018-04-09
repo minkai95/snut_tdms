@@ -17,11 +17,13 @@ public interface UserDao {
 
     int insertLog(Log log);
 
+    int insertData(Data data);
+
     int updatePassword(User user);
 
     int updateUserInfo(UserInfo userInfo);
 
-    int insertData(Data data);
+    int resetAdminPassword(String username);
 
     int logicalDeleteDataByIds(Map<String,Object> map);
 

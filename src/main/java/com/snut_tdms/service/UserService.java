@@ -193,7 +193,7 @@ public class UserService {
             if (userDao.updateUserInfo(userInfo) > 0) {
                 Map<String,Object> map = new HashMap<>();
                 map.put("action","update");
-                map.put("content","用户更新了个人信息");
+                map.put("content","更新了用户的个人信息!");
                 map.put("operationUser",operationUser);
                 map.put("operatedUser",userDao.selectUserByUsername(userInfo.getUser().getUsername()).getUser());
                 insertLog(map);
@@ -204,6 +204,29 @@ public class UserService {
         }else{
             return StatusCode.UPDATE_NOT;
         }
+    }
+    /**
+     * 重置用户密码
+     * @param username 被操作者用户名
+     * @param operationUser 操作者
+     * @return 状态码
+     */
+    public StatusCode resetAdminPassword(String username,User operationUser){
+        StatusCode code;
+        if(selectUserInfoByUsername(username)==null){
+            code = StatusCode.NOT_USER;
+        }else if (userDao.resetAdminPassword(username)>0){
+            code = StatusCode.UPDATE_SUCCESS;
+            Map<String, Object> logParams = new HashMap<>();
+            logParams.put("content", "重置了用户名:"+username+" 的用户密码!");
+            logParams.put("action", "update");
+            logParams.put("operationUser", operationUser);
+            logParams.put("operatedUser", selectUserInfoByUsername(username).getUser());
+            insertLog(logParams);
+        }else{
+            code = StatusCode.UPDATE_ERROR;
+        }
+        return code;
     }
 
     /**

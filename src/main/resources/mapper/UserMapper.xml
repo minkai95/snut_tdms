@@ -140,6 +140,9 @@
           flag = 1
         WHERE id IN ${ids}
     </update>
+    <update id="resetAdminPassword" parameterType="java.lang.String">
+        UPDATE `user` SET password = '123456' WHERE username = #{0};
+    </update>
 
     <select id="selectUserByUsername" parameterType="java.lang.String" resultMap="userRole">
         SELECT

@@ -207,30 +207,6 @@ public class SuperAdminService extends UserService {
     }
 
     /**
-     * 重置管理员密码
-     * @param username 管理员用户名
-     * @param operationUser 操作者
-     * @return 状态码
-     */
-    public StatusCode resetAdminPassword(String username,User operationUser){
-        StatusCode code;
-        if(selectUserInfoByUsername(username)==null){
-            code = StatusCode.NOT_USER;
-        }else if (superAdminDao.resetAdminPassword(username)>0){
-            code = StatusCode.UPDATE_SUCCESS;
-            Map<String, Object> logParams = new HashMap<>();
-            logParams.put("content", "超级管理员重置了用户名:"+username+" 的管理员密码!");
-            logParams.put("action", "update");
-            logParams.put("operationUser", operationUser);
-            logParams.put("operatedUser", selectUserInfoByUsername(username).getUser());
-            insertLog(logParams);
-        }else{
-            code = StatusCode.UPDATE_ERROR;
-        }
-        return code;
-    }
-
-    /**
      * 查询全校日志记录
      * @return list
      */

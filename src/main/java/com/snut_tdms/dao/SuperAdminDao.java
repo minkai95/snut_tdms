@@ -28,8 +28,6 @@ public interface SuperAdminDao extends UserDao{
 
     int updateAdminUserInfo(UserInfo userInfo);
 
-    int resetAdminPassword(String username);
-
     List<Log> selectAllLogs();
 
     List<UserRole> selectAllAdmin();

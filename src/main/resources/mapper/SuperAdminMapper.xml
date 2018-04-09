@@ -65,9 +65,6 @@
           department = #{department.code}
         WHERE user_info.`user` = #{user.username}
     </update>
-    <update id="resetAdminPassword" parameterType="java.lang.String">
-        UPDATE `user` SET password = '123456' WHERE username = #{0};
-    </update>
 
     <select id="selectAllLogs" resultMap="log">
         SELECT
