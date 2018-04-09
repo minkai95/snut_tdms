@@ -334,4 +334,21 @@ public class UserService {
         return userDao.selectDepartmentByCode(departmentCode);
     }
 
+    /**
+     * 通过ID查询角色对象
+     * @param roleId 角色ID
+     * @return role
+     */
+    public Role selectRoleById(String roleId){
+        return userDao.selectRoleById(roleId);
+    }
+
+    /**
+     * 查询所有角色对象
+     * @return list
+     */
+    public List<Role> selectAllRole(){
+        return userDao.selectAllRole();
+    }
+
 }

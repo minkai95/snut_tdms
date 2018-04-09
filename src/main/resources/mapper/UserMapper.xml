@@ -297,5 +297,11 @@
     <select id="selectDepartmentByCode" parameterType="java.lang.String" resultType="com.snut_tdms.model.po.Department">
         SELECT code,`name` FROM department WHERE code = #{0}
     </select>
+    <select id="selectAllRole" resultType="com.snut_tdms.model.po.Role">
+        SELECT id,`name` FROM role
+    </select>
+    <select id="selectRoleById" resultType="com.snut_tdms.model.po.Role">
+        SELECT id,`name` FROM role WHERE id = #{0}
+    </select>
 
 </mapper>

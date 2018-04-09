@@ -42,4 +42,8 @@ public interface UserDao {
     List<Department> selectAllDepartment();
 
     Department selectDepartmentByCode(String departmentCode);
+
+    Role selectRoleById(String roleId);
+
+    List<Role> selectAllRole();
 }
