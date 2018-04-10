@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.snut_tdms.dao.TeacherDao">
-
+    
+    <select id="selectTeacherDataCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+      SELECT
+		 COUNT(1) as num
+	  FROM `data`
+	  LEFT JOIN data_class ON data_class.id = `data`.data_class
+	  WHERE `data`.flag = 0 AND data_class.flag = ${flag} AND `data`.user = #{username}
+    </select>
 
 </mapper>

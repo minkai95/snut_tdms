@@ -19,15 +19,15 @@ public class SessionInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
         HttpSession session = httpServletRequest.getSession(true);  //若存在会话则返回该会话，否则新建一个会话
         String servletPath = httpServletRequest.getServletPath();   //获取请求servlet路径
-        String userRole = (String) session.getAttribute("userRole");    //获取用户权限
-        if (userRole == null || "".equals(userRole)) {  //若session中无用户权限(超时登录)，则返回到登录页
+        String role = (String) session.getAttribute("role");    //获取用户权限
+        if (role == null || "".equals(role)) {  //若session中无用户权限(超时登录)，则返回到登录页
             httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + LOGIN_URL + "?errorFlag=sessionTimeoutError");
             return false;
         } else {
             if (servletPath.contains("selectPerson") || servletPath.contains("updatePerson"))
                 return true;
-            if (!servletPath.contains(userRole)) {  //若请求路径中不包含权限，则返回到登录页
-                session.removeAttribute("userRole");
+            if (!servletPath.contains(role)) {  //若请求路径中不包含权限，则返回到登录页
+                session.removeAttribute("role");
                 session.removeAttribute("userObject");
                 session.invalidate();
                 httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + LOGIN_URL + "?errorFlag=roleError");

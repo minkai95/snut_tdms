@@ -303,5 +303,18 @@
     <select id="selectRoleById" resultType="com.snut_tdms.model.po.Role">
         SELECT id,`name` FROM role WHERE id = #{0}
     </select>
-
+    <select id="selectDepartmentDataClassCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM data_class
+        WHERE department = #{departmentCode} AND role = #{roleId} AND `name` NOT in ('私人类型')
+    </select>
+    <select id="selectAllNoticeCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT COUNT(1) as num
+        FROM system_notice
+        WHERE (
+          SELECT department
+          FROM user_info
+          WHERE user_info.`user` = system_notice.`user`
+        ) = #{0}
+    </select>
 </mapper>

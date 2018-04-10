@@ -34,4 +34,15 @@ public class TeacherService extends UserService{
         this.teacherDao = teacherDao;
     }
 
+    /**
+     * 查询教师上传的公共类目资料数目
+     * @param username 用户名
+     * @return 数目
+     */
+    public Integer selectTeacherDataCount(String username,Integer flag){
+        Map<String,Object> map = new HashMap<>();
+        map.put("username",username);
+        map.put("flag",flag);
+        return teacherDao.selectTeacherDataCount(map);
+    }
 }

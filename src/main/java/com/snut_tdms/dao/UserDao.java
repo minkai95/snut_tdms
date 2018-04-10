@@ -46,4 +46,8 @@ public interface UserDao {
     Role selectRoleById(String roleId);
 
     List<Role> selectAllRole();
+
+    Integer selectDepartmentDataClassCount(Map<String,Object> map);
+
+    Integer selectAllNoticeCount(String departmentCode);
 }
