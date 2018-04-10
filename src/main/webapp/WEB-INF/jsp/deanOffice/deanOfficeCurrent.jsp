@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ include file="WEB-INF/jsp/include/taglibs.jsp" %>
+<%@ include file="../include/taglibs.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,12 +20,12 @@
                     <span>30</span>份 </p>
                 <p class="dataType">私有资料</p>
             </a>
-            <a class="bannerThree" href="applyAddDataClass.jsp" target="mainFrame" onclick="changeLiStyle('dataType')">
+            <a class="bannerThree" href="deanApplyDataClass.jsp" target="mainFrame" onclick="changeLiStyle('dataType')">
                 <p class="bannerNumber">
                     <span>7</span>份 </p>
                 <p class="dataType">资料类目</p>
             </a>
-            <a class="bannerFour" href="teacherNews.jsp" target="mainFrame" onclick="changeLiStyle('teacherNews')">
+            <a class="bannerFour" href="deanOfficeNews.jsp" target="mainFrame" onclick="changeLiStyle('teacherNews')">
                 <p class="bannerNumber">
                     <span>9</span>条 </p>
                 <p class="dataType">消息公告</p>

@@ -61,7 +61,8 @@
     border: 2px dashed #989898;
 }
 .applyDataName{
-    width: 440px;
+    display: inline-block;
+    width: 427px;
     margin-left: 17px;
 }
 .applying{
