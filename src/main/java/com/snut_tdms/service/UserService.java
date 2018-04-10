@@ -351,4 +351,25 @@ public class UserService {
         return userDao.selectAllRole();
     }
 
+    /**
+     * 查询本院系各个角色资料类目总数
+     * @param departmentCode 院系编码
+     * @param roleId 角色ID
+     * @return 数目
+     */
+    public Integer selectDepartmentDataClassCount(String departmentCode,String roleId){
+        Map<String,Object> map = new HashMap<>();
+        map.put("departmentCode",departmentCode);
+        map.put("roleId",roleId);
+        return userDao.selectDepartmentDataClassCount(map);
+    }
+
+    /**
+     * 查询本院系所有消息公告条数
+     * @param departmentCode 院系编码
+     * @return 数目
+     */
+    public Integer selectAllNoticeCount(String departmentCode){
+        return userDao.selectAllNoticeCount(departmentCode);
+    }
 }

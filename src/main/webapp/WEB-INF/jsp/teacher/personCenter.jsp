@@ -12,27 +12,27 @@
         <div class="personCenter">
             <div class="form-group formDiv">
                 <label for="username" class="letterSpacingThree">用户名</label>
-                <span  id="username" class="spanClass">周杰伦</span>
+                <span  id="username" class="spanClass">${userInfo.user.username}</span>
             </div>
             <div class="form-group formDiv">
                 <label for="name" class="letterSpacingTwo">姓名</label>
-                <span  id="name" class="spanClass">周杰伦</span>
+                <span  id="name" class="spanClass">${userInfo.name}</span>
             </div>
             <div class="form-group formDiv">
                 <label for="department">所属院系</label>
-                <span  id="department" class="spanClass">管理学院</span>
+                <span  id="department" class="spanClass">${userInfo.department.name}</span>
             </div>
             <div class="form-group formDiv">
                 <label for="personId" class="letterSpacingThree">身份证</label>
-                <span  id="personId" class="spanClass">612324199999999999</span>
+                <span  id="personId" class="spanClass">${userInfo.user.idCard}</span>
             </div>
             <div class="form-group formDiv">
                 <label for="phone" class="letterSpacingThree">手机号</label>
-                <input type="text" class="form-control inputClass" id="phone" value="15050505500">
+                <input type="text" class="form-control inputClass" id="phone" value="${userInfo.phone}">
             </div>
             <div class="form-group formDiv">
                 <label for="email" class="letterSpacingTwo">邮箱</label>
-                <input type="text" class="form-control inputClass" id="email" value="JayChou@163.com">
+                <input type="text" class="form-control inputClass" id="email" value="${userInfo.email}">
             </div>
             <div class="changePassword">
                 <div class="form-group formDiv">
@@ -45,11 +45,33 @@
                 </div>
             </div>
             <div class="button-group">
-                <button type="reset" class="btn btn-info">取消</button>
-                <button type="submit" class="btn btn-success">提交</button>
+                <button type="button" id="reset" class="btn btn-info">取消</button>
+                <button type="button" id="submitUpdate" class="btn btn-success">修改</button>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    $("#submitUpdate").on('click', function () {
+        var username = $("#username").text();
+        var phone = $("#phone").val();
+        var email = $("#email").val();
+        var newPassword = $("#newPassword").val();
+        $.ajax({
+            type: "POST",
+            url: "${ctx}/user/updatePerson?username=" + username + "&phone=" + phone + "&email=" + email + "&newPassword=" + newPassword,
+            dataType: "json",
+            success: function (result) {
+                alert(result['message']);
+                location.href = "${ctx}/teacher/personCenter";
+            }
+        })
+    });
+    $("#reset").on('click',function () {
+        location.href = "${ctx}/teacher/personCenter";
+    })
+</script>
+
 </body>
 </html>

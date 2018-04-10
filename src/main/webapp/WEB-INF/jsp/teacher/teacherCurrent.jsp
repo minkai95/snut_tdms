@@ -10,24 +10,24 @@
         <p class="title">运行首页</p>
         <div calss="mainCont">
             <div class="banner">
-                <a class="bannerOne" href="teacherPublicData.jsp" target="mainFrame" onclick="changeLiStyle('publicData')">
+                <a class="bannerOne" href="${ctx}/teacher/teacherPublicData" target="mainFrame" onclick="changeLiStyle('publicData')">
                     <p class="bannerNumber">
-                        <span>15</span>份 </p>
+                        <span>${publicDataCount}</span>份 </p>
                     <p class="dataType">公共资料</p>
                 </a>
-                <a class="bannerTwo" href="teacherPersonData.jsp" target="mainFrame" onclick="changeLiStyle('personData')">
+                <a class="bannerTwo" href="${ctx}/teacher/teacherPersonData" target="mainFrame" onclick="changeLiStyle('personData')">
                     <p class="bannerNumber">
-                        <span>30</span>份 </p>
+                        <span>${personDataCount}</span>份 </p>
                     <p class="dataType">私有资料</p>
                 </a>
-                <a class="bannerThree" href="applyAddDataClass.jsp" target="mainFrame" onclick="changeLiStyle('dataType')">
+                <a class="bannerThree" href="${ctx}/teacher/applyAddDataClass" target="mainFrame" onclick="changeLiStyle('dataType')">
                     <p class="bannerNumber">
-                        <span>7</span>份 </p>
+                        <span>${dataClassCount}</span>份 </p>
                     <p class="dataType">资料类目</p>
                 </a>
-                <a class="bannerFour" href="teacherNews.jsp" target="mainFrame" onclick="changeLiStyle('teacherNews')">
+                <a class="bannerFour" href="${ctx}/teacher/teacherNews" target="mainFrame" onclick="changeLiStyle('teacherNews')">
                     <p class="bannerNumber">
-                        <span>9</span>条 </p>
+                        <span>${noticeCount}</span>条 </p>
                     <p class="dataType">消息公告</p>
                 </a>
             </div>

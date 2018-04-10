@@ -1,6 +1,7 @@
 package com.snut_tdms.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.snut_tdms.model.po.UserInfo;
 import com.snut_tdms.model.po.UserRole;
 import com.snut_tdms.service.UserService;
 import com.snut_tdms.util.StatusCode;
@@ -29,35 +30,58 @@ public class UserController {
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     @ResponseBody
-    public String login(@RequestParam("username") String username, @RequestParam("password") String password, HttpSession session){
-        Map<String,Object> jsonMap = new HashMap<>();
+    public JSONObject login(@RequestParam("username") String username, @RequestParam("password") String password, HttpSession session){
+        JSONObject json = new JSONObject();
         Map<String,Object> result = userService.userLogin(username,password);
         StatusCode code = (StatusCode)result.get("StatusCode");
         UserRole userRole = (UserRole)result.get("userRole");
-        jsonMap.put("code",code.getnCode());
-        if(code.getnCode().equals(StatusCode.LOGIN_SUCCESS.getnCode())){
+        if(StatusCode.LOGIN_SUCCESS.getnCode().equals(code.getnCode()) && (userRole.getUser().getFirstLogin()==1)){
+            UserInfo userInfo = userService.selectUserInfoByUsername(username);
             session.setAttribute("userRole",userRole);
+            session.setAttribute("userInfo",userInfo);
             switch (userRole.getRole().getName()){
-                case "超级管理员":
-                    session.setAttribute("userRole","superadmin");
-                    jsonMap.put("urlStr", "/superadmin/index");
+                case "superadmin":
+                    session.setAttribute("role","superadmin");
+                    json.put("urlStr", "/superadmin/index");
                     break;
-                case "管理员":
-                    session.setAttribute("userRole","admin");
-                    jsonMap.put("urlStr", "/admin/index");
+                case "admin":
+                    session.setAttribute("role","admin");
+                    json.put("urlStr", "/admin/index");
                     break;
-                case "学办":
-                    session.setAttribute("userRole","studentOffice");
-                    jsonMap.put("urlStr", "/studentOffice/index");
+                case "teacherOffice":
+                    session.setAttribute("role","studentOffice");
+                    json.put("urlStr", "/studentOffice/index");
                     break;
-                case "教务处":
-                    session.setAttribute("userRole","deanOffice");
-                    jsonMap.put("urlStr", "/deanOffice/index");
+                case "deanOffice":
+                    session.setAttribute("role","deanOffice");
+                    json.put("urlStr", "/deanOffice/index");
+                    break;
+                case "teacher":
+                    session.setAttribute("role","teacher");
+                    json.put("urlStr", "/teacher/index");
                     break;
                 default:
                     break;
             }
         }
-        return JSONObject.toJSONString(jsonMap);
+        return json;
+    }
+
+    @RequestMapping(value = "/updatePerson",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject updatePerson(@RequestParam("username") String username, @RequestParam("phone") String phone,@RequestParam("email") String email,@RequestParam("newPassword") String newPassword, HttpSession session){
+        JSONObject json = new JSONObject();
+        UserInfo userInfo = userService.selectUserInfoByUsername(username);
+        if (userInfo.getPhone().equals(phone) && userInfo.getEmail().equals(email) && (userInfo.getUser().getPassword().equals(newPassword) || "".equals(newPassword) || newPassword==null) ){
+            json.put("message",StatusCode.UPDATE_NOT.getnCode());
+        } else {
+            userInfo.setPhone(phone);
+            userInfo.setEmail(email);
+            if("".equals(newPassword) || newPassword==null){
+                userInfo.getUser().setPassword(newPassword);
+            }
+            json.put("message",userService.updateUserInfo(userInfo,userInfo.getUser()).getnCode());
+        }
+        return json;
     }
 }
