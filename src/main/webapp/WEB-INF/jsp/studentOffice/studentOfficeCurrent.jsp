@@ -10,12 +10,12 @@
     <p class="title">运行首页</p>
     <div calss="mainCont">
         <div class="banner">
-            <a class="bannerOne" href="teacherPublicData.jsp" target="mainFrame" onclick="changeLiStyle('publicData')">
+            <a class="bannerOne" href="studentOfficePublicData.jsp" target="mainFrame" onclick="changeLiStyle('publicData')">
                 <p class="bannerNumber">
                     <span>15</span>份 </p>
                 <p class="dataType">公共资料</p>
             </a>
-            <a class="bannerTwo" href="teacherPersonData.jsp" target="mainFrame" onclick="changeLiStyle('personData')">
+            <a class="bannerTwo" href="studentOfficePersonData.jsp" target="mainFrame" onclick="changeLiStyle('personData')">
                 <p class="bannerNumber">
                     <span>30</span>份 </p>
                 <p class="dataType">私有资料</p>
@@ -25,7 +25,7 @@
                     <span>7</span>份 </p>
                 <p class="dataType">资料类目</p>
             </a>
-            <a class="bannerFour" href="teacherNews.jsp" target="mainFrame" onclick="changeLiStyle('teacherNews')">
+            <a class="bannerFour" href="studentOfficeNews.jsp" target="mainFrame" onclick="changeLiStyle('teacherNews')">
                 <p class="bannerNumber">
                     <span>9</span>条 </p>
                 <p class="dataType">消息公告</p>

@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ include file="../include/taglibs.jsp" %>
+<%@ include file="/WEB-INF/jsp/include/taglibs.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +8,7 @@
 <body>
     <div class="teacherCurrentWrapper">
         <div class="teacherHeader">
-            <p class="publicDataTitle">教师公共资料类目</p>
+            <p class="publicDataTitle">学办公共资料类目</p>
             <div class="teacherUpload">
                 <p class="uploadTitle">管理学院已有公共资料类目</p>
                 <a href="javaScript: void(0)" class="upload" data-toggle="modal" data-target="#myModal"><i class=" icon-plus-sign"></i>申请新增公共资料类目</a>
