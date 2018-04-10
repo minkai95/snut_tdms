@@ -3,12 +3,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>教师公共资料</title>
+    <title>教务处公共资料</title>
 </head>
 <body>
 <div class="teacherCurrentWrapper">
     <div class="teacherHeader">
-        <p class="publicDataTitle">教师公共资料</p>
+        <p class="publicDataTitle">教务处公共资料</p>
         <div class="teacherUpload">
             <p class="uploadTitle">已上传公共资料列表</p>
             <a href="#" class="upload" data-toggle="modal" data-target="#myModal"><i class="icon-upload"></i>上传公共资料</a>
@@ -29,7 +29,7 @@
                 <td>网路基础试卷</td>
                 <td>杨帆</td>
                 <td>2017-5-23</td>
-                <td>公共资料</td>
+                <td>试卷</td>
                 <td style="width: 250px;  text-align: center;">
                     <button class="btn btn-info btn-sm"><i class="icon-search"></i>查看</button>
                     <button class="btn btn-primary btn-sm"><i class="icon-download"></i>下载</button>
@@ -41,7 +41,7 @@
                 <td>网路基础试卷</td>
                 <td>杨帆</td>
                 <td>2017-5-23</td>
-                <td>公共资料</td>
+                <td>实验报告</td>
                 <td style="width: 250px;  text-align: center;">
                     <button class="btn btn-info btn-sm"><i class="icon-search"></i>查看</button>
                     <button class="btn btn-primary btn-sm"><i class="icon-download"></i>下载</button>

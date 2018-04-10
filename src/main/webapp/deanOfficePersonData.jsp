@@ -3,12 +3,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>教师私有资料</title>
+    <title>教务处私有资料</title>
 </head>
 <body>
 <div class="teacherCurrentWrapper">
     <div class="teacherHeader">
-        <p class="publicDataTitle">教师私有资料</p>
+        <p class="publicDataTitle">教务处私有资料</p>
         <div class="teacherUpload">
             <p class="uploadTitle">已上传私有资料列表</p>
             <a href="#" class="upload" data-toggle="modal" data-target="#myModal"><i class="icon-upload"></i>上传私有资料</a>

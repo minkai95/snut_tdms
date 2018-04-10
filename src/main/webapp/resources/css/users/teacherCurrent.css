@@ -14,46 +14,47 @@
     display: flex;
     border-bottom: 2px dashed #ccc;
 }
-.banner div{
+.banner a{
+    display: block;
     flex: 1;
     min-width: 205px;
     height: 100px;
     margin: 0 10px 0 0;
     border-radius: 6px;
+    text-decoration: none;
 }
 .bannerFour{
     margin-right: 0 !important;
-    background: url("/resources/images/bannerFour.png") no-repeat;
+    background: url("/resources/images/bannerFour.png") no-repeat center 0;
     background-size: cover;
 }
 
 .bannerOne{
-     background: url("/resources/images/bannerOne.png") no-repeat;
+     background: url("/resources/images/bannerOne.png") no-repeat center 0;
      background-size: cover;
 }
 .bannerTwo{
-    background: url("/resources/images/bannerTwo.png") no-repeat;
+    background: url("/resources/images/bannerTwo.png") no-repeat center 0;
     background-size: cover;
 }
 .bannerThree{
-    background: url("/resources/images/bannerThree.png") no-repeat;
+    background: url("/resources/images/bannerThree.png") no-repeat center 0;
     background-size: cover;
 }
 .bannerNumber{
-    margin: 10px 0 0 !important;
-    font-size: 16px;
+    margin: 3px 0 0 !important;
+    font-size: 18px;
     color: #f7f7f7;
     padding: 0 50px;
 }
-.bannerNumber a{
+.bannerNumber span{
     color: #fff;
-    font-size: 24px;
+    font-size: 40px;
     padding: 0 3px;
-    text-decoration: underline;
 }
 .dataType{
     padding: 0 50px;
-    font-size: 20px;
+    font-size: 18px;
     margin: 5px 0 0;
     color: #f7f7f7;
     letter-spacing: 5px;

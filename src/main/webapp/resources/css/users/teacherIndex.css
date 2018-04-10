@@ -33,6 +33,10 @@ header{
     font-family: "Microsoft Yahei";
     color: #D0ECF0;
 }
+.welcome a{
+    text-decoration: none;
+    color: #FFFFFF;
+}
 .middle{
     width: 100%;
     height: 556px;
@@ -40,7 +44,7 @@ header{
 }
 .leftContent{
     min-width: 180px;
-    height: 556px;
+    height: 100%;
     flex: 2;
     background-color: #4F575A;
 }
@@ -67,8 +71,12 @@ header{
     cursor: pointer;
 }
 .asideAddClass{
-    color: #E6E4E7 !important;
+    color: #fff !important;
     background-color: #5D6A73;
+}
+.asideAddClass_2{
+    color: #BABCBC !important;
+    background-color: #4f575a !important;
 }
 .aside li a i{
     margin-right: 10px;
@@ -78,4 +86,13 @@ header{
     width: 100%;
     height: 556px;
     border: none;
+}
+
+/* 教务处主页css */
+.publicDataType{
+    background-color: #384144;
+    display: none;
+}
+.publicDataType ul li a{
+    text-indent: 56px;
 }
