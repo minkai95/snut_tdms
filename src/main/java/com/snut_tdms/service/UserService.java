@@ -51,30 +51,34 @@ public class UserService {
      */
     public StatusCode uploadFile(HttpServletRequest request){
         String id = SystemUtils.getUUID();
-        User user = (User)request.getSession().getAttribute("user");
+        User user = ((UserInfo)request.getSession().getAttribute("userInfo")).getUser();
         Data data = new Data();
         data.setId(id);
         data.setUser(userDao.selectUserByUsername(user.getUsername()).getUser());
         data.setSubmitTime(new Timestamp(System.currentTimeMillis()));
         data.setFlag(0);
-        String dataClassId = "";
+        String dataClassId = request.getParameter("fileType");
+        String content = request.getParameter("description");
+        data.setContent(content);
         //MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
+        /*
         Enumeration<String> enumeration = request.getParameterNames();  //获取请求参数的名称
         while (enumeration.hasMoreElements()) {
             String parameterName = enumeration.nextElement();   //获取请求参数的值
             switch (parameterName) {
-                case "content":
+                case "description":
                     data.setContent(request.getParameter(parameterName));
                     break;
-                case "dataClassId":
+                case "fileType":
                     dataClassId = request.getParameter(parameterName);
                     break;
             }
         }
-        DataClass dataClass = selectDataClass(
-                userDao.selectUserInfoByUsername(user.getUsername()).getDepartment().getCode(),
-                userDao.selectUserByUsername(user.getUsername()).getRole().getId(),
-                "(0,1)",dataClassId).get(0);
+        */
+        String departmentCode = userDao.selectUserInfoByUsername(user.getUsername()).getDepartment().getCode();
+        DataClass dataClass = selectDataClass(departmentCode,
+                null,
+                null,dataClassId).get(0);
         data.setDataClass(dataClass);
         request.setAttribute("departmentCode",selectUserInfoByUsername(user.getUsername()).getDepartment().getCode());
         Map<String,Object> resultMap = FileUploadUtil.upload(request);
@@ -271,7 +275,7 @@ public class UserService {
     }
 
     /**
-     * 查询本院公共资料类型,如果roleId为空则查询本院所有公共资料类型
+     * 查询本院资料类型,如果roleId为空则查询本院所有资料类型
      * @param departmentCode 院系编码
      * @param roleId 角色ID
      * @param flag 备注
@@ -297,14 +301,16 @@ public class UserService {
     }
 
     /**
-     * 查询用户自己的资料
+     * 查询用户自己的资料(公共/私有)
      * @param username 用户名
      * @return List
      */
-    public List<Data> selectDataByUsername(String username,String dataClassId){
+    public List<Data> selectDataByParams(String username,String dataClassId,Integer dataFlag,Integer dataClassFlag){
         Map<String,Object> map = new HashMap<>();
         map.put("username",username);
         map.put("dataClassId",dataClassId);
+        map.put("dataFlag",dataFlag);
+        map.put("dataClassFlag",dataClassFlag);
         return userDao.selectDataByParams(map);
     }
 

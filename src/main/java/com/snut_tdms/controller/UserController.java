@@ -8,8 +8,10 @@ import com.snut_tdms.util.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 import java.util.HashMap;
@@ -84,4 +86,24 @@ public class UserController {
         }
         return json;
     }
+
+    @RequestMapping(value = "/getDepartmentDataClass",method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject getDepartmentDataClass(HttpSession httpSession) {
+        JSONObject json = new JSONObject();
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        json.put("dataClass",userService.selectDataClass(userInfo.getDepartment().getCode(),null,"(1)",null));
+        return json;
+    }
+
+    @RequestMapping(value = "/uploadFile",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject uploadFile(HttpServletRequest request) {
+        JSONObject jsonObject = new JSONObject();
+        String a = request.getParameter("fileType");
+        String b = request.getParameter("description");
+        jsonObject.put("message",userService.uploadFile(request).getnCode());
+        return jsonObject;
+    }
+
 }

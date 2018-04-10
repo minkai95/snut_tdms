@@ -26,7 +26,7 @@ public class SessionInterceptor implements HandlerInterceptor {
         } else {
             if (servletPath.contains("selectPerson") || servletPath.contains("updatePerson"))
                 return true;
-            if (!servletPath.contains(role)) {  //若请求路径中不包含权限，则返回到登录页
+            if (!servletPath.contains(role) && !servletPath.contains("user")) {  //若请求路径中不包含权限，则返回到登录页
                 session.removeAttribute("role");
                 session.removeAttribute("userObject");
                 session.invalidate();

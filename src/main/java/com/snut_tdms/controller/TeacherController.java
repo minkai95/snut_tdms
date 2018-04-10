@@ -1,7 +1,9 @@
 package com.snut_tdms.controller;
 
+import com.snut_tdms.model.po.Data;
 import com.snut_tdms.model.po.UserInfo;
 import com.snut_tdms.model.po.UserRole;
+import com.snut_tdms.model.vo.DataHelpClass;
 import com.snut_tdms.service.TeacherService;
 import com.snut_tdms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 教师Controller层
@@ -61,7 +65,13 @@ public class TeacherController {
 
     @RequestMapping(value = "/teacherPublicData", method = RequestMethod.GET)
     public String teacherPublicData(HttpSession httpSession, Model model) {
-
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        List<Data> dataList = userService.selectDataByParams(userInfo.getUser().getUsername(),null,0,1);
+        List<DataHelpClass> result = new ArrayList<>();
+        for (Data data:dataList) {
+            result.add(new DataHelpClass(data,userService.selectUserInfoByUsername(data.getUser().getUsername())));
+        }
+        model.addAttribute("dataList",result);
         return "teacher/teacherPublicData";
     }
     @RequestMapping(value = "/teacherPersonData", method = RequestMethod.GET)

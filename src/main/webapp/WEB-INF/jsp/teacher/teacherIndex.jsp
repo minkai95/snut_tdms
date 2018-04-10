@@ -26,7 +26,7 @@
             </ul>
         </div>
         <div class="rightContent">
-            <iframe id="mainFrame" class="mainFrame" name="mainFrame" src="${ctx}/teacher/teacherCurrent" scrolling="no"></iframe>
+            <iframe id="mainFrame" class="mainFrame" name="mainFrame" src="${ctx}/teacher/teacherCurrent" ></iframe>
         </div>
     </div>
 </div>

@@ -11,7 +11,7 @@
         <p class="publicDataTitle">教师公共资料</p>
         <div class="teacherUpload">
             <p class="uploadTitle">已上传公共资料列表</p>
-            <a href="#" class="upload" data-toggle="modal" data-target="#myModal"><i class="icon-upload"></i>上传公共资料</a>
+            <a href="#" class="upload" id="openModel" data-toggle="modal"><i class="icon-upload"></i>上传公共资料</a>
         </div>
     </div>
     <div class="teacherPublicDataList">
@@ -24,66 +24,20 @@
                 <th>资料类型</th>
                 <th style="text-align: center">操作</th>
             </tr>
-            <tr>
-                <td>1</td>
-                <td>网路基础试卷</td>
-                <td>杨帆</td>
-                <td>2017-5-23</td>
-                <td>公共资料</td>
-                <td style="width: 250px;  text-align: center;">
-                    <button class="btn btn-info btn-sm"><i class="icon-search"></i>查看</button>
-                    <button class="btn btn-primary btn-sm"><i class="icon-download"></i>下载</button>
-                    <button class="btn btn-danger btn-sm"><i class="icon-remove-circle"></i>删除</button>
-                </td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>网路基础试卷</td>
-                <td>杨帆</td>
-                <td>2017-5-23</td>
-                <td>公共资料</td>
-                <td style="width: 250px;  text-align: center;">
-                    <button class="btn btn-info btn-sm"><i class="icon-search"></i>查看</button>
-                    <button class="btn btn-primary btn-sm"><i class="icon-download"></i>下载</button>
-                    <button class="btn btn-danger btn-sm"><i class="icon-remove-circle"></i>删除</button>
-                </td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>网路基础试卷</td>
-                <td>杨帆</td>
-                <td>2017-5-23</td>
-                <td>公共资料</td>
-                <td style="width: 250px;  text-align: center;">
-                    <button class="btn btn-info btn-sm"><i class="icon-search"></i>查看</button>
-                    <button class="btn btn-primary btn-sm"><i class="icon-download"></i>下载</button>
-                    <button class="btn btn-danger btn-sm"><i class="icon-remove-circle"></i>删除</button>
-                </td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>网路基础试卷网路基础试卷网路基础试卷</td>
-                <td>杨帆</td>
-                <td>2017-5-23</td>
-                <td>公共资料</td>
-                <td style="width: 250px;  text-align: center;">
-                    <button class="btn btn-info btn-sm"><i class="icon-search"></i>查看</button>
-                    <button class="btn btn-primary btn-sm"><i class="icon-download"></i>下载</button>
-                    <button class="btn btn-danger btn-sm"><i class="icon-remove-circle"></i>删除</button>
-                </td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>网路基础试卷</td>
-                <td>杨帆</td>
-                <td>2017-5-23</td>
-                <td>公共资料</td>
-                <td style="width: 250px; text-align: center;">
-                    <button class="btn btn-info btn-sm"><i class="icon-search"></i>查看</button>
-                    <button class="btn btn-primary btn-sm"><i class="icon-download"></i>下载</button>
-                    <button class="btn btn-danger btn-sm"><i class="icon-remove-circle"></i>删除</button>
-                </td>
-            </tr>
+            <c:forEach items="${dataList}" var="datahelp" varStatus="dataStatus">
+                <tr>
+                    <td>${dataStatus.index+1}</td>
+                    <td>${datahelp.data.fileName}</td>
+                    <td>${datahelp.userInfo.name}</td>
+                    <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${datahelp.data.submitTime}"/></td>
+                    <td>公共资料</td>
+                    <td style="width: 250px;  text-align: center;">
+                        <button class="btn btn-info btn-sm"><i class="icon-search"></i>查看</button>
+                        <button class="btn btn-primary btn-sm"><i class="icon-download"></i>下载</button>
+                        <button class="btn btn-danger btn-sm"><i class="icon-remove-circle"></i>删除</button>
+                    </td>
+                </tr>
+            </c:forEach>
         </table>
     </div>
 </div>
@@ -98,20 +52,14 @@
             </div>
             <div class="modal-body">
                 <div class="uploadForm">
-                    <form action="#">
+                    <form id="submitDataForm" action="${ctx}/user/uploadFile" method="POST" enctype="multipart/form-data" >
                         <div class="form-group">
                             <label for="description">文件描述:</label>
                             <textarea class="form-control" id="description" name="description" placeholder="请输入文件描述" ></textarea>
                         </div>
                         <div class="form-group">
                             <label for="fileType">文件类型:</label>
-                            <select id="fileType" class="form-control">
-                                <option>--请选择文件类型--</option>
-                                <option value="试卷">试卷</option>
-                                <option value="论文">论文</option>
-                                <option value="实验报告">实验报告</option>
-                                <option value="课程设计">课程设计</option>
-                            </select>
+                            <select id="fileType" name="fileType" class="form-control"></select>
                         </div>
                         <div class="form-group">
                             <label for="chooseFile" class="control-label">选择文件:</label>
@@ -121,7 +69,7 @@
                         </div>
                         <div class="form-group" style="text-align: right; text-align: right; margin: 25px 0 0 0;">
                             <button type="reset" class="btn btn-info btn-primary">取消</button>
-                            <button type="submit" class="btn btn-success btn-primary">提交</button>
+                            <button type="button" id="submitDataButton" class="btn btn-success btn-primary">提交</button>
                         </div>
                     </form>
                 </div>
@@ -129,6 +77,30 @@
         </div>
     </div>
 </div>
-
+<script>
+    $('#openModel').on('click',function () {
+        $.ajax({
+            type: "GET",
+            url: "${ctx}/user/getDepartmentDataClass",
+            dataType: "json",
+            success: function (result) {
+                if(result['dataClass'].length>0){
+                    var fileType = $("#fileType");
+                    fileType.html("");
+                    for (var i = 0; i < result['dataClass'].length; i++) {
+                        fileType.append("<option id='" + result['dataClass'][i]['id'] + "' value='" + result['dataClass'][i]['id'] + "' >" + result['dataClass'][i]['name'] + "</option >");
+                    }
+                }
+                $('#myModal').modal();
+            }
+        })
+    });
+    $('#submitDataButton').on('click',function () {
+        var newUrl = "${ctx}/user/uploadFile?description="+$('#description').val()+"&fileType="+$('#fileType').val();
+        var from = $("#submitDataForm");
+        from.attr('action',newUrl);    //通过jquery为action属性赋值
+        from.submit();    //提交ID为myform的表单
+    })
+</script>
 </body>
 </html>

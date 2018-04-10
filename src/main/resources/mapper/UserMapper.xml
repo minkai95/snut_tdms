@@ -231,7 +231,7 @@
         SELECT
           `data`.id,
           content,
-          file_name,
+          file_name as fileName,
           src,
           data_class.id as dataClassId,
           data_class.name as dataClassName,
@@ -261,6 +261,12 @@
         WHERE user2.username = #{username}
         <if test="dataClassId != null and dataClassId!= ''">
             AND data_class.id = #{dataClassId}
+        </if>
+        <if test="dataFlag != null and dataFlag!= ''">
+            AND `data`.flag = ${dataFlag}
+        </if>
+        <if test="dataClassFlag != null and dataClassFlag!= ''">
+            AND data_class.flag = ${dataClassFlag}
         </if>
     </select>
     <select id="selectClassTypesByDataClassId" parameterType="java.lang.String" resultMap="classTypes">
