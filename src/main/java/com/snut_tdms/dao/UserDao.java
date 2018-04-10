@@ -17,11 +17,13 @@ public interface UserDao {
 
     int insertLog(Log log);
 
+    int insertData(Data data);
+
     int updatePassword(User user);
 
     int updateUserInfo(UserInfo userInfo);
 
-    int insertData(Data data);
+    int resetAdminPassword(String username);
 
     int logicalDeleteDataByIds(Map<String,Object> map);
 
@@ -33,5 +35,15 @@ public interface UserDao {
 
     List<DataClass> selectDataClass(Map<String,Object> map);
 
-    List<Data> selectDataByUsername(String username);
+    List<Data> selectDataByParams(Map<String,Object> map);
+
+    List<ClassType> selectClassTypesByDataClassId(String dataClassId);
+
+    List<Department> selectAllDepartment();
+
+    Department selectDepartmentByCode(String departmentCode);
+
+    Role selectRoleById(String roleId);
+
+    List<Role> selectAllRole();
 }

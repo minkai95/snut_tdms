@@ -3,6 +3,7 @@ package com.snut_tdms.model.po;
 import java.sql.Timestamp;
 
 /**
+ * 文件数据类
  * Created by huankai on 2018/3/22.
  */
 public class Data {
@@ -11,6 +12,7 @@ public class Data {
     private String fileName;
     private String src;
     private DataClass dataClass;
+    private String typeContents;
     private User user;
     private Timestamp submitTime;
     private Timestamp deleteTime;
@@ -19,12 +21,13 @@ public class Data {
     public Data() {
     }
 
-    public Data(String id, String content, String fileName, String src, DataClass dataClass, User user, Timestamp submitTime, Timestamp deleteTime, Integer flag) {
+    public Data(String id, String content, String fileName, String src, DataClass dataClass, String typeContents, User user, Timestamp submitTime, Timestamp deleteTime, Integer flag) {
         this.id = id;
         this.content = content;
         this.fileName = fileName;
         this.src = src;
         this.dataClass = dataClass;
+        this.typeContents = typeContents;
         this.user = user;
         this.submitTime = submitTime;
         this.deleteTime = deleteTime;
@@ -71,6 +74,14 @@ public class Data {
         this.dataClass = dataClass;
     }
 
+    public String getTypeContents() {
+        return typeContents;
+    }
+
+    public void setTypeContents(String typeContents) {
+        this.typeContents = typeContents;
+    }
+
     public User getUser() {
         return user;
     }
@@ -111,6 +122,7 @@ public class Data {
                 ", fileName='" + fileName + '\'' +
                 ", src='" + src + '\'' +
                 ", dataClass=" + dataClass +
+                ", typeContents='" + typeContents + '\'' +
                 ", user=" + user +
                 ", submitTime=" + submitTime +
                 ", deleteTime=" + deleteTime +
@@ -130,6 +142,7 @@ public class Data {
         if (fileName != null ? !fileName.equals(data.fileName) : data.fileName != null) return false;
         if (src != null ? !src.equals(data.src) : data.src != null) return false;
         if (dataClass != null ? !dataClass.equals(data.dataClass) : data.dataClass != null) return false;
+        if (typeContents != null ? !typeContents.equals(data.typeContents) : data.typeContents != null) return false;
         if (user != null ? !user.equals(data.user) : data.user != null) return false;
         if (submitTime != null ? !submitTime.equals(data.submitTime) : data.submitTime != null) return false;
         if (deleteTime != null ? !deleteTime.equals(data.deleteTime) : data.deleteTime != null) return false;
@@ -143,6 +156,7 @@ public class Data {
         result = 31 * result + (fileName != null ? fileName.hashCode() : 0);
         result = 31 * result + (src != null ? src.hashCode() : 0);
         result = 31 * result + (dataClass != null ? dataClass.hashCode() : 0);
+        result = 31 * result + (typeContents != null ? typeContents.hashCode() : 0);
         result = 31 * result + (user != null ? user.hashCode() : 0);
         result = 31 * result + (submitTime != null ? submitTime.hashCode() : 0);
         result = 31 * result + (deleteTime != null ? deleteTime.hashCode() : 0);

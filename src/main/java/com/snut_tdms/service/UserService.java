@@ -31,8 +31,8 @@ public class UserService {
         String content = (String) map.get("content");
         String action = (String) map.get("action");
         Timestamp time = new Timestamp(System.currentTimeMillis());
-        User operationUser = (User) map.get("operationUser");
-        User operatedUser = (User) map.get("operatedUser");
+        User operationUser = userDao.selectUserByUsername(((User) map.get("operationUser")).getUsername()).getUser();
+        User operatedUser = userDao.selectUserByUsername(((User) map.get("operatedUser")).getUsername()).getUser();
         String description = null;
         if(map.containsKey("description")) {
             description = (String) map.get("description");
@@ -76,6 +76,7 @@ public class UserService {
                 userDao.selectUserByUsername(user.getUsername()).getRole().getId(),
                 "(0,1)",dataClassId).get(0);
         data.setDataClass(dataClass);
+        request.setAttribute("departmentCode",selectUserInfoByUsername(user.getUsername()).getDepartment().getCode());
         Map<String,Object> resultMap = FileUploadUtil.upload(request);
         String src = (String)resultMap.get("src");
         StatusCode message = (StatusCode)resultMap.get("message");
@@ -192,7 +193,7 @@ public class UserService {
             if (userDao.updateUserInfo(userInfo) > 0) {
                 Map<String,Object> map = new HashMap<>();
                 map.put("action","update");
-                map.put("content","用户更新了个人信息");
+                map.put("content","更新了用户的个人信息!");
                 map.put("operationUser",operationUser);
                 map.put("operatedUser",userDao.selectUserByUsername(userInfo.getUser().getUsername()).getUser());
                 insertLog(map);
@@ -203,6 +204,29 @@ public class UserService {
         }else{
             return StatusCode.UPDATE_NOT;
         }
+    }
+    /**
+     * 重置用户密码
+     * @param username 被操作者用户名
+     * @param operationUser 操作者
+     * @return 状态码
+     */
+    public StatusCode resetAdminPassword(String username,User operationUser){
+        StatusCode code;
+        if(selectUserInfoByUsername(username)==null){
+            code = StatusCode.NOT_USER;
+        }else if (userDao.resetAdminPassword(username)>0){
+            code = StatusCode.UPDATE_SUCCESS;
+            Map<String, Object> logParams = new HashMap<>();
+            logParams.put("content", "重置了用户名:"+username+" 的用户密码!");
+            logParams.put("action", "update");
+            logParams.put("operationUser", operationUser);
+            logParams.put("operatedUser", selectUserInfoByUsername(username).getUser());
+            insertLog(logParams);
+        }else{
+            code = StatusCode.UPDATE_ERROR;
+        }
+        return code;
     }
 
     /**
@@ -277,8 +301,54 @@ public class UserService {
      * @param username 用户名
      * @return List
      */
-    public List<Data> selectDataByUsername(String username){
-        return userDao.selectDataByUsername(username);
+    public List<Data> selectDataByUsername(String username,String dataClassId){
+        Map<String,Object> map = new HashMap<>();
+        map.put("username",username);
+        map.put("dataClassId",dataClassId);
+        return userDao.selectDataByParams(map);
+    }
+
+    /**
+     * 根据ID查询资料类型下的子分类
+     * @param dataClassId 类型ID
+     * @return list
+     */
+    public  List<ClassType> selectClassTypesByDataClassId(String dataClassId){
+        return userDao.selectClassTypesByDataClassId(dataClassId);
+    }
+
+    /**
+     * 查询所有院系
+     * @return list
+     */
+    public List<Department> selectAllDepartment(){
+        return userDao.selectAllDepartment();
+    }
+
+    /**
+     * 根据院系编码查询院系
+     * @param departmentCode 院系编码
+     * @return Department
+     */
+    public Department selectDepartmentByCode(String departmentCode){
+        return userDao.selectDepartmentByCode(departmentCode);
+    }
+
+    /**
+     * 通过ID查询角色对象
+     * @param roleId 角色ID
+     * @return role
+     */
+    public Role selectRoleById(String roleId){
+        return userDao.selectRoleById(roleId);
+    }
+
+    /**
+     * 查询所有角色对象
+     * @return list
+     */
+    public List<Role> selectAllRole(){
+        return userDao.selectAllRole();
     }
 
 }

@@ -46,6 +46,7 @@
         <result column="firstLogin" jdbcType="VARCHAR" javaType="java.lang.Integer" property="user.firstLogin"/>
         <result column="departmentCode" jdbcType="VARCHAR" javaType="java.lang.String" property="department.code"/>
         <result column="departmentName" jdbcType="VARCHAR" javaType="java.lang.String" property="department.name"/>
+        <result column="classTypes" jdbcType="VARCHAR" javaType="java.lang.String" property="classTypes"/>
         <result column="flag" jdbcType="VARCHAR" javaType="java.lang.Integer" property="flag"/>
     </resultMap>
     <resultMap id="data" type="com.snut_tdms.model.po.Data">
@@ -64,6 +65,7 @@
         <result column="dataClassDepartmentCode" jdbcType="VARCHAR" javaType="java.lang.String" property="dataClass.department.code"/>
         <result column="dataClassDepartmentName" jdbcType="VARCHAR" javaType="java.lang.String" property="dataClass.department.name"/>
         <result column="dataClassFlag" jdbcType="VARCHAR" javaType="java.lang.Integer" property="dataClass.flag"/>
+        <result column="typeContents" jdbcType="VARCHAR" javaType="java.lang.String" property="typeContents"/>
         <result column="username" jdbcType="VARCHAR" javaType="java.lang.String" property="user.username"/>
         <result column="password" jdbcType="VARCHAR" javaType="java.lang.String" property="user.password"/>
         <result column="idCard" jdbcType="VARCHAR" javaType="java.lang.String" property="user.idCard"/>
@@ -71,6 +73,16 @@
         <result column="submitTime" jdbcType="VARCHAR" javaType="java.sql.Timestamp" property="submitTime"/>
         <result column="deleteTime" jdbcType="VARCHAR" javaType="java.sql.Timestamp" property="deleteTime"/>
         <result column="flag" jdbcType="VARCHAR" javaType="java.lang.Integer" property="flag"/>
+    </resultMap>
+    <resultMap id="classTypes" type="com.snut_tdms.model.po.ClassType">
+        <id column="id" jdbcType="VARCHAR" javaType="java.lang.String" property="id"/>
+        <result column="name" jdbcType="VARCHAR" javaType="java.lang.String" property="name"/>
+        <result column="departmentCode" jdbcType="VARCHAR" javaType="java.lang.String" property="department.code"/>
+        <result column="departmentName" jdbcType="VARCHAR" javaType="java.lang.String" property="department.name"/>
+        <result column="username" jdbcType="VARCHAR" javaType="java.lang.String" property="user.username"/>
+        <result column="password" jdbcType="VARCHAR" javaType="java.lang.String" property="user.password"/>
+        <result column="idCard" jdbcType="VARCHAR" javaType="java.lang.String" property="user.idCard"/>
+        <result column="firstLogin" jdbcType="VARCHAR" javaType="java.lang.Integer" property="user.firstLogin"/>
     </resultMap>
 
     <insert id="insertLog" parameterType="com.snut_tdms.model.po.Log">
@@ -101,6 +113,7 @@
             #{fileName},
             #{src},
             #{dataClass.id},
+            #{typeContents},
             #{user.username},
             #{submitTime},
             #{deleteTime},
@@ -126,6 +139,9 @@
         UPDATE `data` SET
           flag = 1
         WHERE id IN ${ids}
+    </update>
+    <update id="resetAdminPassword" parameterType="java.lang.String">
+        UPDATE `user` SET password = '123456' WHERE username = #{0};
     </update>
 
     <select id="selectUserByUsername" parameterType="java.lang.String" resultMap="userRole">
@@ -194,6 +210,7 @@
           `user`.first_login as firstLogin,
           department.code as departmentCode,
           department.name as departmentName,
+          class_types as classTypes,
           data_class.flag
           FROM data_class
           LEFT JOIN role ON data_class.role = role.id
@@ -210,7 +227,7 @@
             AND role.id = #{roleId}
         </if>
     </select>
-    <select id="selectDataByUsername" parameterType="java.lang.String" resultMap="data">
+    <select id="selectDataByParams" parameterType="java.util.Map" resultMap="data">
         SELECT
           `data`.id,
           content,
@@ -227,6 +244,7 @@
           department.code as dataClassDepartmentCode,
           department.name as dataClassDepartmentName,
           data_class.flag as dataClassFlag,
+          type_contents,
           user2.username,
           user2.password,
           user2.id_card as idCard,
@@ -240,7 +258,50 @@
         LEFT JOIN `user` user1 ON data_class.`user` = user1.username
         LEFT JOIN department ON data_class.department = department.code
         LEFT JOIN `user` user2 ON `data`.user = user2.username
-        WHERE user2.username = #{0}
+        WHERE user2.username = #{username}
+        <if test="dataClassId != null and dataClassId!= ''">
+            AND data_class.id = #{dataClassId}
+        </if>
+    </select>
+    <select id="selectClassTypesByDataClassId" parameterType="java.lang.String" resultMap="classTypes">
+        SELECT
+          ct.id,
+          ct.`name`,
+          department.code as departmentCode,
+          department.name as departmentName,
+          `user`.username,
+          `user`.password,
+          `user`.id_card as idCard,
+          `user`.first_login as firstLogin
+        FROM  class_type as ct
+        LEFT JOIN department ON department.code = ct.department
+        LEFT JOIN `user` ON `user`.username = ct.`user`
+        INNER JOIN(
+            SELECT
+                SUBSTRING_INDEX(SUBSTRING_INDEX(b.class_types,'/',b.id),'/','-1') as classTypeId
+            FROM (
+                SELECT class_types, data_sequence.id FROM data_sequence
+                CROSS JOIN(
+                    SELECT
+                        class_types,
+                        (LENGTH(class_types) - LENGTH(REPLACE(class_types,'/',''))+1) as len
+                    FROM data_class
+                    WHERE id = #{0}
+                ) as a ON a.len>=data_sequence.id
+            ) as b
+        ) as c on c.classTypeId = ct.id
+    </select>
+    <select id="selectAllDepartment" resultType="com.snut_tdms.model.po.Department">
+        SELECT code,`name` FROM department
+    </select>
+    <select id="selectDepartmentByCode" parameterType="java.lang.String" resultType="com.snut_tdms.model.po.Department">
+        SELECT code,`name` FROM department WHERE code = #{0}
+    </select>
+    <select id="selectAllRole" resultType="com.snut_tdms.model.po.Role">
+        SELECT id,`name` FROM role
+    </select>
+    <select id="selectRoleById" resultType="com.snut_tdms.model.po.Role">
+        SELECT id,`name` FROM role WHERE id = #{0}
     </select>
 
 </mapper>

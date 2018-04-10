@@ -10,10 +10,26 @@ Target Server Type    : MYSQL
 Target Server Version : 50549
 File Encoding         : 65001
 
-Date: 2018-03-25 19:10:23
+Date: 2018-04-03 16:29:25
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for class_type
+-- ----------------------------
+DROP TABLE IF EXISTS `class_type`;
+CREATE TABLE `class_type` (
+  `id` varchar(255) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `department` varchar(255) DEFAULT NULL,
+  `user` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `department` (`department`),
+  KEY `class_type_ibfk_2` (`user`),
+  CONSTRAINT `class_type_ibfk_1` FOREIGN KEY (`department`) REFERENCES `department` (`code`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `class_type_ibfk_2` FOREIGN KEY (`user`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for data
@@ -25,16 +41,17 @@ CREATE TABLE `data` (
   `file_name` varchar(255) DEFAULT NULL,
   `src` varchar(255) DEFAULT NULL,
   `data_class` varchar(255) DEFAULT NULL,
+  `type_contents` varchar(255) DEFAULT NULL,
   `user` varchar(255) DEFAULT NULL,
   `submit_time` datetime DEFAULT NULL,
   `delete_time` datetime DEFAULT NULL,
-  `flag` int(255) unsigned zerofill DEFAULT NULL COMMENT '0表示正常，1表示被逻辑删除',
-  PRIMARY KEY (`id`),
+  `flag` int(255) DEFAULT '0' COMMENT '''0''表示正常,''1''表示被逻辑删除',
+  PRIMARY KEY (`id`) USING BTREE,
   KEY `data_class` (`data_class`),
   KEY `user` (`user`),
   CONSTRAINT `data_ibfk_1` FOREIGN KEY (`data_class`) REFERENCES `data_class` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `data_ibfk_2` FOREIGN KEY (`user`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Table structure for data_class
@@ -46,7 +63,8 @@ CREATE TABLE `data_class` (
   `role` varchar(255) DEFAULT NULL,
   `user` varchar(255) DEFAULT NULL,
   `department` varchar(255) DEFAULT NULL,
-  `flag` int(255) DEFAULT NULL COMMENT '0表示为公共类型未审核,1表示公共类型已审核,2表示私人类型',
+  `class_types` varchar(255) DEFAULT NULL,
+  `flag` int(255) DEFAULT '0' COMMENT '0表示公共类型未审核,1表示公共类型已审核,2表示私人类型',
   PRIMARY KEY (`id`),
   KEY `role` (`role`),
   KEY `data_class_ibfk_2` (`user`),
@@ -55,6 +73,15 @@ CREATE TABLE `data_class` (
   CONSTRAINT `data_class_ibfk_2` FOREIGN KEY (`user`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `data_class_ibfk_3` FOREIGN KEY (`department`) REFERENCES `department` (`code`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for data_sequence
+-- ----------------------------
+DROP TABLE IF EXISTS `data_sequence`;
+CREATE TABLE `data_sequence` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Table structure for department
@@ -111,6 +138,22 @@ CREATE TABLE `system_notice` (
   KEY `system_notice_ibfk_2` (`role`),
   CONSTRAINT `system_notice_ibfk_1` FOREIGN KEY (`user`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `system_notice_ibfk_2` FOREIGN KEY (`role`) REFERENCES `role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for type_content
+-- ----------------------------
+DROP TABLE IF EXISTS `type_content`;
+CREATE TABLE `type_content` (
+  `id` varchar(255) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `class_type` varchar(255) DEFAULT NULL,
+  `user` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `class_type` (`class_type`),
+  KEY `user` (`user`),
+  CONSTRAINT `type_content_ibfk_1` FOREIGN KEY (`class_type`) REFERENCES `class_type` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `type_content_ibfk_2` FOREIGN KEY (`user`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------

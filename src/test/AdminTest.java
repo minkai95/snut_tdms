@@ -1,3 +1,4 @@
+import com.snut_tdms.model.po.Log;
 import com.snut_tdms.model.po.User;
 import com.snut_tdms.service.AdminService;
 import org.junit.Before;
@@ -41,7 +42,10 @@ public class AdminTest {
         map.put("operationUser",operationUser);
         map.put("operatedUser",operatedUser);
         map.put("description","文件不合格而被删除");
-        System.out.print(adminService.deleteDataByIds(list,map));
+        List<Log> l  = adminService.selectDepartmentLogs("001");
+        for (Log log: l) {
+            System.out.println(log);
+        }
     }
 
 }

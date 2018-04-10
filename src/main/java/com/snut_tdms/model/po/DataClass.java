@@ -1,6 +1,7 @@
 package com.snut_tdms.model.po;
 
 /**
+ * 资料类别
  * Created by huankai on 2018/3/22.
  */
 public class DataClass {
@@ -9,17 +10,19 @@ public class DataClass {
     private Role role;
     private User user;
     private Department department;
+    private String classTypes;
     private Integer flag;
 
     public DataClass() {
     }
 
-    public DataClass(String id, String name, Role role, User user, Department department, Integer flag) {
+    public DataClass(String id, String name, Role role, User user, Department department, String classTypes, Integer flag) {
         this.id = id;
         this.name = name;
         this.role = role;
         this.user = user;
         this.department = department;
+        this.classTypes = classTypes;
         this.flag = flag;
     }
 
@@ -63,6 +66,14 @@ public class DataClass {
         this.department = department;
     }
 
+    public String getClassTypes() {
+        return classTypes;
+    }
+
+    public void setClassTypes(String classTypes) {
+        this.classTypes = classTypes;
+    }
+
     public Integer getFlag() {
         return flag;
     }
@@ -79,6 +90,7 @@ public class DataClass {
                 ", role=" + role +
                 ", user=" + user +
                 ", department=" + department +
+                ", classTypes='" + classTypes + '\'' +
                 ", flag=" + flag +
                 '}';
     }
@@ -95,6 +107,7 @@ public class DataClass {
         if (role != null ? !role.equals(dataClass.role) : dataClass.role != null) return false;
         if (user != null ? !user.equals(dataClass.user) : dataClass.user != null) return false;
         if (department != null ? !department.equals(dataClass.department) : dataClass.department != null) return false;
+        if (classTypes != null ? !classTypes.equals(dataClass.classTypes) : dataClass.classTypes != null) return false;
         return flag != null ? flag.equals(dataClass.flag) : dataClass.flag == null;
     }
 
@@ -105,6 +118,7 @@ public class DataClass {
         result = 31 * result + (role != null ? role.hashCode() : 0);
         result = 31 * result + (user != null ? user.hashCode() : 0);
         result = 31 * result + (department != null ? department.hashCode() : 0);
+        result = 31 * result + (classTypes != null ? classTypes.hashCode() : 0);
         result = 31 * result + (flag != null ? flag.hashCode() : 0);
         return result;
     }
