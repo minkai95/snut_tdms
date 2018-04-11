@@ -16,8 +16,8 @@ public class FileDownloadUtil {
 
     public static StatusCode download(HttpServletRequest request, HttpServletResponse response) throws IOException {
         //得到要下载的文件名
-        String fileName = request.getParameter("filename");  //23239283cas9_阿凡达.avi
-        fileName = new String(fileName.getBytes("iso8859-1"),"UTF-8");
+        String fileName = (String) request.getAttribute("filename");  //23239283cas9_阿凡达.avi
+        //fileName = new String(fileName.getBytes("UTF-8"),"iso8859-1");
         String departmentCode = (String) request.getAttribute("departmentCode");
         //上传的文件都是保存在/WEB-INF/upload目录下的子目录当中
         String fileSaveRootPath = request.getServletContext().getRealPath("\\WEB-INF\\upload\\"+departmentCode);

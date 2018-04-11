@@ -1,16 +1,21 @@
 package com.snut_tdms.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.snut_tdms.model.po.Data;
 import com.snut_tdms.model.po.UserInfo;
 import com.snut_tdms.model.po.UserRole;
 import com.snut_tdms.model.vo.DataHelpClass;
 import com.snut_tdms.service.TeacherService;
 import com.snut_tdms.service.UserService;
+import com.snut_tdms.util.StatusCode;
+import com.sun.org.glassfish.gmbal.ParameterNames;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -45,6 +50,7 @@ public class TeacherController {
         model.addAttribute("personDataCount",personDataCount);
         model.addAttribute("dataClassCount",dataClassCount);
         model.addAttribute("noticeCount",noticeCount);
+        model.addAttribute("userInfo",userInfo);
         return "teacher/teacherIndex";
     }
 
@@ -66,9 +72,10 @@ public class TeacherController {
     @RequestMapping(value = "/teacherPublicData", method = RequestMethod.GET)
     public String teacherPublicData(HttpSession httpSession, Model model) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        List<Data> dataList = userService.selectDataByParams(userInfo.getUser().getUsername(),null,0,1);
+        List<Data> dataList = userService.selectDataByParams(userInfo.getUser().getUsername(),null,0,1,null);
         List<DataHelpClass> result = new ArrayList<>();
         for (Data data:dataList) {
+            data.setFileName(data.getFileName().substring(data.getFileName().lastIndexOf("_")+1));
             result.add(new DataHelpClass(data,userService.selectUserInfoByUsername(data.getUser().getUsername())));
         }
         model.addAttribute("dataList",result);
@@ -100,4 +107,20 @@ public class TeacherController {
 
         return "teacher/teacherNews";
     }
+
+    @RequestMapping(value = "/logicalDeleteDataById", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject logicalDeleteDataById(@RequestParam("id") String id ,@RequestParam("description") String description , HttpSession httpSession) {
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        JSONObject jsonObject = new JSONObject();
+        List<String> list = new ArrayList<>();
+        list.add(id);
+        if (userService.logicalDeleteDataByIds(list,userInfo.getUser(),description)>0) {
+            jsonObject.put("message", StatusCode.DELETE_SUCCESS.getnCode());
+        }else {
+            jsonObject.put("message",StatusCode.DELETE_ERROR.getnCode());
+        }
+        return jsonObject;
+    }
+
 }

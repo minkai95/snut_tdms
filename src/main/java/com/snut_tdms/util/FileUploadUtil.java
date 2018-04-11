@@ -104,7 +104,7 @@ public class FileUploadUtil {
                     //获取item中的上传文件的输入流
                     InputStream in = item.getInputStream();
                     //得到文件保存的名称
-                    String saveFilename = makeFileName(filename);
+                    String saveFilename = makeFileName(filename,request);
                     //得到文件的保存目录
                     String realSavePath = makePath(saveFilename, savePath,departmentCode);
                     //创建一个文件输出流
@@ -126,6 +126,7 @@ public class FileUploadUtil {
                     //item.delete();
                     map.put("message",StatusCode.FILE_UPLOAD_SUCCESS);
                     map.put("src",realSavePath);
+                    map.put("filename",filename);
                 }
             }
         }catch (FileUploadBase.FileSizeLimitExceededException e) {
@@ -141,6 +142,9 @@ public class FileUploadUtil {
         if(!map.containsKey("src")){
             map.put("src",null);
         }
+        if(!map.containsKey("filename")){
+            map.put("filename",null);
+        }
         return map;
     }
 
@@ -149,8 +153,8 @@ public class FileUploadUtil {
      * @param fileName 文件名
      * @return String
      */
-    private static String makeFileName(String fileName){
-        return SystemUtils.getUUID()+"_"+fileName;
+    private static String makeFileName(String fileName,HttpServletRequest request){
+        return request.getAttribute("id")+"_"+fileName;
     }
 
     /**

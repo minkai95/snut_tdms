@@ -1,9 +1,13 @@
 package com.snut_tdms.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.snut_tdms.model.po.Data;
+import com.snut_tdms.model.po.SystemNotice;
 import com.snut_tdms.model.po.UserInfo;
 import com.snut_tdms.model.po.UserRole;
+import com.snut_tdms.model.vo.DataHelpClass;
 import com.snut_tdms.service.UserService;
+import com.snut_tdms.util.FileDownloadUtil;
 import com.snut_tdms.util.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -12,7 +16,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -105,5 +113,15 @@ public class UserController {
         jsonObject.put("message",userService.uploadFile(request).getnCode());
         return jsonObject;
     }
+
+    @RequestMapping(value = "/downloadFile", method = RequestMethod.GET)
+    public void downloadFile(HttpSession httpSession,HttpServletRequest request, HttpServletResponse response,@RequestParam("saveFilename") String saveFilename) throws IOException {
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        request.setAttribute("filename",saveFilename);
+        request.setAttribute("departmentCode",userInfo.getDepartment().getCode());
+        StatusCode code = FileDownloadUtil.download(request,response);
+        System.out.println(code.getnCode());
+    }
+
 
 }

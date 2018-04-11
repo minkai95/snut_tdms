@@ -19,22 +19,25 @@
             <tr>
                 <th>#</th>
                 <th>文件名称</th>
+                <th>描述</th>
                 <th>上传者</th>
                 <th>上传日期</th>
                 <th>资料类型</th>
                 <th style="text-align: center">操作</th>
             </tr>
             <c:forEach items="${dataList}" var="datahelp" varStatus="dataStatus">
-                <tr>
+                <tr id="dataList">
+                    <td style="display:none">${datahelp.data.id}</td>
                     <td>${dataStatus.index+1}</td>
                     <td>${datahelp.data.fileName}</td>
+                    <td>${datahelp.data.content}</td>
                     <td>${datahelp.userInfo.name}</td>
                     <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${datahelp.data.submitTime}"/></td>
                     <td>公共资料</td>
                     <td style="width: 250px;  text-align: center;">
                         <button class="btn btn-info btn-sm"><i class="icon-search"></i>查看</button>
-                        <button class="btn btn-primary btn-sm"><i class="icon-download"></i>下载</button>
-                        <button class="btn btn-danger btn-sm"><i class="icon-remove-circle"></i>删除</button>
+                        <a href="" class="btn btn-primary btn-sm" id="downloadFile"><i class="icon-download"></i>下载</a>
+                        <button class="btn btn-danger btn-sm" id="deleteFile"><i class="icon-remove-circle"></i>删除</button>
                     </td>
                 </tr>
             </c:forEach>
@@ -68,8 +71,8 @@
                             <input class="form-control chooseFile" id="chooseFile" type="file" name="taskFile" value="" onchange="$('#fileName').text($(this).val().substr($(this).val().lastIndexOf('\\')+1))"/>
                         </div>
                         <div class="form-group" style="text-align: right; text-align: right; margin: 25px 0 0 0;">
-                            <button type="reset" class="btn btn-info btn-primary">取消</button>
-                            <button type="button" id="submitDataButton" class="btn btn-success btn-primary">提交</button>
+                            <button data-dismiss="modal" aria-label="Close" class="btn btn-info btn-primary">取消</button>
+                            <button type="submit" id="submitDataButton" class="btn btn-success btn-primary">提交</button>
                         </div>
                     </form>
                 </div>
@@ -96,10 +99,61 @@
         })
     });
     $('#submitDataButton').on('click',function () {
-        var newUrl = "${ctx}/user/uploadFile?description="+$('#description').val()+"&fileType="+$('#fileType').val();
-        var from = $("#submitDataForm");
-        from.attr('action',newUrl);    //通过jquery为action属性赋值
-        from.submit();    //提交ID为myform的表单
+        var options = {
+            dataType:"json",
+            url:"${ctx}/user/uploadFile?description="+$('#description').val()+"&fileType="+$('#fileType').val(),
+            resetForm: true,
+            success: function (result) {
+                $.confirm({
+                    title: '提示',
+                    content: result['message'],
+                    buttons: {
+                        关闭: function () {
+                            location.reload();
+                        }
+                    }
+                })
+            }
+        };
+        $("#submitDataForm").ajaxForm(options);
+    });
+    $('#deleteFile').on('click',function () {
+        $.confirm({
+            title: '提示',
+            content: '您确认删除吗？<input style="margin-top:5px;" class="form-control" type="text" id="deleteReason" placeholder="请输入删除原因(选填)"/>',
+            buttons: {
+                确认: function () {
+                    var description = $('#deleteReason').val();
+                    var id = $('#dataList').children('td').eq(0).text();
+                    console.log(description+"==="+id);
+                    $.ajax({
+                        type: "POST",
+                        url: "${ctx}/teacher/logicalDeleteDataById?id="+id+"&description="+description,
+                        dataType: "json",
+                        success: function (result) {
+                            $.confirm({
+                                title: '提示',
+                                content: result['message'],
+                                buttons: {
+                                    确定: function () {
+                                        location.reload();
+                                    }
+                                }
+                            })
+                        }
+                    });
+                },
+                关闭: function () {
+                    $('#myModal').modal("hide");
+                }
+            }
+        })
+    });
+    $('#downloadFile').on('click',function () {
+        var tr = $('#dataList');
+        var id = tr.children('td').eq(0).text();
+        var filename = tr.children('td').eq(2).text();
+        $(this).attr("href","${ctx}/user/downloadFile?saveFilename="+id+"_"+filename)
     })
 </script>
 </body>

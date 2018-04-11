@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -51,6 +52,7 @@ public class UserService {
      */
     public StatusCode uploadFile(HttpServletRequest request){
         String id = SystemUtils.getUUID();
+        request.setAttribute("id",id);
         User user = ((UserInfo)request.getSession().getAttribute("userInfo")).getUser();
         Data data = new Data();
         data.setId(id);
@@ -82,11 +84,9 @@ public class UserService {
         data.setDataClass(dataClass);
         request.setAttribute("departmentCode",selectUserInfoByUsername(user.getUsername()).getDepartment().getCode());
         Map<String,Object> resultMap = FileUploadUtil.upload(request);
-        String src = (String)resultMap.get("src");
         StatusCode message = (StatusCode)resultMap.get("message");
-        String filename = src == null ? null : src.substring(src.lastIndexOf("\\") + 1);
-        data.setSrc(src);
-        data.setFileName(filename);
+        data.setSrc((String)resultMap.get("src"));
+        data.setFileName(id+"_"+ resultMap.get("filename"));
         if(message.getnCode().equals(StatusCode.FILE_UPLOAD_SUCCESS.getnCode())){
             if(userDao.insertData(data)>0){
                 Map<String,Object> map = new HashMap<>();
@@ -143,20 +143,36 @@ public class UserService {
         return StatusCode.INSERT_ERROR;
     }
 
-    public Integer logicalDeleteDataByIds(List<String> idList, Map<String,Object> map){
+    public Integer logicalDeleteDataByIds(List<String> idList,User operationUser,String description){
+        Map<String,Object> map = new HashMap<>();
         StringBuffer sb = new StringBuffer();
         String[] strArr = idList.toArray(new String[idList.size()]);
         String str = Arrays.toString(strArr);
         sb.append("(");
-        sb.append(str.substring(1,str.length()-1));
+        int c = 0;
+        for (String s:strArr) {
+            sb.append("'"+s+"'");
+            if(c++>0){
+                sb.append(",");
+            }
+        }
         sb.append(")");
         Map<String,Object> m = new HashMap<>();
         m.put("ids",sb.toString());
+        m.put("deleteTime",new Timestamp(System.currentTimeMillis()));
+        map.put("content","逻辑删除了一份资料！");
+        map.put("action","logicalDelete");
+        map.put("operationUser",operationUser);
+        map.put("description",description);
         int count = userDao.logicalDeleteDataByIds(m);
         if(count>0){
-            map.put("content","用户逻辑删除了"+count+"份资料！");
-            map.put("action","logicalDelete");
-            insertLog(map);
+            for (String id: idList) {
+                Data data = userDao.selectDataById(id);
+                if (data != null){
+                    map.put("operatedUser",data.getUser());
+                }
+                insertLog(map);
+            }
         }
         return count;
     }
@@ -305,12 +321,13 @@ public class UserService {
      * @param username 用户名
      * @return List
      */
-    public List<Data> selectDataByParams(String username,String dataClassId,Integer dataFlag,Integer dataClassFlag){
+    public List<Data> selectDataByParams(String username,String dataClassId,Integer dataFlag,Integer dataClassFlag,String dataId){
         Map<String,Object> map = new HashMap<>();
         map.put("username",username);
         map.put("dataClassId",dataClassId);
-        map.put("dataFlag",dataFlag);
-        map.put("dataClassFlag",dataClassFlag);
+        map.put("dataFlag",String.valueOf(dataFlag));
+        map.put("dataClassFlag",String.valueOf(dataClassFlag));
+        map.put("dataId",dataId);
         return userDao.selectDataByParams(map);
     }
 

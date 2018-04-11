@@ -10,7 +10,7 @@
     <header class="header">
         <div class="headerLeft">高校资料管理系统</div>
         <div class="headerRight">
-            <div class="welcome">你好，<a href="${ctx}/teacher/personCenter" target="mainFrame" id="username">周杰伦</a></div>
+            <div class="welcome">你好，<a href="${ctx}/teacher/personCenter" target="mainFrame" id="username">${userInfo.name}</a></div>
         </div>
     </header>
     <div class="middle">

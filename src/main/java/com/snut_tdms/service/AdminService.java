@@ -9,6 +9,7 @@ import com.snut_tdms.util.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.*;
 
 /**
@@ -113,6 +114,29 @@ public class AdminService extends UserService{
             insertLog(map);
         }
         return count;
+    }
+
+    /**
+     * 删除单个文件
+     * @param fileName 要删除的文件的文件名
+     * @param src 删除文件路径
+     * @return 单个文件删除成功返回true，否则返回false
+     */
+    public StatusCode deleteFile(String src,String fileName) {
+        File file = new File(src+"\\"+fileName);
+        // 如果文件路径所对应的文件存在，并且是一个文件，则直接删除
+        if (file.exists() && file.isFile()) {
+            if (file.delete()) {
+                System.out.println("删除文件" + fileName + "成功！");
+                return StatusCode.DELETE_SUCCESS;
+            } else {
+                System.out.println("删除文件" + fileName + "失败！");
+                return StatusCode.DELETE_ERROR;
+            }
+        } else {
+            System.out.println("删除文件失败：" + fileName + "不存在！");
+            return StatusCode.DELETE_ERROR_NOT_FILE;
+        }
     }
 
     /**
