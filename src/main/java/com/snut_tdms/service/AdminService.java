@@ -93,51 +93,6 @@ public class AdminService extends UserService{
         }
         return resultStr;
     }
-    /**
-     * 通过id删除资料
-     * @param idList id列表
-     * @param map 插入日志的数据
-     * @return 成功删除条数
-     */
-    public Integer deleteDataByIds(List<String> idList, Map<String,Object> map){
-        StringBuffer sb = new StringBuffer();
-        String[] strArr = idList.toArray(new String[idList.size()]);
-        String str = Arrays.toString(strArr);
-        sb.append("(");
-        sb.append(str.substring(1,str.length()-1));
-        sb.append(")");
-        Map<String,Object> m = new HashMap<>();
-        m.put("ids",sb.toString());
-        int count = adminDao.deleteDataByIds(m);
-        if(count>0){
-            map.put("content","管理员彻底删除了"+count+"份资料！");
-            insertLog(map);
-        }
-        return count;
-    }
-
-    /**
-     * 删除单个文件
-     * @param fileName 要删除的文件的文件名
-     * @param src 删除文件路径
-     * @return 单个文件删除成功返回true，否则返回false
-     */
-    public StatusCode deleteFile(String src,String fileName) {
-        File file = new File(src+"\\"+fileName);
-        // 如果文件路径所对应的文件存在，并且是一个文件，则直接删除
-        if (file.exists() && file.isFile()) {
-            if (file.delete()) {
-                System.out.println("删除文件" + fileName + "成功！");
-                return StatusCode.DELETE_SUCCESS;
-            } else {
-                System.out.println("删除文件" + fileName + "失败！");
-                return StatusCode.DELETE_ERROR;
-            }
-        } else {
-            System.out.println("删除文件失败：" + fileName + "不存在！");
-            return StatusCode.DELETE_ERROR_NOT_FILE;
-        }
-    }
 
     /**
      * 管理员查询本院系所有日志记录

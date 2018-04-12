@@ -19,8 +19,6 @@ public interface AdminDao extends UserDao {
 
     int deleteUserByUsernameList(List<String> usernameList);
 
-    int deleteDataByIds(Map<String,Object> ids);
-
     List<Log> selectDepartmentLogs(String departmentCode);
 
     List<User> selectUserByRole(String roleId);

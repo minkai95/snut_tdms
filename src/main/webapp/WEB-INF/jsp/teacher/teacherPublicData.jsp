@@ -27,7 +27,6 @@
             </tr>
             <c:forEach items="${dataList}" var="datahelp" varStatus="dataStatus">
                 <tr id="${datahelp.data.id}">
-                    <td style="display:none">${datahelp.data.id}</td>
                     <td>${dataStatus.index+1}</td>
                     <td>${datahelp.data.fileName}</td>
                     <td>${datahelp.data.content}</td>
@@ -81,6 +80,7 @@
     </div>
 </div>
 <script>
+    //打开模态框
     $('#openModel').on('click',function () {
         $.ajax({
             type: "GET",
@@ -98,6 +98,7 @@
             }
         })
     });
+    //上传文件
     $('#submitDataButton').on('click',function () {
         var options = {
             dataType:"json",
@@ -127,7 +128,7 @@
                     var description = $('#deleteReason').val();
                     $.ajax({
                         type: "POST",
-                        url: "${ctx}/teacher/logicalDeleteDataById?id="+id+"&description="+description,
+                        url: "${ctx}/user/logicalDeleteDataById?id="+id+"&description="+description,
                         dataType: "json",
                         success: function (result) {
                             $.confirm({
@@ -151,7 +152,7 @@
     //下载文件
     function downloadFile(id) {
         var tr = $('#'+id+'');
-        var filename = tr.children('td').eq(2).text();
+        var filename = tr.children('td').eq(1).text();
         console.log(id+"_"+filename);
         $('.downloadFile').attr("href","${ctx}/user/downloadFile?saveFilename="+id+"_"+filename)
     }

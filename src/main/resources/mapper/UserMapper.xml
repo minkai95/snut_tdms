@@ -121,6 +121,11 @@
         )
     </insert>
 
+    <delete id="deleteDataByIds" parameterType="java.util.Map">
+        DELETE FROM `data`
+        WHERE id IN ${ids}
+    </delete>
+
     <update id="updatePassword" parameterType="com.snut_tdms.model.po.User">
         UPDATE `user` SET
           password = #{password},

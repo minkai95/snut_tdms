@@ -38,10 +38,6 @@
             #{username}
         </foreach>
     </delete>
-    <delete id="deleteDataByIds" parameterType="java.util.Map">
-        DELETE FROM `data`
-        WHERE id IN ${ids}
-    </delete>
 
     <select id="selectDepartmentLogs" resultMap="log" parameterType="java.lang.String">
         SELECT

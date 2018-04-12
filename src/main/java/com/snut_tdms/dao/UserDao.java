@@ -19,6 +19,8 @@ public interface UserDao {
 
     int insertData(Data data);
 
+    int deleteDataByIds(Map<String,Object> ids);
+
     int updatePassword(User user);
 
     int updateUserInfo(UserInfo userInfo);

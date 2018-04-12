@@ -83,7 +83,14 @@ public class TeacherController {
     }
     @RequestMapping(value = "/teacherPersonData", method = RequestMethod.GET)
     public String teacherPersonData(HttpSession httpSession, Model model) {
-
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        List<Data> dataList = userService.selectDataByParams(userInfo.getUser().getUsername(),null,0,2,null);
+        List<DataHelpClass> result = new ArrayList<>();
+        for (Data data:dataList) {
+            data.setFileName(data.getFileName().substring(data.getFileName().lastIndexOf("_")+1));
+            result.add(new DataHelpClass(data,userService.selectUserInfoByUsername(data.getUser().getUsername())));
+        }
+        model.addAttribute("dataList",result);
         return "teacher/teacherPersonData";
     }
     @RequestMapping(value = "/applyAddDataClass", method = RequestMethod.GET)
@@ -106,21 +113,6 @@ public class TeacherController {
     public String teacherNews(HttpSession httpSession, Model model) {
 
         return "teacher/teacherNews";
-    }
-
-    @RequestMapping(value = "/logicalDeleteDataById", method = RequestMethod.POST)
-    @ResponseBody
-    public JSONObject logicalDeleteDataById(@RequestParam("id") String id ,@RequestParam("description") String description , HttpSession httpSession) {
-        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        JSONObject jsonObject = new JSONObject();
-        List<String> list = new ArrayList<>();
-        list.add(id);
-        if (userService.logicalDeleteDataByIds(list,userInfo.getUser(),description)>0) {
-            jsonObject.put("message", StatusCode.DELETE_SUCCESS.getnCode());
-        }else {
-            jsonObject.put("message",StatusCode.DELETE_ERROR.getnCode());
-        }
-        return jsonObject;
     }
 
 }
