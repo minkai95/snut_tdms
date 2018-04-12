@@ -1,10 +1,10 @@
 package com.snut_tdms.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.snut_tdms.model.po.Data;
-import com.snut_tdms.model.po.UserInfo;
-import com.snut_tdms.model.po.UserRole;
+import com.snut_tdms.model.po.*;
 import com.snut_tdms.model.vo.DataHelpClass;
+import com.snut_tdms.model.vo.LogHelpClass;
+import com.snut_tdms.model.vo.NoticeHelpClass;
 import com.snut_tdms.service.TeacherService;
 import com.snut_tdms.service.UserService;
 import com.snut_tdms.util.StatusCode;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -106,12 +107,70 @@ public class TeacherController {
     }
     @RequestMapping(value = "/dataTrace", method = RequestMethod.GET)
     public String dataTrace(HttpSession httpSession, Model model) {
-
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        List<Log> logs = userService.selectPersonLogs(userInfo.getUser().getUsername());
+        List<Log> resultLog = new ArrayList<>();
+        String[] strArr = {"insert","delete","logicalDelete"};
+        List<String> list = Arrays.asList(strArr);
+        if (logs.size()>0) {
+            for (Log log : logs) {
+                if (list.contains(log.getAction())) {
+                    switch (log.getAction()){
+                        case "insert":
+                            log.setAction("新增");
+                            break;
+                        case "delete":
+                            log.setAction("删除");
+                            break;
+                        case "logicalDelete":
+                            log.setAction("逻辑删除");
+                            break;
+                    }
+                    resultLog.add(log);
+                }
+            }
+        }
+        List<LogHelpClass> result = new ArrayList<>();
+        for (Log log:resultLog) {
+            if (log.getDescription()==null || "".equals(log.getDescription())){
+                log.setDescription("暂无");
+            }
+            LogHelpClass logHelpClass = new LogHelpClass();
+            logHelpClass.setLog(log);
+            logHelpClass.setOperationUserInfo(userService.selectUserInfoByUsername(log.getOperationUser().getUsername()));
+            UserRole userRole = userService.selectUserRoleByUsername(log.getOperationUser().getUsername());
+            switch (userRole.getRole().getName()){
+                case "superadmin":
+                    userRole.getRole().setName("超级管理员");
+                    break;
+                case "admin":
+                    userRole.getRole().setName("管理员");
+                    break;
+                case "teacherOffice":
+                    userRole.getRole().setName("学办教师");
+                    break;
+                case "deanOffice":
+                    userRole.getRole().setName("教务处教师");
+                    break;
+                case "teacher":
+                    userRole.getRole().setName("教师");
+                    break;
+            }
+            logHelpClass.setOperationUserRole(userRole);
+            result.add(logHelpClass);
+        }
+        model.addAttribute("logHelpList",result);
         return "teacher/dataTrace";
     }
     @RequestMapping(value = "/teacherNews", method = RequestMethod.GET)
     public String teacherNews(HttpSession httpSession, Model model) {
-
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        List<SystemNotice> list = userService.selectSystemNotice(userInfo.getDepartment().getCode(),null);
+        List<NoticeHelpClass> result = new ArrayList<>();
+        for (SystemNotice systemNotice: list) {
+            result.add(new NoticeHelpClass(systemNotice,userService.selectUserInfoByUsername(systemNotice.getUser().getUsername())));
+        }
+        model.addAttribute("noticeHelpList",result);
         return "teacher/teacherNews";
     }
 

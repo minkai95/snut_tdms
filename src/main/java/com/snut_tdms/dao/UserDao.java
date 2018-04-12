@@ -54,4 +54,6 @@ public interface UserDao {
     Integer selectDepartmentDataClassCount(Map<String,Object> map);
 
     Integer selectAllNoticeCount(String departmentCode);
+
+    List<Log> selectPersonLogs(String username);
 }

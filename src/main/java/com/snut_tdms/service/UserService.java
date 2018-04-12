@@ -373,6 +373,15 @@ public class UserService {
     }
 
     /**
+     * 根据用户名查询用户角色
+     * @param username 用户名
+     * @return UserRole对象
+     */
+    public UserRole selectUserRoleByUsername(String username){
+        return userDao.selectUserByUsername(username);
+    }
+
+    /**
      * 查询用户自己的资料(公共/私有)
      * @param username 用户名
      * @return List
@@ -459,5 +468,14 @@ public class UserService {
      */
     public Integer selectAllNoticeCount(String departmentCode){
         return userDao.selectAllNoticeCount(departmentCode);
+    }
+
+    /**
+     * 查询用户的所有被操作的日志记录
+     * @param username 用户名
+     * @return list
+     */
+    public List<Log> selectPersonLogs(String username){
+        return userDao.selectPersonLogs(username);
     }
 }
