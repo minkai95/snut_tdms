@@ -26,7 +26,7 @@
                 <th style="text-align: center">操作</th>
             </tr>
             <c:forEach items="${dataList}" var="datahelp" varStatus="dataStatus">
-                <tr id="dataList">
+                <tr id="${datahelp.data.id}">
                     <td style="display:none">${datahelp.data.id}</td>
                     <td>${dataStatus.index+1}</td>
                     <td>${datahelp.data.fileName}</td>
@@ -36,8 +36,8 @@
                     <td>公共资料</td>
                     <td style="width: 250px;  text-align: center;">
                         <button class="btn btn-info btn-sm"><i class="icon-search"></i>查看</button>
-                        <a href="" class="btn btn-primary btn-sm" id="downloadFile"><i class="icon-download"></i>下载</a>
-                        <button class="btn btn-danger btn-sm" id="deleteFile"><i class="icon-remove-circle"></i>删除</button>
+                        <a href="javascript:void(0)" class="btn btn-primary btn-sm downloadFile" onclick="downloadFile('${datahelp.data.id}')"><i class="icon-download"></i>下载</a>
+                        <button class="btn btn-danger btn-sm" onclick="deleteFile()"><i class="icon-remove-circle"></i>删除</button>
                     </td>
                 </tr>
             </c:forEach>
@@ -117,7 +117,8 @@
         };
         $("#submitDataForm").ajaxForm(options);
     });
-    $('#deleteFile').on('click',function () {
+    //删除文件
+    function deleteFile() {
         $.confirm({
             title: '提示',
             content: '您确认删除吗？<input style="margin-top:5px;" class="form-control" type="text" id="deleteReason" placeholder="请输入删除原因(选填)"/>',
@@ -148,13 +149,14 @@
                 }
             }
         })
-    });
-    $('#downloadFile').on('click',function () {
-        var tr = $('#dataList');
-        var id = tr.children('td').eq(0).text();
+    }
+    //下载文件
+    function downloadFile(id) {
+        var tr = $('#'+id+'');
         var filename = tr.children('td').eq(2).text();
-        $(this).attr("href","${ctx}/user/downloadFile?saveFilename="+id+"_"+filename)
-    })
+        console.log(id+"_"+filename);
+        $('.downloadFile').attr("href","${ctx}/user/downloadFile?saveFilename="+id+"_"+filename)
+    }
 </script>
 </body>
 </html>
