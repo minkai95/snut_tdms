@@ -37,7 +37,7 @@
                     <td style="width: 250px;  text-align: center;">
                         <button class="btn btn-info btn-sm"><i class="icon-search"></i>查看</button>
                         <a href="javascript:void(0)" class="btn btn-primary btn-sm downloadFile" onclick="downloadFile('${datahelp.data.id}')"><i class="icon-download"></i>下载</a>
-                        <button class="btn btn-danger btn-sm" onclick="deleteFile()"><i class="icon-remove-circle"></i>删除</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteFile('${datahelp.data.id}')"><i class="icon-remove-circle"></i>删除</button>
                     </td>
                 </tr>
             </c:forEach>
@@ -118,15 +118,13 @@
         $("#submitDataForm").ajaxForm(options);
     });
     //删除文件
-    function deleteFile() {
+    function deleteFile(id) {
         $.confirm({
             title: '提示',
             content: '您确认删除吗？<input style="margin-top:5px;" class="form-control" type="text" id="deleteReason" placeholder="请输入删除原因(选填)"/>',
             buttons: {
                 确认: function () {
                     var description = $('#deleteReason').val();
-                    var id = $('#dataList').children('td').eq(0).text();
-                    console.log(description+"==="+id);
                     $.ajax({
                         type: "POST",
                         url: "${ctx}/teacher/logicalDeleteDataById?id="+id+"&description="+description,
