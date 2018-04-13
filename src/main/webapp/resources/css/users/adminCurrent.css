@@ -1,0 +1,20 @@
+.adminBannerOne{
+    background: url("/resources/images/admin1.png") no-repeat center 0;
+    background-size: cover;
+}
+
+.adminBannerTwo{
+    background: url("/resources/images/admin2.png") no-repeat center 0;
+    background-size: cover;
+}
+
+.adminBannerThree{
+    background: url("/resources/images/admin3.png") no-repeat center 0;
+    background-size: cover;
+}
+
+.adminBannerFour{
+    margin-right: 0 !important;
+    background: url("/resources/images/admin4.png") no-repeat center 0;
+    background-size: cover;
+}

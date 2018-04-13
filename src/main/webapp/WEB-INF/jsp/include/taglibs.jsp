@@ -15,6 +15,7 @@
 <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/users/teacherCurrent.css"/>
 <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/users/teacherPublicData.css"/>
 <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/users/applyAddDataClass.css"/>
+<link rel="stylesheet" type="text/css" href="${ctx}/resources/css/users/adminCurrent.css"/>
 <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/personCenter.css"/>
 <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/switchBtn.css"/>
 <%-- 引入JS --%>
