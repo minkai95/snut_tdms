@@ -33,19 +33,4 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-
-    @RequestMapping(value = "/deleteFile",method = RequestMethod.POST)
-    @ResponseBody
-    public JSONObject deleteFile(@RequestParam("dataId") String dataId, HttpSession httpSession) {
-        JSONObject jsonObject = new JSONObject();
-        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        List<Data> dataList = userService.selectDataByParams(userInfo.getUser().getUsername(),null,null,null,dataId);
-        if(dataList.size()>0){
-            Data data = dataList.get(0);
-            jsonObject.put("message",adminService.deleteFile(data.getSrc(),data.getFileName()));
-        } else {
-            jsonObject.put("message", StatusCode.DELETE_ERROR_NOT_FILE);
-        }
-        return jsonObject;
-    }
 }

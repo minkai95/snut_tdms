@@ -59,24 +59,9 @@ public class UserService {
         data.setUser(userDao.selectUserByUsername(user.getUsername()).getUser());
         data.setSubmitTime(new Timestamp(System.currentTimeMillis()));
         data.setFlag(0);
-        String dataClassId = request.getParameter("fileType");
+        String dataClassId = (String) request.getAttribute("fileType");
         String content = request.getParameter("description");
         data.setContent(content);
-        //MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
-        /*
-        Enumeration<String> enumeration = request.getParameterNames();  //获取请求参数的名称
-        while (enumeration.hasMoreElements()) {
-            String parameterName = enumeration.nextElement();   //获取请求参数的值
-            switch (parameterName) {
-                case "description":
-                    data.setContent(request.getParameter(parameterName));
-                    break;
-                case "fileType":
-                    dataClassId = request.getParameter(parameterName);
-                    break;
-            }
-        }
-        */
         String departmentCode = userDao.selectUserInfoByUsername(user.getUsername()).getDepartment().getCode();
         DataClass dataClass = selectDataClass(departmentCode,
                 null,
@@ -143,6 +128,77 @@ public class UserService {
         return StatusCode.INSERT_ERROR;
     }
 
+    /**
+     * 彻底删除单个文件
+     * @param data 要删除的文件
+     * @param description 删除描述(原因)
+     * @return 单个文件删除成功返回true，否则返回false
+     */
+    public StatusCode deleteFile(Data data,String description,User operationUser) {
+        File file = new File(data.getSrc()+"\\"+data.getFileName());
+        // 如果文件路径所对应的文件存在，并且是一个文件，则直接删除
+        if (file.exists() && file.isFile()) {
+            Map<String,Object> map = new HashMap<>();
+            map.put("action","delete");
+            map.put("operationUser",operationUser);
+            map.put("operatedUser",data.getUser());
+            map.put("description",description);
+            List<String> ids = new ArrayList<>();
+            ids.add(data.getId());
+            if (file.delete()&&deleteDataByIds(ids,map,data)>0) {
+                System.out.println("删除文件" + data.getFileName() + "成功！");
+                return StatusCode.DELETE_SUCCESS;
+            } else {
+                System.out.println("删除文件" + data.getFileName() + "失败！");
+                return StatusCode.DELETE_ERROR;
+            }
+        } else {
+            System.out.println("删除文件失败：" + data.getFileName() + "不存在！");
+            return StatusCode.DELETE_ERROR_NOT_FILE;
+        }
+    }
+
+    /**
+     * 通过id删除资料
+     * @param idList id列表
+     * @param map 插入日志的数据
+     * @return 成功删除条数
+     */
+    public Integer deleteDataByIds(List<String> idList, Map<String,Object> map,Data data){
+        StringBuffer sb = new StringBuffer();
+        String[] strArr = idList.toArray(new String[idList.size()]);
+        String str = Arrays.toString(strArr);
+        sb.append("(");
+        int c = 0;
+        for (String s:strArr) {
+            sb.append("'"+s+"'");
+            if(c++>0){
+                sb.append(",");
+            }
+        }
+        sb.append(")");
+        Map<String,Object> m = new HashMap<>();
+        m.put("ids",sb.toString());
+        int flag = data.getDataClass().getFlag();
+        int count = userDao.deleteDataByIds(m);
+        if(count>0){
+            if (flag==2) {
+                map.put("content", selectUserInfoByUsername(((User) map.get("operationUser")).getUsername()).getName() + "彻底删除了" + count + "份私人资料！");
+            }else {
+                map.put("content", selectUserInfoByUsername(((User) map.get("operationUser")).getUsername()).getName() + "彻底删除了" + count + "份公共资料！");
+            }
+            insertLog(map);
+        }
+        return count;
+    }
+
+    /**
+     * 逻辑删除文件
+     * @param idList id
+     * @param operationUser 操作者
+     * @param description 描述
+     * @return 成功删除数量
+     */
     public Integer logicalDeleteDataByIds(List<String> idList,User operationUser,String description){
         Map<String,Object> map = new HashMap<>();
         StringBuffer sb = new StringBuffer();
@@ -317,6 +373,15 @@ public class UserService {
     }
 
     /**
+     * 根据用户名查询用户角色
+     * @param username 用户名
+     * @return UserRole对象
+     */
+    public UserRole selectUserRoleByUsername(String username){
+        return userDao.selectUserByUsername(username);
+    }
+
+    /**
      * 查询用户自己的资料(公共/私有)
      * @param username 用户名
      * @return List
@@ -388,11 +453,29 @@ public class UserService {
     }
 
     /**
+     * 通过ID查询数据
+     * @param dataId ID
+     * @return Data
+     */
+    public Data selectDataById(String dataId){
+        return userDao.selectDataById(dataId);
+    }
+
+    /**
      * 查询本院系所有消息公告条数
      * @param departmentCode 院系编码
      * @return 数目
      */
     public Integer selectAllNoticeCount(String departmentCode){
         return userDao.selectAllNoticeCount(departmentCode);
+    }
+
+    /**
+     * 查询用户的所有被操作的日志记录
+     * @param username 用户名
+     * @return list
+     */
+    public List<Log> selectPersonLogs(String username){
+        return userDao.selectPersonLogs(username);
     }
 }

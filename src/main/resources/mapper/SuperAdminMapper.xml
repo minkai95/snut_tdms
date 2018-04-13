@@ -76,10 +76,10 @@
           user1.password as operationUserPassword,
           user1.id_card as operationUserIdCard,
           user1.first_login as operationUserFirstLogin,
-          user1.username as operatedUserUsername,
-          user1.password as operatedUserPassword,
-          user1.id_card as operatedUserIdCard,
-          user1.first_login as operatedUserFirstLogin,
+          user2.username as operatedUserUsername,
+          user2.password as operatedUserPassword,
+          user2.id_card as operatedUserIdCard,
+          user2.first_login as operatedUserFirstLogin,
           description
           FROM log
           LEFT JOIN `user` as user1 ON user1.username =operation_user

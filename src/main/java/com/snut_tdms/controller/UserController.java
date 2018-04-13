@@ -1,10 +1,7 @@
 package com.snut_tdms.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.snut_tdms.model.po.Data;
-import com.snut_tdms.model.po.SystemNotice;
-import com.snut_tdms.model.po.UserInfo;
-import com.snut_tdms.model.po.UserRole;
+import com.snut_tdms.model.po.*;
 import com.snut_tdms.model.vo.DataHelpClass;
 import com.snut_tdms.service.UserService;
 import com.snut_tdms.util.FileDownloadUtil;
@@ -50,9 +47,9 @@ public class UserController {
             session.setAttribute("userRole",userRole);
             session.setAttribute("userInfo",userInfo);
             switch (userRole.getRole().getName()){
-                case "superadmin":
-                    session.setAttribute("role","superadmin");
-                    json.put("urlStr", "/superadmin/index");
+                case "superAdmin":
+                    session.setAttribute("role","superAdmin");
+                    json.put("urlStr", "/superAdmin/index");
                     break;
                 case "admin":
                     session.setAttribute("role","admin");
@@ -106,10 +103,17 @@ public class UserController {
 
     @RequestMapping(value = "/uploadFile",method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject uploadFile(HttpServletRequest request) {
+    public JSONObject uploadFile(HttpServletRequest request,HttpSession httpSession) {
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         JSONObject jsonObject = new JSONObject();
         String a = request.getParameter("fileType");
         String b = request.getParameter("description");
+        List<DataClass> list = userService.selectDataClass(userInfo.getDepartment().getCode(),null,"(2)",null);
+        if (request.getParameter("fileType")==null){
+            request.setAttribute("fileType",list.get(0).getId());
+        }else {
+            request.setAttribute("fileType",request.getParameter("fileType"));
+        }
         jsonObject.put("message",userService.uploadFile(request).getnCode());
         return jsonObject;
     }
@@ -123,5 +127,62 @@ public class UserController {
         System.out.println(code.getnCode());
     }
 
+    @RequestMapping(value = "/deleteFile",method = RequestMethod.DELETE)
+    @ResponseBody
+    public JSONObject deleteFile(@RequestParam("dataId") String dataId,@RequestParam("description") String description, HttpSession httpSession) {
+        JSONObject jsonObject = new JSONObject();
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        Data data = userService.selectDataById(dataId);
+        if(data != null){
+            jsonObject.put("message",userService.deleteFile(data,description,userInfo.getUser()).getnCode());
+        } else {
+            jsonObject.put("message", StatusCode.DELETE_ERROR_NOT_FILE.getnCode());
+        }
+        return jsonObject;
+    }
+
+    @RequestMapping(value = "/logicalDeleteDataById", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject logicalDeleteDataById(@RequestParam("id") String id ,@RequestParam("description") String description , HttpSession httpSession) {
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        JSONObject jsonObject = new JSONObject();
+        List<String> list = new ArrayList<>();
+        list.add(id);
+        if (userService.logicalDeleteDataByIds(list,userInfo.getUser(),description)>0) {
+            jsonObject.put("message", StatusCode.DELETE_SUCCESS.getnCode());
+        }else {
+            jsonObject.put("message",StatusCode.DELETE_ERROR.getnCode());
+        }
+        return jsonObject;
+    }
+
+    @RequestMapping(value = "/personCenter", method = RequestMethod.GET)
+    public String personCenter(HttpSession httpSession, Model model) {
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        model.addAttribute("userInfo",userService.selectUserInfoByUsername(userInfo.getUser().getUsername()));
+        return "include/personCenter";
+    }
+
+    // 格式化UserRole
+     static UserRole updateUserRole(UserRole userRole){
+        switch (userRole.getRole().getName()){
+            case "superAdmin":
+                userRole.getRole().setName("超级管理员");
+                break;
+            case "admin":
+                userRole.getRole().setName("管理员");
+                break;
+            case "teacherOffice":
+                userRole.getRole().setName("学办教师");
+                break;
+            case "deanOffice":
+                userRole.getRole().setName("教务处教师");
+                break;
+            case "teacher":
+                userRole.getRole().setName("教师");
+                break;
+        }
+        return userRole;
+    }
 
 }

@@ -19,6 +19,8 @@ public interface UserDao {
 
     int insertData(Data data);
 
+    int deleteDataByIds(Map<String,Object> ids);
+
     int updatePassword(User user);
 
     int updateUserInfo(UserInfo userInfo);
@@ -52,4 +54,6 @@ public interface UserDao {
     Integer selectDepartmentDataClassCount(Map<String,Object> map);
 
     Integer selectAllNoticeCount(String departmentCode);
+
+    List<Log> selectPersonLogs(String username);
 }
