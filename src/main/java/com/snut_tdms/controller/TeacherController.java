@@ -1,21 +1,16 @@
 package com.snut_tdms.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.snut_tdms.model.po.*;
 import com.snut_tdms.model.vo.DataHelpClass;
 import com.snut_tdms.model.vo.LogHelpClass;
 import com.snut_tdms.model.vo.NoticeHelpClass;
 import com.snut_tdms.service.TeacherService;
 import com.snut_tdms.service.UserService;
-import com.snut_tdms.util.StatusCode;
-import com.sun.org.glassfish.gmbal.ParameterNames;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -99,12 +94,6 @@ public class TeacherController {
 
         return "teacher/applyAddDataClass";
     }
-    @RequestMapping(value = "/personCenter", method = RequestMethod.GET)
-    public String personCenter(HttpSession httpSession, Model model) {
-        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        model.addAttribute("userInfo",userService.selectUserInfoByUsername(userInfo.getUser().getUsername()));
-        return "teacher/personCenter";
-    }
     @RequestMapping(value = "/dataTrace", method = RequestMethod.GET)
     public String dataTrace(HttpSession httpSession, Model model) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
@@ -138,24 +127,7 @@ public class TeacherController {
             LogHelpClass logHelpClass = new LogHelpClass();
             logHelpClass.setLog(log);
             logHelpClass.setOperationUserInfo(userService.selectUserInfoByUsername(log.getOperationUser().getUsername()));
-            UserRole userRole = userService.selectUserRoleByUsername(log.getOperationUser().getUsername());
-            switch (userRole.getRole().getName()){
-                case "superadmin":
-                    userRole.getRole().setName("超级管理员");
-                    break;
-                case "admin":
-                    userRole.getRole().setName("管理员");
-                    break;
-                case "teacherOffice":
-                    userRole.getRole().setName("学办教师");
-                    break;
-                case "deanOffice":
-                    userRole.getRole().setName("教务处教师");
-                    break;
-                case "teacher":
-                    userRole.getRole().setName("教师");
-                    break;
-            }
+            UserRole userRole = UserController.updateUserRole(userService.selectUserRoleByUsername(log.getOperationUser().getUsername()));
             logHelpClass.setOperationUserRole(userRole);
             result.add(logHelpClass);
         }

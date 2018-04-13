@@ -35,8 +35,8 @@ public class SuperAdminService extends UserService {
      * @param user 超级管理员
      * @return Map
      */
-    public Map<String,Object> insertDepartmentList(List<Department> departmentList, User user){
-        Map<String,Object> map = new HashMap<>();
+    public String insertDepartmentList(List<Department> departmentList, User user){
+        String result="";
         List<Department> relDepartmentList = new ArrayList<>();
         List<String> departmentCodeList = new ArrayList<>();
         List<String> departmentNameList = new ArrayList<>();
@@ -54,19 +54,19 @@ public class SuperAdminService extends UserService {
             count = superAdminDao.insertDepartmentList(relDepartmentList);
         }
         if(count==departmentList.size()){
-            map.put("StatusCode",count+"条数据全部成功插入");
+            result = count+"条院系数据成功插入成功!";
         }else if(count<departmentList.size()){
-            map.put("StatusCode",count+"条数据插入成功,"+(departmentList.size()-count)+"条数据插入失败!请检查院系是否重复！");
+            result = count+"条院系数据插入成功,"+(departmentList.size()-count)+"条插入失败,请检查编码是否重复!";
         }
         if(count>0) {
             Map<String, Object> logParams = new HashMap<>();
-            logParams.put("content", map.get("StatusCode"));
+            logParams.put("content", result);
             logParams.put("action", "insert");
             logParams.put("operationUser", user);
             logParams.put("operatedUser", user);
             insertLog(logParams);
         }
-        return map;
+        return result;
     }
 
     /**
@@ -76,17 +76,17 @@ public class SuperAdminService extends UserService {
      * @param operationUser 操作者
      * @return Map
      */
-    public Map<String,Object> insertAdmin(String username,String departmentCode,User operationUser){
-        Map<String,Object> map = new HashMap<>();
+    public String insertAdmin(String username,String departmentCode,User operationUser){
+        String result = "";
         Map<String,Object> relParams = new HashMap<>();
         relParams.put("username",username);
         relParams.put("departmentCode",departmentCode);
         if(selectUserInfoByUsername(username)!=null){
-            map.put("StatusCode","添加失败,该用户名已经存在！");
+            result = "添加失败,该用户名已经存在！";
         }else if(selectDepartmentByCode(departmentCode)==null){
-            map.put("StatusCode","添加失败,院系编码不存在！");
+            result = "添加失败,院系编码不存在！";
         }else if(superAdminDao.insertAdmin(relParams)>0){
-            map.put("StatusCode","添加成功!");
+            result = StatusCode.INSERT_SUCCESS.getnCode();
             Map<String, Object> logParams = new HashMap<>();
             logParams.put("content", "超级管理员新增了一名院系管理员！");
             logParams.put("action", "insert");
@@ -94,9 +94,9 @@ public class SuperAdminService extends UserService {
             logParams.put("operatedUser", selectUserInfoByUsername(username).getUser());
             insertLog(logParams);
         }else{
-            map.put("StatusCode","添加失败!");
+            result = "添加失败!";
         }
-        return  map;
+        return  result;
     }
 
     /**
@@ -105,25 +105,25 @@ public class SuperAdminService extends UserService {
      * @param user 超级管理员
      * @return map
      */
-    public Map<String,Object> deleteDepartmentListByCodes(List<String> departmentCodeList,User user){
+    public String deleteDepartmentListByCodes(List<String> departmentCodeList,User user){
         int count = superAdminDao.deleteDepartmentListByCodes(departmentCodeList);
-        Map<String,Object> map = new HashMap<>();
+        String result = "";
         if(count>0 && count<departmentCodeList.size()){
-            map.put("StatusCode",count+"条数据删除成功!"+(departmentCodeList.size()-count)+"条数据删除失败!");
+            result = count+"条院系数据删除成功!"+(departmentCodeList.size()-count)+"条删除失败!";
         }else if(count==departmentCodeList.size()){
-            map.put("StatusCode",count+"条数据删除成功!");
+            result = count+"条院系数据删除成功!";
         }else {
-            map.put("StatusCode",departmentCodeList.size()+"条数据删除失败!");
+            result = departmentCodeList.size()+"条院系数据删除失败!";
         }
         if(count>0){
             Map<String, Object> logParams = new HashMap<>();
-            logParams.put("content", map.get("StatusCode"));
+            logParams.put("content", result);
             logParams.put("action", "delete");
             logParams.put("operationUser", user);
             logParams.put("operatedUser", user);
             insertLog(logParams);
         }
-        return map;
+        return result;
     }
 
     /**

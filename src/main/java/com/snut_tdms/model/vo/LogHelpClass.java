@@ -14,14 +14,16 @@ public class LogHelpClass {
     private Log log;
     private UserInfo operationUserInfo;
     private UserRole operationUserRole;
+    private UserInfo operatedUserInfo;
 
     public LogHelpClass() {
     }
 
-    public LogHelpClass(Log log, UserInfo operationUserInfo, UserRole operationUserRole) {
+    public LogHelpClass(Log log, UserInfo operationUserInfo, UserRole operationUserRole, UserInfo operatedUserInfo) {
         this.log = log;
         this.operationUserInfo = operationUserInfo;
         this.operationUserRole = operationUserRole;
+        this.operatedUserInfo = operatedUserInfo;
     }
 
     public Log getLog() {
@@ -48,12 +50,21 @@ public class LogHelpClass {
         this.operationUserRole = operationUserRole;
     }
 
+    public UserInfo getOperatedUserInfo() {
+        return operatedUserInfo;
+    }
+
+    public void setOperatedUserInfo(UserInfo operatedUserInfo) {
+        this.operatedUserInfo = operatedUserInfo;
+    }
+
     @Override
     public String toString() {
         return "LogHelpClass{" +
                 "log=" + log +
                 ", operationUserInfo=" + operationUserInfo +
                 ", operationUserRole=" + operationUserRole +
+                ", operatedUserInfo=" + operatedUserInfo +
                 '}';
     }
 
@@ -67,7 +78,9 @@ public class LogHelpClass {
         if (log != null ? !log.equals(that.log) : that.log != null) return false;
         if (operationUserInfo != null ? !operationUserInfo.equals(that.operationUserInfo) : that.operationUserInfo != null)
             return false;
-        return operationUserRole != null ? operationUserRole.equals(that.operationUserRole) : that.operationUserRole == null;
+        if (operationUserRole != null ? !operationUserRole.equals(that.operationUserRole) : that.operationUserRole != null)
+            return false;
+        return operatedUserInfo != null ? operatedUserInfo.equals(that.operatedUserInfo) : that.operatedUserInfo == null;
     }
 
     @Override
@@ -75,6 +88,7 @@ public class LogHelpClass {
         int result = log != null ? log.hashCode() : 0;
         result = 31 * result + (operationUserInfo != null ? operationUserInfo.hashCode() : 0);
         result = 31 * result + (operationUserRole != null ? operationUserRole.hashCode() : 0);
+        result = 31 * result + (operatedUserInfo != null ? operatedUserInfo.hashCode() : 0);
         return result;
     }
 }

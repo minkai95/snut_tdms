@@ -47,9 +47,9 @@ public class UserController {
             session.setAttribute("userRole",userRole);
             session.setAttribute("userInfo",userInfo);
             switch (userRole.getRole().getName()){
-                case "superadmin":
-                    session.setAttribute("role","superadmin");
-                    json.put("urlStr", "/superadmin/index");
+                case "superAdmin":
+                    session.setAttribute("role","superAdmin");
+                    json.put("urlStr", "/superAdmin/index");
                     break;
                 case "admin":
                     session.setAttribute("role","admin");
@@ -156,5 +156,33 @@ public class UserController {
         return jsonObject;
     }
 
+    @RequestMapping(value = "/personCenter", method = RequestMethod.GET)
+    public String personCenter(HttpSession httpSession, Model model) {
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        model.addAttribute("userInfo",userService.selectUserInfoByUsername(userInfo.getUser().getUsername()));
+        return "include/personCenter";
+    }
+
+    // 格式化UserRole
+     static UserRole updateUserRole(UserRole userRole){
+        switch (userRole.getRole().getName()){
+            case "superAdmin":
+                userRole.getRole().setName("超级管理员");
+                break;
+            case "admin":
+                userRole.getRole().setName("管理员");
+                break;
+            case "teacherOffice":
+                userRole.getRole().setName("学办教师");
+                break;
+            case "deanOffice":
+                userRole.getRole().setName("教务处教师");
+                break;
+            case "teacher":
+                userRole.getRole().setName("教师");
+                break;
+        }
+        return userRole;
+    }
 
 }

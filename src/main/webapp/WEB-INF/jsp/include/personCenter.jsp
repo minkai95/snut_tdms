@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ include file="../include/taglibs.jsp" %>
+<%@ include file="taglibs.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -63,13 +63,22 @@
             url: "${ctx}/user/updatePerson?username=" + username + "&phone=" + phone + "&email=" + email + "&newPassword=" + newPassword,
             dataType: "json",
             success: function (result) {
-                alert(result['message']);
-                location.href = "${ctx}/teacher/personCenter";
+                $.confirm({
+                    title: '提示',
+                    content: result['message'],
+                    buttons: {
+                        关闭: function () {
+                            if (result['message']!="您未做任何修改!") {
+                                location.reload();
+                            }
+                        }
+                    }
+                })
             }
         })
     });
     $("#reset").on('click',function () {
-        location.href = "${ctx}/teacher/personCenter";
+        location.href = "${ctx}/user/personCenter";
     })
 </script>
 

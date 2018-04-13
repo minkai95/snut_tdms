@@ -10,20 +10,20 @@
     <header class="header">
         <div class="headerLeft">高校资料管理系统</div>
         <div class="headerRight">
-            <div class="welcome">你好，superAdmin</div>
+            <div class="welcome">你好，超级管理员</div>
         </div>
     </header>
     <div class="middle">
         <div class="leftContent">
             <ul class="aside">
-                <li><a href="superadminCurrent.jsp" target="mainFrame" class="asideAddClass"><i class="icon-home"></i>运行首页</a></li>
-                <li><a href="departmentManage.jsp" target="mainFrame"><i class="icon-sitemap"></i>院系管理</a></li>
-                <li><a href="departmentAdminManage.jsp" target="mainFrame"><i class="icon-group"></i>管理员管理</a></li>
-                <li><a href="log.jsp" target="mainFrame"><i class="icon-bar-chart"></i>全校日志</a></li>
+                <li><a href="${ctx}/superAdmin/superAdminCurrent" target="mainFrame" class="asideAddClass"><i class="icon-home"></i>运行首页</a></li>
+                <li><a href="${ctx}/superAdmin/departmentManage" target="mainFrame"><i class="icon-sitemap"></i>院系管理</a></li>
+                <li><a href="${ctx}/superAdmin/departmentAdminManage" target="mainFrame"><i class="icon-group"></i>管理员管理</a></li>
+                <li><a href="${ctx}/superAdmin/superAdminLog" target="mainFrame"><i class="icon-bar-chart"></i>全校日志</a></li>
             </ul>
         </div>
         <div class="rightContent">
-            <iframe id="mainFrame" class="mainFrame" name="mainFrame" src="superadminCurrent.jsp" scrolling="no"></iframe>
+            <iframe id="mainFrame" class="mainFrame" name="mainFrame" src="${ctx}/superAdmin/superAdminCurrent"></iframe>
         </div>
     </div>
 </div>
