@@ -93,10 +93,8 @@
         <result column="operationUserPassword" jdbcType="VARCHAR" javaType="java.lang.String" property="operationUser.password"/>
         <result column="operationUserIdCard" jdbcType="VARCHAR" javaType="java.lang.String" property="operationUser.idCard"/>
         <result column="operationUserFirstLogin" jdbcType="VARCHAR" javaType="java.lang.Integer" property="operationUser.firstLogin"/>
-        <result column="operatedUserUsername" jdbcType="VARCHAR" javaType="java.lang.String" property="operatedUser.username"/>
-        <result column="operatedUserPassword" jdbcType="VARCHAR" javaType="java.lang.String" property="operatedUser.password"/>
-        <result column="operatedUserIdCard" jdbcType="VARCHAR" javaType="java.lang.String" property="operatedUser.idCard"/>
-        <result column="operatedUserFirstLogin" jdbcType="VARCHAR" javaType="java.lang.Integer" property="operatedUser.firstLogin"/>
+        <result column="operatedId" jdbcType="VARCHAR" javaType="java.lang.String" property="operatedId"/>
+        <result column="operatedType" jdbcType="VARCHAR" javaType="java.lang.String" property="operatedType"/>
         <result column="description" jdbcType="VARCHAR" javaType="java.lang.String" property="description"/>
     </resultMap>
 
@@ -107,7 +105,8 @@
           #{action},
           #{time},
           #{operationUser.username},
-          #{operatedUser.username},
+          #{operatedId},
+          #{operatedType},
           #{description}
         )
     </insert>
@@ -248,6 +247,26 @@
         <if test="roleId != null and roleId!= ''">
             AND role.id = #{roleId}
         </if>
+    </select>
+    <select id="selectDataClassById" parameterType="java.lang.String" resultMap="dataClass">
+        SELECT
+        data_class.id,
+        data_class.`name`,
+        role.id as roleId,
+        role.name as roleName,
+        `user`.username,
+        `user`.password,
+        `user`.id_card as idCard,
+        `user`.first_login as firstLogin,
+        department.code as departmentCode,
+        department.name as departmentName,
+        class_types as classTypes,
+        data_class.flag
+        FROM data_class
+        LEFT JOIN role ON data_class.role = role.id
+        LEFT JOIN `user` ON data_class.`user` = `user`.username
+        LEFT JOIN department ON data_class.department = department.code
+        WHERE data_class.id = #{0}
     </select>
     <select id="selectDataByParams" parameterType="java.util.Map" resultMap="data">
         SELECT
@@ -392,15 +411,12 @@
         user1.password as operationUserPassword,
         user1.id_card as operationUserIdCard,
         user1.first_login as operationUserFirstLogin,
-        user2.username as operatedUserUsername,
-        user2.password as operatedUserPassword,
-        user2.id_card as operatedUserIdCard,
-        user2.first_login as operatedUserFirstLogin,
+        operated_id as operatedId,
+        operated_type as operatedType,
         description
         FROM log
         LEFT JOIN `user` as user1 ON user1.username =operation_user
-        LEFT JOIN `user` as user2 ON user2.username =operated_user
-        WHERE user2.username = #{0}
+        WHERE (operation_user = #{0} OR operated_id in(SELECT id FROM `data` WHERE `data`.user = #{0}))
         ORDER BY `time` desc
     </select>
 </mapper>

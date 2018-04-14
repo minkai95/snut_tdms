@@ -6,6 +6,7 @@ import com.snut_tdms.model.vo.LogHelpClass;
 import com.snut_tdms.service.SuperAdminService;
 import com.snut_tdms.service.UserService;
 import com.snut_tdms.util.StatusCode;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,43 +39,50 @@ public class SuperAdminController {
     public String index(HttpSession httpSession, Model model) {
         return "superadmin/superAdminIndex";
     }
+
     @RequestMapping(value = "/superAdminCurrent", method = RequestMethod.GET)
     public String superAdminCurrent(HttpSession httpSession, Model model) {
         return "superadmin/superAdminCurrent";
     }
+
     @RequestMapping(value = "/superAdminLog", method = RequestMethod.GET)
     public String superAdminLog(HttpSession httpSession, Model model) {
         List<Log> logList = superAdminService.selectAllLogs();
         List<LogHelpClass> logHelpClassList = new ArrayList<>();
         for (Log log: logList) {
-            switch (log.getAction()){
-                case "login":
-                    log.setAction("登录");
-                    break;
-                case "insert":
-                    log.setAction("新增");
-                    break;
-                case "delete":
-                    log.setAction("删除");
-                    break;
-                case "logicalDelete":
-                    log.setAction("逻辑删除");
-                    break;
-                case "update":
-                    log.setAction("修改");
-                    break;
-            }
             if (log.getDescription()==null || "".equals(log.getDescription())){
-                log.setDescription("暂无");
+                log.setDescription("无");
             }
             LogHelpClass logHelpClass = new LogHelpClass();
+            logHelpClass.setOperatedType(log.getOperatedType());
+            switch (log.getOperatedType()){
+                case "文件":
+                    Data data = userService.selectDataById(log.getOperatedId());
+                    if (data!=null) {
+                        data.setFileName(data.getFileName().substring(data.getFileName().lastIndexOf("_") + 1));
+                        logHelpClass.setOperatedData(data);
+                        logHelpClass.setOperatedDataUserInfo(userService.selectUserInfoByUsername(data.getUser().getUsername()));
+                        logHelpClass.setOperatedDataUserRole(UserController.updateUserRole(userService.selectUserRoleByUsername(data.getUser().getUsername())));
+                    }
+                    break;
+                case "文件类型":
+                    logHelpClass.setOperatedDataClass(userService.selectDataClassById(log.getOperatedId()));
+                    break;
+                case "用户":
+                    logHelpClass.setOperatedUserInfo(userService.selectUserInfoByUsername(log.getOperatedId()));
+                    logHelpClass.setOperatedUserRole(UserController.updateUserRole(userService.selectUserRoleByUsername(log.getOperatedId())));
+                    break;
+                case "院系":
+                    logHelpClass.setOperatedDepartment(userService.selectDepartmentByCode(log.getOperatedId()));
+                    break;
+            }
             logHelpClass.setLog(log);
             if (log.getOperationUser()!=null && userService.selectUserInfoByUsername(log.getOperationUser().getUsername())!=null){
                 logHelpClass.setOperationUserInfo(userService.selectUserInfoByUsername(log.getOperationUser().getUsername()));
             }else {
                 UserInfo userInfo = new UserInfo();
                 if (log.getOperationUser()!=null && log.getOperationUser().getUsername() != null){
-                    userInfo.setName(log.getOperatedUser().getUsername());
+                    userInfo.setName("该用户已被删除!");
                     userInfo.setEmail("该用户已被删除!");
                     userInfo.setPhone("该用户已被删除!");
                 }else {
@@ -98,17 +106,6 @@ public class SuperAdminController {
                     userRole.setRole(role);
                 }
                 logHelpClass.setOperationUserRole(userRole);
-            }
-            if (log.getOperatedUser()!=null && userService.selectUserInfoByUsername(log.getOperatedUser().getUsername())!=null){
-                logHelpClass.setOperatedUserInfo(userService.selectUserInfoByUsername(log.getOperatedUser().getUsername()));
-            }else {
-                UserInfo userInfo = new UserInfo();
-                if (log.getOperatedUser()!=null && log.getOperatedUser().getUsername() != null){
-                    userInfo.setName(log.getOperatedUser().getUsername());
-                }else {
-                    userInfo.setName("无");
-                }
-                logHelpClass.setOperatedUserInfo(userInfo);
             }
             logHelpClassList.add(logHelpClass);
         }
@@ -214,6 +211,14 @@ public class SuperAdminController {
                 jsonObject.put("message",code);
             }
         }
+        return jsonObject;
+    }
+
+    @RequestMapping(value = "/recoverData", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject recoverData(@RequestParam("dataId") String dataId,HttpSession httpSession){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("message",superAdminService.recoverData(dataId,((UserInfo)httpSession.getAttribute("userInfo")).getUser()));
         return jsonObject;
     }
 

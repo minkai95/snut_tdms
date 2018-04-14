@@ -6,6 +6,8 @@ import com.snut_tdms.model.vo.LogHelpClass;
 import com.snut_tdms.model.vo.NoticeHelpClass;
 import com.snut_tdms.service.TeacherService;
 import com.snut_tdms.service.UserService;
+import com.snut_tdms.util.LogActionType;
+import com.snut_tdms.util.OperatedType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -99,22 +101,11 @@ public class TeacherController {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         List<Log> logs = userService.selectPersonLogs(userInfo.getUser().getUsername());
         List<Log> resultLog = new ArrayList<>();
-        String[] strArr = {"insert","delete","logicalDelete"};
+        String[] strArr = {LogActionType.INSERT.getnCode(),LogActionType.DELETE.getnCode(),LogActionType.LOGICAL_DELETE.getnCode(),LogActionType.RECOVER.getnCode()};
         List<String> list = Arrays.asList(strArr);
         if (logs.size()>0) {
             for (Log log : logs) {
                 if (list.contains(log.getAction())) {
-                    switch (log.getAction()){
-                        case "insert":
-                            log.setAction("新增");
-                            break;
-                        case "delete":
-                            log.setAction("删除");
-                            break;
-                        case "logicalDelete":
-                            log.setAction("逻辑删除");
-                            break;
-                    }
                     resultLog.add(log);
                 }
             }
@@ -129,6 +120,13 @@ public class TeacherController {
             logHelpClass.setOperationUserInfo(userService.selectUserInfoByUsername(log.getOperationUser().getUsername()));
             UserRole userRole = UserController.updateUserRole(userService.selectUserRoleByUsername(log.getOperationUser().getUsername()));
             logHelpClass.setOperationUserRole(userRole);
+            Data data = userService.selectDataById(log.getOperatedId());
+            logHelpClass.setOperatedType(log.getOperatedType());
+            if (data != null){
+                data.setFileName(data.getFileName().substring(data.getFileName().lastIndexOf("_")+1));
+                logHelpClass.setOperatedData(data);
+                logHelpClass.setOperatedDataClass(data.getDataClass());
+            }
             result.add(logHelpClass);
         }
         model.addAttribute("logHelpList",result);

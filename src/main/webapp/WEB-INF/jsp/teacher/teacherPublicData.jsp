@@ -19,6 +19,7 @@
             <tr>
                 <th>#</th>
                 <th>文件名称</th>
+                <th>文件类型</th>
                 <th>描述</th>
                 <th>上传者</th>
                 <th>上传日期</th>
@@ -29,6 +30,7 @@
                 <tr id="${datahelp.data.id}">
                     <td>${dataStatus.index+1}</td>
                     <td>${datahelp.data.fileName}</td>
+                    <td>${datahelp.data.dataClass.name}</td>
                     <td>${datahelp.data.content}</td>
                     <td>${datahelp.userInfo.name}</td>
                     <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${datahelp.data.submitTime}"/></td>
@@ -109,7 +111,7 @@
                     title: '提示',
                     content: result['message'],
                     buttons: {
-                        关闭: function () {
+                        确定: function () {
                             location.reload();
                         }
                     }

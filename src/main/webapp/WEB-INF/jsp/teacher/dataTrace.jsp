@@ -12,6 +12,8 @@
             <table class="table table-bordered table-striped">
                 <tr>
                     <th>#</th>
+                    <th>文件名</th>
+                    <th>文件类型</th>
                     <th>内容</th>
                     <th>动作</th>
                     <th>时间</th>
@@ -22,7 +24,9 @@
                 <c:forEach items="${logHelpList}" var="logHelp" varStatus="logStatus">
                     <tr id="${logHelp.log.id}">
                         <td>${logStatus.index+1}</td>
-                        <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${logHelp.log.content}</td>
+                        <td>${logHelp.operatedData.fileName}<c:if test="${logHelp.operatedData.fileName==null}">已被删除</c:if></td>
+                        <td>${logHelp.operatedData.dataClass.name}<c:if test="${logHelp.operatedData.dataClass.name==null}">已被删除</c:if></td>
+                        <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${logHelp.log.content}</td>
                         <td>${logHelp.log.action}</td>
                         <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${logHelp.log.time}"/></td>
                         <td>${logHelp.operationUserInfo.name}</td>
@@ -33,6 +37,13 @@
                         <td style="display: none">${logHelp.operationUserRole.role.name}</td>
                         <td style="display: none">${logHelp.operationUserInfo.phone}</td>
                         <td style="display: none">${logHelp.operationUserInfo.email}</td>
+                        <td style="display:none">${logHelp.operatedType}</td>
+                        <c:if test="${logHelp.operatedType == '文件'}">
+                            <td style="display:none;">
+                                <span>${logHelp.operatedData.fileName}<c:if test="${logHelp.operatedData.fileName==null}">已被删除</c:if></span>
+                                <span>${logHelp.operatedData.dataClass.name}<c:if test="${logHelp.operatedData.dataClass.name==null}">已被删除</c:if></span>
+                            </td>
+                        </c:if>
                     </tr>
                 </c:forEach>
             </table>
@@ -65,6 +76,10 @@
                                     <li>邮箱:<span id="handlerEmail"></span></li>
                                 </ul>
                             </div>
+                            <label for="handler2">被操作对象:<span id="operatedType"></span></label>
+                            <div id="handler2">
+                                <ul></ul>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -78,12 +93,21 @@
 <script>
     function openModel(logId) {
         var tr = $('#'+logId+'');
-        $('#content').text(tr.children().eq(1).text());
-        $('#description').text(tr.children().eq(5).text());
-        $('#handlerName').text(tr.children().eq(4).text());
-        $('#handlerJob').text(tr.children().eq(7).text());
-        $('#handlerPhone').text(tr.children().eq(8).text());
-        $('#handlerEmail').text(tr.children().eq(9).text());
+        $('#content').text(tr.children().eq(3).text());
+        $('#description').text(tr.children().eq(7).text());
+        $('#handlerName').text(tr.children().eq(6).text());
+        $('#handlerJob').text(tr.children().eq(9).text());
+        $('#handlerPhone').text(tr.children().eq(10).text());
+        $('#handlerEmail').text(tr.children().eq(11).text());
+        var operatedType = tr.children('td').eq(12).text();
+        $('#operatedType').text(operatedType);
+        var ul = $("#handler2").children('ul').eq(0);
+        ul.html("");
+        var td = tr.children('td').eq(13);
+        if (operatedType=='文件'){
+            ul.append("<li>文件名:"+td.children('span').eq(0).text()+"</li>");
+            ul.append("<li>文件类型:"+td.children('span').eq(1).text()+"</li>");
+        }
         $('#myModal').modal();
     }
 </script>

@@ -2,9 +2,7 @@ package com.snut_tdms.service;
 
 import com.snut_tdms.dao.UserDao;
 import com.snut_tdms.model.po.*;
-import com.snut_tdms.util.FileUploadUtil;
-import com.snut_tdms.util.StatusCode;
-import com.snut_tdms.util.SystemUtils;
+import com.snut_tdms.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,14 +29,15 @@ public class UserService {
         String id = SystemUtils.getUUID();
         String content = (String) map.get("content");
         String action = (String) map.get("action");
+        String operatedId = (String) map.get("operatedId");
+        String operatedType = (String) map.get("operatedType");
         Timestamp time = new Timestamp(System.currentTimeMillis());
         User operationUser = userDao.selectUserByUsername(((User) map.get("operationUser")).getUsername()).getUser();
-        User operatedUser = userDao.selectUserByUsername(((User) map.get("operatedUser")).getUsername()).getUser();
         String description = null;
         if(map.containsKey("description")) {
             description = (String) map.get("description");
         }
-        if(userDao.insertLog(new Log(id,content,action,time,operationUser,operatedUser,description))>0){
+        if(userDao.insertLog(new Log(id,content,action,time,operationUser,operatedId,operatedType,description))>0){
             return StatusCode.INSERT_SUCCESS;
         }else{
             return StatusCode.INSERT_ERROR;
@@ -76,9 +75,10 @@ public class UserService {
             if(userDao.insertData(data)>0){
                 Map<String,Object> map = new HashMap<>();
                 map.put("content","用户上传了一个文件！");
-                map.put("action","insert");
+                map.put("action", LogActionType.INSERT.getnCode());
                 map.put("operationUser",userDao.selectUserByUsername(user.getUsername()).getUser());
-                map.put("operatedUser",userDao.selectUserByUsername(user.getUsername()).getUser());
+                map.put("operatedId",id);
+                map.put("operatedType", OperatedType.FILE.getnCode());
                 insertLog(map);
                 return StatusCode.FILE_UPLOAD_SUCCESS;
             }else{
@@ -107,9 +107,10 @@ public class UserService {
         if(!list.contains(dataClass.getName())) {
             if (userDao.insertDataClass(dataClass) > 0) {
                 Map<String,Object> map = new HashMap<>();
-                map.put("action","insert");
+                map.put("action",LogActionType.INSERT.getnCode());
                 map.put("operationUser",operationUser);
-                map.put("operatedUser",dataClass.getUser());
+                map.put("operatedId",dataClass.getId());
+                map.put("operatedType",OperatedType.FILE_TYPE.getnCode());
                 if(dataClass.getFlag()==0){
                     map.put("content","用户申请新增类目！");
                     insertLog(map);
@@ -139,21 +140,19 @@ public class UserService {
         // 如果文件路径所对应的文件存在，并且是一个文件，则直接删除
         if (file.exists() && file.isFile()) {
             Map<String,Object> map = new HashMap<>();
-            map.put("action","delete");
+            map.put("action",LogActionType.DELETE.getnCode());
             map.put("operationUser",operationUser);
-            map.put("operatedUser",data.getUser());
+            map.put("operatedId",data.getId());
+            map.put("operatedType",OperatedType.FILE.getnCode());
             map.put("description",description);
             List<String> ids = new ArrayList<>();
             ids.add(data.getId());
             if (file.delete()&&deleteDataByIds(ids,map,data)>0) {
-                System.out.println("删除文件" + data.getFileName() + "成功！");
                 return StatusCode.DELETE_SUCCESS;
             } else {
-                System.out.println("删除文件" + data.getFileName() + "失败！");
                 return StatusCode.DELETE_ERROR;
             }
         } else {
-            System.out.println("删除文件失败：" + data.getFileName() + "不存在！");
             return StatusCode.DELETE_ERROR_NOT_FILE;
         }
     }
@@ -164,14 +163,14 @@ public class UserService {
      * @param map 插入日志的数据
      * @return 成功删除条数
      */
-    public Integer deleteDataByIds(List<String> idList, Map<String,Object> map,Data data){
-        StringBuffer sb = new StringBuffer();
+    private Integer deleteDataByIds(List<String> idList, Map<String,Object> map,Data data){
+        StringBuilder sb = new StringBuilder();
         String[] strArr = idList.toArray(new String[idList.size()]);
         String str = Arrays.toString(strArr);
         sb.append("(");
         int c = 0;
         for (String s:strArr) {
-            sb.append("'"+s+"'");
+            sb.append("'").append(s).append("'");
             if(c++>0){
                 sb.append(",");
             }
@@ -201,13 +200,13 @@ public class UserService {
      */
     public Integer logicalDeleteDataByIds(List<String> idList,User operationUser,String description){
         Map<String,Object> map = new HashMap<>();
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         String[] strArr = idList.toArray(new String[idList.size()]);
         String str = Arrays.toString(strArr);
         sb.append("(");
         int c = 0;
         for (String s:strArr) {
-            sb.append("'"+s+"'");
+            sb.append("'").append(s).append("'");
             if(c++>0){
                 sb.append(",");
             }
@@ -217,15 +216,16 @@ public class UserService {
         m.put("ids",sb.toString());
         m.put("deleteTime",new Timestamp(System.currentTimeMillis()));
         map.put("content","逻辑删除了一份资料！");
-        map.put("action","logicalDelete");
+        map.put("action",LogActionType.LOGICAL_DELETE.getnCode());
         map.put("operationUser",operationUser);
+        map.put("operatedType",OperatedType.FILE.getnCode());
         map.put("description",description);
         int count = userDao.logicalDeleteDataByIds(m);
         if(count>0){
             for (String id: idList) {
                 Data data = userDao.selectDataById(id);
                 if (data != null){
-                    map.put("operatedUser",data.getUser());
+                    map.put("operatedId",data.getId());
                 }
                 insertLog(map);
             }
@@ -247,10 +247,11 @@ public class UserService {
             user.setPassword(password);
             if (userDao.updatePassword(user) > 0) {
                 Map<String,Object> map = new HashMap<>();
-                map.put("action","update");
+                map.put("action",LogActionType.UPDATE.getnCode());
                 map.put("content","用户更新了密码");
                 map.put("operationUser",operationUser);
-                map.put("operatedUser",userDao.selectUserByUsername(user.getUsername()).getUser());
+                map.put("operatedId",user.getUsername());
+                map.put("operatedType",OperatedType.USER.getnCode());
                 insertLog(map);
                 return StatusCode.UPDATE_SUCCESS;
             } else {
@@ -268,10 +269,11 @@ public class UserService {
         if(!userInfo.equals(userDao.selectUserInfoByUsername(userInfo.getUser().getUsername()))) {
             if (userDao.updateUserInfo(userInfo) > 0) {
                 Map<String,Object> map = new HashMap<>();
-                map.put("action","update");
+                map.put("action",LogActionType.UPDATE.getnCode());
                 map.put("content","更新了用户的个人信息!");
                 map.put("operationUser",operationUser);
-                map.put("operatedUser",userDao.selectUserByUsername(userInfo.getUser().getUsername()).getUser());
+                map.put("operatedId",userInfo.getUser().getUsername());
+                map.put("operatedType",OperatedType.USER.getnCode());
                 insertLog(map);
                 return StatusCode.UPDATE_SUCCESS;
             } else {
@@ -295,9 +297,10 @@ public class UserService {
             code = StatusCode.UPDATE_SUCCESS;
             Map<String, Object> logParams = new HashMap<>();
             logParams.put("content", "重置了用户名:"+username+" 的用户密码!");
-            logParams.put("action", "update");
+            logParams.put("action", LogActionType.UPDATE.getnCode());
             logParams.put("operationUser", operationUser);
-            logParams.put("operatedUser", selectUserInfoByUsername(username).getUser());
+            logParams.put("operatedId", username);
+            logParams.put("operatedType", OperatedType.USER.getnCode());
             insertLog(logParams);
         }else{
             code = StatusCode.UPDATE_ERROR;
@@ -317,10 +320,11 @@ public class UserService {
         if(userRole != null){
             if(userRole.getUser().getPassword().equals(password)){
                 Map<String,Object> m = new HashMap<>();
-                m.put("action","login");
+                m.put("action",LogActionType.LOGIN.getnCode());
                 m.put("content","用户登录了");
                 m.put("operationUser",userRole.getUser());
-                m.put("operatedUser",userRole.getUser());
+                m.put("operatedId",username);
+                m.put("operatedType",OperatedType.USER.getnCode());
                 insertLog(m);
                 map.put("StatusCode",StatusCode.LOGIN_SUCCESS);
                 map.put("userRole",userRole);
@@ -468,6 +472,15 @@ public class UserService {
      */
     public Integer selectAllNoticeCount(String departmentCode){
         return userDao.selectAllNoticeCount(departmentCode);
+    }
+
+    /**
+     * 通过数据类型ID查询数据类型
+     * @param dataClassId 数据类型ID
+     * @return DataClass
+     */
+    public DataClass selectDataClassById(String dataClassId){
+        return userDao.selectDataClassById(dataClassId);
     }
 
     /**

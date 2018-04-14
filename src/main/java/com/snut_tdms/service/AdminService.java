@@ -5,6 +5,8 @@ import com.snut_tdms.dao.UserDao;
 import com.snut_tdms.model.po.Log;
 import com.snut_tdms.model.po.User;
 import com.snut_tdms.model.po.UserInfo;
+import com.snut_tdms.util.LogActionType;
+import com.snut_tdms.util.OperatedType;
 import com.snut_tdms.util.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,9 +48,10 @@ public class AdminService extends UserService{
             if(adminDao.insertUser(map)>0){
                 Map<String,Object> m = new HashMap<>();
                 m.put("content","院系管理员添加了一名用户");
-                m.put("action","insert");
+                m.put("action", LogActionType.INSERT.getnCode());
                 m.put("operationUser",operationUser);
-                m.put("operatedUser",selectUserInfoByUsername(username).getUser());
+                m.put("operatedId",username);
+                m.put("operatedType", OperatedType.USER.getnCode());
                 insertLog(m);
                 return StatusCode.INSERT_SUCCESS;
             } else {
@@ -66,7 +69,7 @@ public class AdminService extends UserService{
      * @param description 描述
      * @return String
      */
-    public String deleteAdminByUsernameList(List<String> usernameList,User operationUser,String description){
+    public String deleteUserByUsernameList(List<String> usernameList,User operationUser,String description){
         Map<String,Object> logParam = new HashMap<>();
         List<User> userList = new ArrayList<>();
         for (String username:usernameList) {
@@ -74,11 +77,12 @@ public class AdminService extends UserService{
         }
         if(userList.size()>0){
             logParam.put("content", "管理员删除了一名用户!");
-            logParam.put("action","delete");
+            logParam.put("action",LogActionType.DELETE.getnCode());
             logParam.put("operationUser", operationUser);
             logParam.put("description", description);
+            logParam.put("operatedType", OperatedType.USER.getnCode());
             for (User operatedUser:userList) {
-                logParam.put("operatedUser", operatedUser);
+                logParam.put("operatedId", operatedUser.getUsername());
                 insertLog(logParam);
             }
         }

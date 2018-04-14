@@ -3,6 +3,8 @@ package com.snut_tdms.service;
 import com.snut_tdms.dao.SuperAdminDao;
 import com.snut_tdms.dao.UserDao;
 import com.snut_tdms.model.po.*;
+import com.snut_tdms.util.LogActionType;
+import com.snut_tdms.util.OperatedType;
 import com.snut_tdms.util.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,11 +62,14 @@ public class SuperAdminService extends UserService {
         }
         if(count>0) {
             Map<String, Object> logParams = new HashMap<>();
-            logParams.put("content", result);
-            logParams.put("action", "insert");
+            logParams.put("content", "超级管理员新增一条院系!");
+            logParams.put("action", LogActionType.INSERT.getnCode());
             logParams.put("operationUser", user);
-            logParams.put("operatedUser", user);
-            insertLog(logParams);
+            logParams.put("operatedType", OperatedType.DEPARTMENT.getnCode());
+            for (Department department:relDepartmentList) {
+                logParams.put("operatedId",department.getCode());
+                insertLog(logParams);
+            }
         }
         return result;
     }
@@ -89,9 +94,10 @@ public class SuperAdminService extends UserService {
             result = StatusCode.INSERT_SUCCESS.getnCode();
             Map<String, Object> logParams = new HashMap<>();
             logParams.put("content", "超级管理员新增了一名院系管理员！");
-            logParams.put("action", "insert");
+            logParams.put("action", LogActionType.INSERT.getnCode());
             logParams.put("operationUser", operationUser);
-            logParams.put("operatedUser", selectUserInfoByUsername(username).getUser());
+            logParams.put("operatedId", username);
+            logParams.put("operatedType", OperatedType.USER.getnCode());
             insertLog(logParams);
         }else{
             result = "添加失败!";
@@ -106,6 +112,16 @@ public class SuperAdminService extends UserService {
      * @return map
      */
     public String deleteDepartmentListByCodes(List<String> departmentCodeList,User user){
+        List<String> reDepartmentCodeList = new ArrayList<>();
+        List<String> codeList = new ArrayList<>();
+        for (Department department: selectAllDepartment()){
+            codeList.add(department.getCode());
+        }
+        for (String s:departmentCodeList) {
+            if(!codeList.contains(s)){
+                reDepartmentCodeList.add(s);
+            }
+        }
         int count = superAdminDao.deleteDepartmentListByCodes(departmentCodeList);
         String result = "";
         if(count>0 && count<departmentCodeList.size()){
@@ -117,11 +133,14 @@ public class SuperAdminService extends UserService {
         }
         if(count>0){
             Map<String, Object> logParams = new HashMap<>();
-            logParams.put("content", result);
-            logParams.put("action", "delete");
+            logParams.put("content", "超级管理员删除了一条院系数据!");
+            logParams.put("action", LogActionType.DELETE.getnCode());
             logParams.put("operationUser", user);
-            logParams.put("operatedUser", user);
-            insertLog(logParams);
+            logParams.put("operatedType", OperatedType.DEPARTMENT.getnCode());
+            for (String s:reDepartmentCodeList) {
+                logParams.put("operatedId",s);
+                insertLog(logParams);
+            }
         }
         return result;
     }
@@ -129,11 +148,17 @@ public class SuperAdminService extends UserService {
     /**
      * 删除院系管理员
      * @param usernameList 管理员用户名
-     * @param user 操作者
+     * @param operationUser 操作者
      * @param description 描述
      * @return String
      */
-    public String deleteAdminByUsernameList(List<String> usernameList,User user,String description){
+    public String deleteAdminByUsernameList(List<String> usernameList,User operationUser,String description){
+        List<String> relUsernameList = new ArrayList<>();
+        for (String username: usernameList){
+            if (selectUserInfoByUsername(username)!=null){
+                relUsernameList.add(username);
+            }
+        }
         int count = superAdminDao.deleteAdminByUsernameList(usernameList);
         String result;
         if(count==usernameList.size()){
@@ -146,11 +171,14 @@ public class SuperAdminService extends UserService {
         if(!result.equals("删除失败!")){
             Map<String, Object> logParams = new HashMap<>();
             logParams.put("content", result);
-            logParams.put("action", "delete");
-            logParams.put("operationUser", user);
-            logParams.put("operatedUser", user);
+            logParams.put("action", LogActionType.DELETE.getnCode());
+            logParams.put("operationUser", operationUser);
+            logParams.put("operatedType", OperatedType.USER.getnCode());
             logParams.put("description", description);
-            insertLog(logParams);
+            for (String username: relUsernameList){
+                logParams.put("operatedType",username);
+                insertLog(logParams);
+            }
         }
         return result;
     }
@@ -158,19 +186,20 @@ public class SuperAdminService extends UserService {
     /**
      * 修改院系
      * @param department 院系
-     * @param user 超级管理员
+     * @param operationUser 超级管理员
      * @return 状态码
      */
-    public StatusCode updateDepartmentByCode(Department department,User user){
+    public StatusCode updateDepartmentByCode(Department department,User operationUser){
         if(selectDepartmentByCode(department.getCode()).getName().equals(department.getName())){
             return StatusCode.UPDATE_NOT;
         }
         if(superAdminDao.updateDepartmentByCode(department)>0){
             Map<String, Object> logParams = new HashMap<>();
             logParams.put("content", "超级管理员修改了院系编码:"+department.getCode()+" 的院系信息");
-            logParams.put("action", "delete");
-            logParams.put("operationUser", user);
-            logParams.put("operatedUser", user);
+            logParams.put("action", LogActionType.UPDATE.getnCode());
+            logParams.put("operationUser", operationUser);
+            logParams.put("operatedId", department.getCode());
+            logParams.put("operatedType", OperatedType.DEPARTMENT.getnCode());
             insertLog(logParams);
             return StatusCode.UPDATE_SUCCESS;
         }else{
@@ -195,9 +224,10 @@ public class SuperAdminService extends UserService {
         } else if (superAdminDao.updateAdminUserInfo(userInfo)>0){
             Map<String, Object> logParams = new HashMap<>();
             logParams.put("content", "超级管理员修改了用户名:"+userInfo.getUser().getUsername()+" 的管理员信息!");
-            logParams.put("action", "update");
+            logParams.put("action", LogActionType.UPDATE.getnCode());
             logParams.put("operationUser", operationUser);
-            logParams.put("operatedUser", userInfo.getUser());
+            logParams.put("operatedId", userInfo.getUser().getUsername());
+            logParams.put("operatedType", OperatedType.USER.getnCode());
             insertLog(logParams);
             code = StatusCode.UPDATE_SUCCESS;
         } else{
@@ -225,5 +255,26 @@ public class SuperAdminService extends UserService {
             userInfoList.add(selectUserInfoByUsername(userRole.getUser().getUsername()));
         }
         return  userInfoList;
+    }
+
+    /**
+     * 恢复用户删除文件
+     * @param dataId 文件ID
+     * @param operationUser 超级管理员
+     * @return StatusCode
+     */
+    public StatusCode recoverData(String dataId,User operationUser){
+        if (superAdminDao.recoverData(dataId)>0){
+            Map<String,Object> map = new HashMap<>();
+            map.put("content","超级管理员恢复了一份用户文件!");
+            map.put("action",LogActionType.RECOVER.getnCode());
+            map.put("operatedId",dataId);
+            map.put("operatedType",OperatedType.FILE.getnCode());
+            map.put("operationUser",operationUser);
+            insertLog(map);
+            return StatusCode.RECOVER_SUCCESS;
+        }else {
+            return StatusCode.RECOVER_ERROR;
+        }
     }
 }

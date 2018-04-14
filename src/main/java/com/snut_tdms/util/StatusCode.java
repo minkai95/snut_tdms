@@ -15,7 +15,8 @@ public enum StatusCode {
     FILE_FORMAT_ERROR("上传失败，文件类型不合法!"),FILE_UPLOAD_SUCCESS("上传成功！"),FILE_BIG("上传失败，单个文件超出最大值!"),
     FILE_ALL_BIG("上传失败，上传文件的总的大小超出限制的最大值!"),FILE_UPLOAD_ERROR("上传失败!"),
     FILE_DELETE("您要下载的资源已被删除!"),FILE_DOWNLOAD_SUCCESS("文件下载成功!"),
-    APPLY_SUCCESS("申请成功，请等待管理员同意!"),DATA_CLASS_ERROR("申请失败，所申请类目名称已经存在!"),APPLY_ERROR("申请失败！");
+    APPLY_SUCCESS("申请成功，请等待管理员同意!"),DATA_CLASS_ERROR("申请失败，所申请类目名称已经存在!"),APPLY_ERROR("申请失败！"),
+    RECOVER_SUCCESS("恢复成功!"),RECOVER_ERROR("恢复失败!");
     private String nCode;
 
     StatusCode(String nCode) {

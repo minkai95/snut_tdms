@@ -3,6 +3,7 @@ package com.snut_tdms.model.po;
 import java.sql.Timestamp;
 
 /**
+ * 日志实体类
  * Created by huankai on 2018/3/22.
  */
 public class Log {
@@ -11,28 +12,21 @@ public class Log {
     private String action;
     private Timestamp time;
     private User operationUser;
-    private User operatedUser;
+    private String operatedId;
+    private String operatedType;
     private String description;
 
     public Log() {
     }
 
-    public Log(String id, String content, String action, Timestamp time, User operationUser, User operatedUser) {
+    public Log(String id, String content, String action, Timestamp time, User operationUser, String operatedId, String operatedType, String description) {
         this.id = id;
         this.content = content;
         this.action = action;
         this.time = time;
         this.operationUser = operationUser;
-        this.operatedUser = operatedUser;
-    }
-
-    public Log(String id, String content, String action, Timestamp time, User operationUser, User operatedUser, String description) {
-        this.id = id;
-        this.content = content;
-        this.action = action;
-        this.time = time;
-        this.operationUser = operationUser;
-        this.operatedUser = operatedUser;
+        this.operatedId = operatedId;
+        this.operatedType = operatedType;
         this.description = description;
     }
 
@@ -76,12 +70,20 @@ public class Log {
         this.operationUser = operationUser;
     }
 
-    public User getOperatedUser() {
-        return operatedUser;
+    public String getOperatedId() {
+        return operatedId;
     }
 
-    public void setOperatedUser(User operatedUser) {
-        this.operatedUser = operatedUser;
+    public void setOperatedId(String operatedId) {
+        this.operatedId = operatedId;
+    }
+
+    public String getOperatedType() {
+        return operatedType;
+    }
+
+    public void setOperatedType(String operatedType) {
+        this.operatedType = operatedType;
     }
 
     public String getDescription() {
@@ -100,7 +102,8 @@ public class Log {
                 ", action='" + action + '\'' +
                 ", time=" + time +
                 ", operationUser=" + operationUser +
-                ", operatedUser=" + operatedUser +
+                ", operatedId='" + operatedId + '\'' +
+                ", operatedType='" + operatedType + '\'' +
                 ", description='" + description + '\'' +
                 '}';
     }
@@ -117,7 +120,8 @@ public class Log {
         if (action != null ? !action.equals(log.action) : log.action != null) return false;
         if (time != null ? !time.equals(log.time) : log.time != null) return false;
         if (operationUser != null ? !operationUser.equals(log.operationUser) : log.operationUser != null) return false;
-        if (operatedUser != null ? !operatedUser.equals(log.operatedUser) : log.operatedUser != null) return false;
+        if (operatedId != null ? !operatedId.equals(log.operatedId) : log.operatedId != null) return false;
+        if (operatedType != null ? !operatedType.equals(log.operatedType) : log.operatedType != null) return false;
         return description != null ? description.equals(log.description) : log.description == null;
     }
 
@@ -128,7 +132,8 @@ public class Log {
         result = 31 * result + (action != null ? action.hashCode() : 0);
         result = 31 * result + (time != null ? time.hashCode() : 0);
         result = 31 * result + (operationUser != null ? operationUser.hashCode() : 0);
-        result = 31 * result + (operatedUser != null ? operatedUser.hashCode() : 0);
+        result = 31 * result + (operatedId != null ? operatedId.hashCode() : 0);
+        result = 31 * result + (operatedType != null ? operatedType.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         return result;
     }
