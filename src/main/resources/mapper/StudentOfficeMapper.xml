@@ -3,5 +3,29 @@
 <mapper namespace="com.snut_tdms.dao.StudentOfficeDao">
 
 
+    <select id="selectStudentOfficeDataCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+        SELECT COUNT(1)
+        FROM `data`
+        LEFT JOIN `user` ON `user`.username = `data`.user
+        LEFT JOIN data_class ON `data`.data_class = data_class.id
+        WHERE (SELECT department FROM user_info WHERE user_info.user = `user`.username) = #{department}
+        AND `data`.flag = 0
+        <if test="username!=null and username!=''">
+            AND `data`.user = #{username} AND data_class.name = '私人类型'
+        </if>
+        <if test="roleId!=null and roleId!=''">
+            AND (SELECT user_role.`user` FROM user_role WHERE role = #{roleId})=`data`.user AND data_class.name NOT IN ('私人类型')
+        </if>
+    </select>
 
+    <select id="selectAdminNoticeCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT COUNT(1) as num
+        FROM system_notice
+        WHERE (
+            SELECT department
+            FROM user_info
+            WHERE user_info.`user` = system_notice.`user`
+        ) = #{0}
+        AND role = '002'
+    </select>
 </mapper>

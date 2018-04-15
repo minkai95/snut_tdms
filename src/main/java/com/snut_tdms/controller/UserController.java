@@ -55,7 +55,7 @@ public class UserController {
                     session.setAttribute("role","admin");
                     json.put("urlStr", "/admin/index");
                     break;
-                case "teacherOffice":
+                case "studentOffice":
                     session.setAttribute("role","studentOffice");
                     json.put("urlStr", "/studentOffice/index");
                     break;
@@ -172,7 +172,7 @@ public class UserController {
             case "admin":
                 userRole.getRole().setName("管理员");
                 break;
-            case "teacherOffice":
+            case "studentOffice":
                 userRole.getRole().setName("学办教师");
                 break;
             case "deanOffice":

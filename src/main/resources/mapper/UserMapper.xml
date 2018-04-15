@@ -390,7 +390,7 @@
     <select id="selectDepartmentDataClassCount" parameterType="java.util.Map" resultType="java.lang.Integer">
         SELECT COUNT(1)
         FROM data_class
-        WHERE department = #{departmentCode} AND role = #{roleId} AND `name` NOT in ('私人类型')
+        WHERE department = #{departmentCode} AND role = #{roleId} AND `name` NOT in ('私人类型') AND flag = 1
     </select>
     <select id="selectAllNoticeCount" parameterType="java.lang.String" resultType="java.lang.Integer">
         SELECT COUNT(1) as num

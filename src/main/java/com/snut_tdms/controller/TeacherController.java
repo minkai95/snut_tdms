@@ -39,15 +39,6 @@ public class TeacherController {
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String index(HttpSession httpSession, Model model) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        UserRole userRole = (UserRole) httpSession.getAttribute("userRole");
-        Integer publicDataCount = teacherService.selectTeacherDataCount(userInfo.getUser().getUsername(),1);
-        Integer personDataCount = teacherService.selectTeacherDataCount(userInfo.getUser().getUsername(),2);
-        Integer dataClassCount = userService.selectDepartmentDataClassCount(userInfo.getDepartment().getCode(),userRole.getRole().getId());
-        Integer noticeCount = userService.selectAllNoticeCount(userInfo.getDepartment().getCode());
-        model.addAttribute("publicDataCount",publicDataCount);
-        model.addAttribute("personDataCount",personDataCount);
-        model.addAttribute("dataClassCount",dataClassCount);
-        model.addAttribute("noticeCount",noticeCount);
         model.addAttribute("userInfo",userInfo);
         return "teacher/teacherIndex";
     }
