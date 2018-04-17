@@ -43,6 +43,9 @@
                 </tr>
             </c:forEach>
         </table>
+        <c:if test="${dataHelpClassList==null||dataHelpClassList.size()==0}">
+            <p class="bg-info noData">暂无文件</p>
+        </c:if>
     </div>
 </div>
 

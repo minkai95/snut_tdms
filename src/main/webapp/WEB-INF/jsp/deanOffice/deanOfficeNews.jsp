@@ -31,6 +31,9 @@
                 </tr>
             </c:forEach>
         </table>
+        <c:if test="${noticeHelpList==null||noticeHelpList.size()==0}">
+            <p class="bg-info noData">暂无数据</p>
+        </c:if>
     </div>
 
     <!-- Modal -->

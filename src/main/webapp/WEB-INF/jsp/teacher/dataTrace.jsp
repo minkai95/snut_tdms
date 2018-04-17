@@ -47,6 +47,9 @@
                     </tr>
                 </c:forEach>
             </table>
+            <c:if test="${logHelpList==null||logHelpList.size()==0}">
+                <p class="bg-info noData">暂无数据</p>
+            </c:if>
         </div>
 
         <!-- Modal -->
