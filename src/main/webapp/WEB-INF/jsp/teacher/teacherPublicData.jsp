@@ -26,23 +26,26 @@
                 <th>资料类型</th>
                 <th style="text-align: center">操作</th>
             </tr>
-            <c:forEach items="${dataList}" var="datahelp" varStatus="dataStatus">
-                <tr id="${datahelp.data.id}">
+            <c:forEach items="${dataList}" var="dataHelp" varStatus="dataStatus">
+                <tr id="${dataHelp.data.id}">
                     <td>${dataStatus.index+1}</td>
-                    <td>${datahelp.data.fileName}</td>
-                    <td>${datahelp.data.dataClass.name}</td>
-                    <td>${datahelp.data.content}</td>
-                    <td>${datahelp.userInfo.name}</td>
-                    <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${datahelp.data.submitTime}"/></td>
+                    <td>${dataHelp.data.fileName}</td>
+                    <td>${dataHelp.data.dataClass.name}</td>
+                    <td>${dataHelp.data.content}</td>
+                    <td>${dataHelp.userInfo.name}</td>
+                    <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${dataHelp.data.submitTime}"/></td>
                     <td>公共资料</td>
                     <td style="width: 250px;  text-align: center;">
                         <button class="btn btn-info btn-sm"><i class="icon-search"></i>查看</button>
-                        <a href="javascript:void(0)" class="btn btn-primary btn-sm downloadFile" onclick="downloadFile('${datahelp.data.id}')"><i class="icon-download"></i>下载</a>
-                        <button class="btn btn-danger btn-sm" onclick="deleteFile('${datahelp.data.id}')"><i class="icon-remove-circle"></i>删除</button>
+                        <button class="btn btn-primary btn-sm" onclick="downloadFile('${dataHelp.data.id}')"><i class="icon-download"></i>下载</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteFile('${dataHelp.data.id}')"><i class="icon-remove-circle"></i>删除</button>
                     </td>
                 </tr>
             </c:forEach>
         </table>
+        <c:if test="${dataList==null||dataList.size()==0}">
+            <p class="bg-info noData">暂无文件</p>
+        </c:if>
     </div>
 </div>
 
@@ -155,8 +158,33 @@
     function downloadFile(id) {
         var tr = $('#'+id+'');
         var filename = tr.children('td').eq(1).text();
-        console.log(id+"_"+filename);
-        $('.downloadFile').attr("href","${ctx}/user/downloadFile?saveFilename="+id+"_"+filename)
+        $.ajax({
+            type: "GET",
+            url: "${ctx}/user/selectFile?saveFilename="+id+"_"+filename,
+            dataType: "json",
+            success: function (result) {
+                if (result['message']=='您要下载的资源已被删除!') {
+                    $.confirm({
+                        title: '提示',
+                        content: result['message'],
+                        buttons: {
+                            确定: function () {
+                                $.ajax({
+                                    type: "DELETE",
+                                    url: "${ctx}/user/deleteFile?dataId="+id+"&description="+"",
+                                    dataType: "json",
+                                    success: function (result) {
+                                        location.reload();
+                                    }
+                                });
+                            }
+                        }
+                    })
+                }else {
+                    window.location.href = "${ctx}/user/downloadFile?saveFilename="+id+"_"+filename;
+                }
+            }
+        });
     }
 </script>
 </body>

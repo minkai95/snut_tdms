@@ -138,16 +138,17 @@ public class UserService {
     public StatusCode deleteFile(Data data,String description,User operationUser) {
         File file = new File(data.getSrc()+"\\"+data.getFileName());
         // 如果文件路径所对应的文件存在，并且是一个文件，则直接删除
+        Map<String,Object> map = new HashMap<>();
+        map.put("action",LogActionType.DELETE.getnCode());
+        map.put("operationUser",operationUser);
+        map.put("operatedId",data.getId());
+        map.put("operatedType",OperatedType.FILE.getnCode());
+        map.put("description",description);
+        List<String> ids = new ArrayList<>();
+        ids.add(data.getId());
+        int count = deleteDataByIds(ids,map);
         if (file.exists() && file.isFile()) {
-            Map<String,Object> map = new HashMap<>();
-            map.put("action",LogActionType.DELETE.getnCode());
-            map.put("operationUser",operationUser);
-            map.put("operatedId",data.getId());
-            map.put("operatedType",OperatedType.FILE.getnCode());
-            map.put("description",description);
-            List<String> ids = new ArrayList<>();
-            ids.add(data.getId());
-            if (file.delete()&&deleteDataByIds(ids,map,data)>0) {
+            if (file.delete() && count>0) {
                 return StatusCode.DELETE_SUCCESS;
             } else {
                 return StatusCode.DELETE_ERROR;
@@ -163,30 +164,28 @@ public class UserService {
      * @param map 插入日志的数据
      * @return 成功删除条数
      */
-    private Integer deleteDataByIds(List<String> idList, Map<String,Object> map,Data data){
-        StringBuilder sb = new StringBuilder();
-        String[] strArr = idList.toArray(new String[idList.size()]);
-        String str = Arrays.toString(strArr);
-        sb.append("(");
-        int c = 0;
-        for (String s:strArr) {
-            sb.append("'").append(s).append("'");
-            if(c++>0){
-                sb.append(",");
+    private Integer deleteDataByIds(List<String> idList, Map<String,Object> map){
+        List<Data> dataList = new ArrayList<>();
+        for (String id:idList) {
+            if (selectDataById(id)!=null){
+                dataList.add(selectDataById(id));
             }
         }
-        sb.append(")");
-        Map<String,Object> m = new HashMap<>();
-        m.put("ids",sb.toString());
-        int flag = data.getDataClass().getFlag();
-        int count = userDao.deleteDataByIds(m);
-        if(count>0){
-            if (flag==2) {
-                map.put("content", selectUserInfoByUsername(((User) map.get("operationUser")).getUsername()).getName() + "彻底删除了" + count + "份私人资料！");
-            }else {
-                map.put("content", selectUserInfoByUsername(((User) map.get("operationUser")).getUsername()).getName() + "彻底删除了" + count + "份公共资料！");
+        int count = 0;
+        for (Data data:dataList) {
+            int flag = data.getDataClass().getFlag();
+            Map<String,Object> params = new HashMap<>();
+            params.put("id",data.getId());
+            params.put("deleteTime",new Timestamp(System.currentTimeMillis()));
+            if (userDao.deleteDataById(params)>0) {
+                ++count;
+                if (flag == 2) {
+                    map.put("content", selectUserInfoByUsername(((User) map.get("operationUser")).getUsername()).getName() + "彻底删除了" + count + "份私人资料！");
+                } else {
+                    map.put("content", selectUserInfoByUsername(((User) map.get("operationUser")).getUsername()).getName() + "彻底删除了" + count + "份公共资料！");
+                }
+                insertLog(map);
             }
-            insertLog(map);
         }
         return count;
     }
@@ -490,5 +489,18 @@ public class UserService {
      */
     public List<Log> selectPersonLogs(String username){
         return userDao.selectPersonLogs(username);
+    }
+
+    /**
+     * 查询不同角色的所有公共类型资料数据
+     * @param departmentCode 院系编码
+     * @param roleId 角色ID
+     * @return List
+     */
+    public List<Data> selectRoleAllPublicData(String departmentCode,String roleId){
+        Map<String,Object> map = new HashMap<>();
+        map.put("departmentCode",departmentCode);
+        map.put("roleId",roleId);
+        return userDao.selectRoleAllPublicData(map);
     }
 }

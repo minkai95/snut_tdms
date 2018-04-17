@@ -14,9 +14,28 @@ import java.net.URLEncoder;
  */
 public class FileDownloadUtil {
 
+    public static StatusCode selectFile(HttpServletRequest request){
+        //得到要下载的文件名
+        String fileName = (String) request.getAttribute("filename");  //bd3256e4650b42ca4b77a70e435b7fca_阿凡达.doc
+        //fileName = new String(fileName.getBytes("UTF-8"),"iso8859-1");
+        String departmentCode = (String) request.getAttribute("departmentCode");
+        //上传的文件都是保存在/WEB-INF/upload目录下的子目录当中
+        String fileSaveRootPath = request.getServletContext().getRealPath("\\WEB-INF\\upload\\"+departmentCode);
+        //通过文件名找出文件的所在目录
+        String path = findFileSavePathByFileName(fileName,fileSaveRootPath);
+        //得到要下载的文件
+        File file = new File(path + "\\" + fileName);
+        //如果文件不存在
+        if(!file.exists()){
+            return StatusCode.FILE_DELETE;
+        }else {
+            return StatusCode.FILE_HAVE;
+        }
+    }
+
     public static StatusCode download(HttpServletRequest request, HttpServletResponse response) throws IOException {
         //得到要下载的文件名
-        String fileName = (String) request.getAttribute("filename");  //23239283cas9_阿凡达.avi
+        String fileName = (String) request.getAttribute("filename");  //bd3256e4650b42ca4b77a70e435b7fca_阿凡达.doc
         //fileName = new String(fileName.getBytes("UTF-8"),"iso8859-1");
         String departmentCode = (String) request.getAttribute("departmentCode");
         //上传的文件都是保存在/WEB-INF/upload目录下的子目录当中

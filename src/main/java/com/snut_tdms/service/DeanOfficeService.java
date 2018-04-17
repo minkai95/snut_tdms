@@ -5,6 +5,9 @@ import com.snut_tdms.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 教务处service层
  * Created by huankai on 2018/3/27.
@@ -20,5 +23,13 @@ public class DeanOfficeService extends UserService{
         super(userDao);
         this.userDao = userDao;
         this.deanOfficeDao = deanOfficeDao;
+    }
+
+    public Integer selectDataCountByParams(Integer dataClassFlag,String username,String roleId){
+        Map<String,Object> map = new HashMap<>();
+        map.put("dataClassFlag",dataClassFlag);
+        map.put("username",username);
+        map.put("roleId",roleId);
+        return deanOfficeDao.selectDataCountByParams(map);
     }
 }

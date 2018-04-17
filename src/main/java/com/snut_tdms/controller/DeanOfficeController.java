@@ -1,10 +1,20 @@
 package com.snut_tdms.controller;
 
+import com.snut_tdms.model.po.SystemNotice;
+import com.snut_tdms.model.po.UserInfo;
+import com.snut_tdms.model.po.UserRole;
+import com.snut_tdms.model.vo.NoticeHelpClass;
 import com.snut_tdms.service.DeanOfficeService;
 import com.snut_tdms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 教务处controller层
@@ -22,4 +32,47 @@ public class DeanOfficeController {
         this.userService = userService;
         this.deanOfficeService = deanOfficeService;
     }
+
+    @RequestMapping(value = "/index", method = RequestMethod.GET)
+    public String index(HttpSession httpSession, Model model) {
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        model.addAttribute("userInfo",userInfo);
+        return "deanOffice/deanOfficeIndex";
+    }
+
+    @RequestMapping(value = "/deanOfficeCurrent", method = RequestMethod.GET)
+    public String deanOfficeCurrent(HttpSession httpSession, Model model) {
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        UserRole userRole = (UserRole) httpSession.getAttribute("userRole");
+        Integer teacherPublicDataCount = deanOfficeService.selectDataCountByParams(1,null,"005");
+        Integer deanOfficePublicDataCount = deanOfficeService.selectDataCountByParams(1,null,"004");
+        Integer personDataCount = deanOfficeService.selectDataCountByParams(2,userInfo.getUser().getUsername(),null);
+        Integer dataClassCount = userService.selectDepartmentDataClassCount(userInfo.getDepartment().getCode(),userRole.getRole().getId());
+        Integer noticeCount = userService.selectAllNoticeCount(userInfo.getDepartment().getCode());
+        model.addAttribute("publicDataCount",teacherPublicDataCount+deanOfficePublicDataCount);
+        model.addAttribute("personDataCount",personDataCount);
+        model.addAttribute("dataClassCount",dataClassCount);
+        model.addAttribute("noticeCount",noticeCount);
+        return "deanOffice/deanOfficeCurrent";
+    }
+
+    @RequestMapping(value = "/deanApplyDataClass", method = RequestMethod.GET)
+    public String deanApplyDataClass(HttpSession httpSession, Model model) {
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        UserRole userRole = (UserRole) httpSession.getAttribute("userRole");
+        return "deanOffice/deanApplyDataClass";
+    }
+
+    @RequestMapping(value = "/deanOfficeNews", method = RequestMethod.GET)
+    public String deanOfficeNews(HttpSession httpSession, Model model) {
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        List<SystemNotice> list = userService.selectSystemNotice(userInfo.getDepartment().getCode(),null);
+        List<NoticeHelpClass> result = new ArrayList<>();
+        for (SystemNotice systemNotice: list) {
+            result.add(new NoticeHelpClass(systemNotice,userService.selectUserInfoByUsername(systemNotice.getUser().getUsername())));
+        }
+        model.addAttribute("noticeHelpList",result);
+        return "deanOffice/deanOfficeNews";
+    }
+
 }

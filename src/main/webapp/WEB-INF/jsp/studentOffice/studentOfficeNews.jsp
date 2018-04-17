@@ -18,19 +18,22 @@
                     <th>发布者</th>
                     <th style="text-align: center;">操作</th>
                 </tr>
-                <tr>
-                    <td>1</td>
-                    <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">请按时提交期末考试试卷</td>
-                    <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">请按时提交期末考试试卷请按时提交期末考试试卷请按时提交期末考试试卷请按时提交期末考试试卷</td>
-                    <td>2018-05-31&emsp;23:11:02</td>
-                    <td>大壮</td>
-                    <td style="width: 140px; text-align: center;">
-                        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">
-                            <i class="icon-search"></i>查看详情
-                        </button>
-                    </td>
-                </tr>
+                <c:forEach items="${noticeHelpList}" var="noticeHelp" varStatus="noticeStatus">
+                    <tr id="${noticeHelp.systemNotice.id}">
+                        <td>${noticeStatus.index+1}</td>
+                        <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${noticeHelp.systemNotice.name}</td>
+                        <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${noticeHelp.systemNotice.content}</td>
+                        <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${noticeHelp.systemNotice.date}"/></td>
+                        <td>${noticeHelp.userInfo.name}</td>
+                        <td style="width: 140px; text-align: center;">
+                            <button type="button" onclick="openModel('${noticeHelp.systemNotice.id}')" class="btn btn-info"><i class="icon-search"></i>查看详情</button>
+                        </td>
+                    </tr>
+                </c:forEach>
             </table>
+            <c:if test="${noticeHelpList==null||noticeHelpList.size()==0}">
+                <p class="bg-info noData">暂无数据</p>
+            </c:if>
         </div>
 
         <!-- Modal -->
@@ -43,17 +46,17 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="content">标题</label>
-                            <div id="content">文件被删除</div>
+                            <label for="title">标题</label>
+                            <div id="title"></div>
                         </div>
                         <div class="form-group">
-                            <label for="description">内容</label>
-                            <div id="description">数学试卷由于不符合许愿要求，被删除数学试卷由于不符合许愿要求，被删除数学试卷由于不符合许愿要求，被删除数学试卷由于不符合许愿要求，被删除</div>
+                            <label for="content">内容</label>
+                            <div id="content"></div>
                         </div>
                         <div class="form-group">
                             <p class="date" style="text-align: right; margin-top: 30px; font-weight: bold;">
-                                <span class="date">2017/09/23</span>
-                                <span id="username">何大壮</span>
+                                发布者：<span id="modelName"></span><br>
+                                <span class="date" id="modelData"></span>
                             </p>
                         </div>
                     </div>
@@ -65,4 +68,14 @@
         </div>
     </div>
 </body>
+<script>
+    function openModel(logId) {
+        var tr = $('#'+logId+'');
+        $('#title').text(tr.children().eq(1).text());
+        $('#content').text(tr.children().eq(2).text());
+        $('#modelData').text(tr.children().eq(3).text());
+        $('#modelName').text(tr.children().eq(4).text());
+        $('#myModal').modal();
+    }
+</script>
 </html>

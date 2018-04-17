@@ -10,12 +10,12 @@
     <p class="title">运行首页</p>
     <div calss="mainCont">
         <div class="banner">
-            <a class="bannerOne" href="${ctx}/studentOffice/studentOfficePublicData" target="mainFrame" onclick="changeLiStyle('publicData')">
+            <a class="bannerOne" href="${ctx}/user/rolePublicData?roleId=003" target="mainFrame" onclick="changeLiStyle('publicData')">
                 <p class="bannerNumber">
                     <span>${publicDataCount}</span>份 </p>
                 <p class="dataType">公共资料</p>
             </a>
-            <a class="bannerTwo" href="${ctx}/studentOffice/studentOfficePersonData" target="mainFrame" onclick="changeLiStyle('personData')">
+            <a class="bannerTwo" href="${ctx}/user/personData" target="mainFrame" onclick="changeLiStyle('personData')">
                 <p class="bannerNumber">
                     <span>${personDataCount}</span>份 </p>
                 <p class="dataType">私有资料</p>
