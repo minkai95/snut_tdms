@@ -37,7 +37,7 @@
                     <td>公共资料</td>
                     <td style="width: 250px;  text-align: center;">
                         <button class="btn btn-info btn-sm"><i class="icon-search"></i>查看</button>
-                        <a class="btn btn-primary btn-sm downloadFile" onclick="downloadFile('${dataHelp.data.id}')"><i class="icon-download"></i>下载</a>
+                        <a class="btn btn-primary btn-sm" onclick="downloadFile('${dataHelp.data.id}')"><i class="icon-download"></i>下载</a>
                         <button class="btn btn-danger btn-sm" onclick="deleteFile('${dataHelp.data.id}')"><i class="icon-remove-circle"></i>删除</button>
                     </td>
                 </tr>
@@ -56,7 +56,7 @@
             </div>
             <div class="modal-body">
                 <div class="uploadForm">
-                    <form action="#" method="post" id="submitDataForm">
+                    <form id="submitDataForm" action="${ctx}/user/uploadFile" method="POST" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="description">文件描述:</label>
                             <textarea class="form-control" id="description" name="description" placeholder="请输入文件描述" ></textarea>

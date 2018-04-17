@@ -35,7 +35,7 @@
                     <td>私有资料</td>
                     <td style="width: 250px;  text-align: center;">
                         <button class="btn btn-info btn-sm"><i class="icon-search"></i>查看</button>
-                        <a href="javascript:void(0)" onclick="downloadFile('${dataHelp.data.id}')" class="btn btn-primary btn-sm downloadFile"><i class="icon-download"></i>下载</a>
+                        <button onclick="downloadFile('${dataHelp.data.id}')" class="btn btn-primary btn-sm"><i class="icon-download"></i>下载</button>
                         <button onclick="deleteFile('${dataHelp.data.id}')" class="btn btn-danger btn-sm"><i class="icon-remove-circle"></i>删除</button>
                     </td>
                 </tr>
@@ -76,6 +76,7 @@
     </div>
 </div>
 <script>
+    // 上传文件
     $('#submitDataButton').on('click',function () {
         var options = {
             dataType:"json",
@@ -99,8 +100,33 @@
     function downloadFile(id) {
         var tr = $('#'+id+'');
         var filename = tr.children('td').eq(1).text();
-        console.log(id+"_"+filename);
-        $('.downloadFile').attr("href","${ctx}/user/downloadFile?saveFilename="+id+"_"+filename)
+        $.ajax({
+            type: "GET",
+            url: "${ctx}/user/selectFile?saveFilename="+id+"_"+filename,
+            dataType: "json",
+            success: function (result) {
+                if (result['message']=='您要下载的资源已被删除!') {
+                    $.confirm({
+                        title: '提示',
+                        content: result['message'],
+                        buttons: {
+                            确定: function () {
+                                $.ajax({
+                                    type: "DELETE",
+                                    url: "${ctx}/user/deleteFile?dataId="+id+"&description="+"",
+                                    dataType: "json",
+                                    success: function (result) {
+                                        location.reload();
+                                    }
+                                });
+                            }
+                        }
+                    })
+                }else {
+                    window.location.href = "${ctx}/user/downloadFile?saveFilename="+id+"_"+filename;
+                }
+            }
+        });
     }
     //删除文件
     function deleteFile(id) {

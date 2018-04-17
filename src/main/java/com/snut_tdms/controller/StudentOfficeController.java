@@ -78,8 +78,13 @@ public class StudentOfficeController {
     @RequestMapping(value = "/studentOfficePersonData", method = RequestMethod.GET)
     public String studentOfficePersonData(HttpSession httpSession, Model model) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        UserRole userRole = (UserRole) httpSession.getAttribute("userRole");
-
+        List<Data> dataList = userService.selectDataByParams(userInfo.getUser().getUsername(),null,0,2,null);
+        List<DataHelpClass> result = new ArrayList<>();
+        for (Data data:dataList) {
+            data.setFileName(data.getFileName().substring(data.getFileName().lastIndexOf("_")+1));
+            result.add(new DataHelpClass(data,userService.selectUserInfoByUsername(data.getUser().getUsername())));
+        }
+        model.addAttribute("dataList",result);
         return "studentOffice/studentOfficePersonData";
     }
     @RequestMapping(value = "/applyAddDataClass", method = RequestMethod.GET)
