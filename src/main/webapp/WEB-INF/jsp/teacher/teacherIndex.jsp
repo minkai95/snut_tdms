@@ -21,7 +21,7 @@
                 <li id="personData"><a href="${ctx}/teacher/teacherPersonData" target="mainFrame"><i class="icon-briefcase"></i>私有资料</a></li>
                 <li id="dataType"><a href="${ctx}/teacher/applyAddDataClass" target="mainFrame"><i class="icon-plus-sign"></i>申请类目</a></li>
                 <li id="teacherCenter"><a href="${ctx}/user/personCenter" target="mainFrame"><i class="icon-user"></i>个人中心</a></li>
-                <li><a href="${ctx}/teacher/dataTrace" target="mainFrame"><i class="icon-screenshot"></i>资料追踪</a></li>
+                <li><a href="${ctx}/user/dataTrace" target="mainFrame"><i class="icon-screenshot"></i>资料追踪</a></li>
                 <li id="teacherNews"><a href="${ctx}/teacher/teacherNews" target="mainFrame"><i class="icon-bell-alt"></i>消息通告</a></li>
             </ul>
         </div>

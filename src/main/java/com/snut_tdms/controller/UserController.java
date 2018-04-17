@@ -3,8 +3,10 @@ package com.snut_tdms.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.snut_tdms.model.po.*;
 import com.snut_tdms.model.vo.DataHelpClass;
+import com.snut_tdms.model.vo.LogHelpClass;
 import com.snut_tdms.service.UserService;
 import com.snut_tdms.util.FileDownloadUtil;
+import com.snut_tdms.util.LogActionType;
 import com.snut_tdms.util.StatusCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -16,10 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * 用户Controller层
@@ -173,6 +172,51 @@ public class UserController {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         model.addAttribute("userInfo",userService.selectUserInfoByUsername(userInfo.getUser().getUsername()));
         return "include/personCenter";
+    }
+
+    @RequestMapping(value = "/dataTrace", method = RequestMethod.GET)
+    public String dataTrace(HttpSession httpSession, Model model) {
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        UserRole userRole = (UserRole) httpSession.getAttribute("userRole");
+        List<Log> logs = userService.selectPersonLogs(userInfo.getUser().getUsername());
+        List<Log> resultLog = new ArrayList<>();
+        String[] strArr = {LogActionType.INSERT.getnCode(),LogActionType.DELETE.getnCode(),LogActionType.LOGICAL_DELETE.getnCode(),LogActionType.RECOVER.getnCode()};
+        List<String> list = Arrays.asList(strArr);
+        if (logs.size()>0) {
+            for (Log log : logs) {
+                if (list.contains(log.getAction())) {
+                    resultLog.add(log);
+                }
+            }
+        }
+        List<LogHelpClass> result = new ArrayList<>();
+        for (Log log:resultLog) {
+            if (log.getDescription()==null || "".equals(log.getDescription())){
+                log.setDescription("暂无");
+            }
+            LogHelpClass logHelpClass = new LogHelpClass();
+            logHelpClass.setLog(log);
+            logHelpClass.setOperationUserInfo(userService.selectUserInfoByUsername(log.getOperationUser().getUsername()));
+            UserRole userRole1 = UserController.updateUserRole(userService.selectUserRoleByUsername(log.getOperationUser().getUsername()));
+            logHelpClass.setOperationUserRole(userRole1);
+            Data data = userService.selectDataById(log.getOperatedId());
+            logHelpClass.setOperatedType(log.getOperatedType());
+            if (data != null){
+                data.setFileName(data.getFileName().substring(data.getFileName().lastIndexOf("_")+1));
+                logHelpClass.setOperatedData(data);
+                logHelpClass.setOperatedDataClass(data.getDataClass());
+            }
+            result.add(logHelpClass);
+        }
+        model.addAttribute("logHelpList",result);
+        switch (userRole.getRole().getName()){
+            case "teacher":
+                return "teacher/dataTrace";
+            case "studentOffice":
+                return "studentOffice/dataTrace";
+            default:
+                return "";
+        }
     }
 
     // 格式化UserRole

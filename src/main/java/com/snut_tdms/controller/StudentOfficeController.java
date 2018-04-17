@@ -1,11 +1,12 @@
 package com.snut_tdms.controller;
 
-import com.snut_tdms.model.po.Data;
-import com.snut_tdms.model.po.UserInfo;
-import com.snut_tdms.model.po.UserRole;
+import com.snut_tdms.model.po.*;
 import com.snut_tdms.model.vo.DataHelpClass;
+import com.snut_tdms.model.vo.LogHelpClass;
+import com.snut_tdms.model.vo.NoticeHelpClass;
 import com.snut_tdms.service.StudentOfficeService;
 import com.snut_tdms.service.UserService;
+import com.snut_tdms.util.LogActionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,10 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.jws.Oneway;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * 学办controller层
@@ -94,18 +92,15 @@ public class StudentOfficeController {
 
         return "studentOffice/applyAddDataClass";
     }
-    @RequestMapping(value = "/dataTrace", method = RequestMethod.GET)
-    public String dataTrace(HttpSession httpSession, Model model) {
-        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        UserRole userRole = (UserRole) httpSession.getAttribute("userRole");
-
-        return "studentOffice/dataTrace";
-    }
     @RequestMapping(value = "/studentOfficeNews", method = RequestMethod.GET)
     public String studentOfficeNews(HttpSession httpSession, Model model) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        UserRole userRole = (UserRole) httpSession.getAttribute("userRole");
-
+        List<SystemNotice> list = userService.selectSystemNotice(userInfo.getDepartment().getCode(),"002");
+        List<NoticeHelpClass> result = new ArrayList<>();
+        for (SystemNotice systemNotice: list) {
+            result.add(new NoticeHelpClass(systemNotice,userService.selectUserInfoByUsername(systemNotice.getUser().getUsername())));
+        }
+        model.addAttribute("noticeHelpList",result);
         return "studentOffice/studentOfficeNews";
     }
 }
