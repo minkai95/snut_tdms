@@ -148,10 +148,10 @@
                     <div class="form-group">
                         <label for="resetPassword" style="letter-spacing: 2.5px;">重置密码:</label>
                         <div class="switchBtnWrapper switchBtnMove" id="resetPassword">
-                            <div class="switchBtnLeft cont"></div>
-                            <div class="switchBtnMiddle cont">否</div>
-                            <div class="switchBtnRight cont"></div>
-                            <div class="switchBtn" id="btn"></div>
+                            <div class="switchBtnLeft cont" onmousedown="btnMove()"></div>
+                            <div class="switchBtnMiddle cont" onmousedown="btnMove()"></div>
+                            <div class="switchBtnRight cont" onmousedown="btnMove()"></div>
+                            <div class="switchBtn" id="btn" onmousedown="btnMove()"></div>
                         </div>
                     </div>
                 </div>
@@ -200,17 +200,16 @@
         });
 
         /*按钮js*/
-        $("#btn").mousedown(function() {
-            if($("#btn").css("left") === "0px"){
-                $("#btn").animate({left:'60px'},"2000");
-    ;            $(".cont").addClass("addStyle");
-                $(".switchBtnMiddle").text("是");
-            }else{
-                $("#btn").animate({left:'0'},"2000");
+        function btnMove() {
+            if ($("#btn").css("left") === "0px") {
+                $("#btn").animate({left: '29px'}, "fast");
+                $(".cont").addClass("addStyle");
+            } else {
+                $("#btn").animate({left: '0'}, "fast");
                 $(".switchBtnWrapper div").removeClass("addStyle");
-                $(".switchBtnMiddle").text("否");
             }
-        });
+        }
+
 
         /*修改用户信息js*/
         $(".updateUserInfo").on("click", function() {
@@ -232,7 +231,7 @@
                     }
                 }
             });
-        })
+        });
     </script>
 </body>
 

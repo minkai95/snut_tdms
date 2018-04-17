@@ -1,10 +1,10 @@
 .switchBtnWrapper{width: 90px; height: 27px; overflow: hidden; position: relative;}
-.cont{background-color: #ccc;}
+.cont{background-color: #dcdfe6;}
 .switchBtnWrapper div{width: 25px; height: 25px; float: left;}
-.switchBtnLeft{border: 1px solid #ccc; border-radius: 50% 0 0 50%; border-right: none; text-align: center; line-height: 25px;}
-.switchBtnRight{border: 1px solid #ccc; border-radius: 0 50% 50% 0; border-left: none; text-align: center; line-height: 25;}
-.switchBtnMiddle{width: 35px !important; border: 1px solid #ccc; border-left: none; border-right: none; text-align: center; line-height: 25px;}
-.switchBtn{position: absolute; top: 0; left: 0; background-color: #fff !important; border: 1px solid #ccc; border-radius: 50%;}
+.switchBtnLeft{border: 1px solid #dcdfe6; border-radius: 50% 0 0 50%; border-right: none; text-align: center; line-height: 25px;}
+.switchBtnRight{border: 1px solid #dcdfe6; border-radius: 0 50% 50% 0; border-left: none; text-align: center; line-height: 25;}
+.switchBtnMiddle{width: 5px !important; border: 1px solid #dcdfe6; border-left: none; border-right: none; text-align: center; line-height: 25px;}
+.switchBtn{width: 21px !important; height: 21px !important; margin-top: 2px; margin-left: 2px; position: absolute; top: 0; left: 0; background-color: #fff !important; border-radius: 50%;}
 .switchBtn:hover{cursor: pointer;}
-.addStyle{background-color: #2db51b !important;}
-.switchBtnMove{    margin-left: 111px;  margin-top: -27px;}
+.addStyle{background-color:  #409eff !important;}
+.switchBtnMove{    margin-left: 103px;  margin-top: -27px;}

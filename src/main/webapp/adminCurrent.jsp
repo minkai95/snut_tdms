@@ -41,8 +41,13 @@
 
 <script>
     function changeLiStyle(liId) {
-        $(".aside li", window.parent.document).siblings().children('a').removeClass("asideAddClass");
-        $("#" + liId, window.parent.document).children('a').addClass('asideAddClass');
+        if(liId == "dataType"){
+            $("#publicDataType", window.parent.document).slideToggle();
+        } else{
+            $(".aside li", window.parent.document).siblings().children('a').removeClass("asideAddClass");
+            $("#" + liId, window.parent.document).children('a').addClass('asideAddClass');
+
+        }
     }
 </script>
 </body>

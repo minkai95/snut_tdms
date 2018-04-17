@@ -1,5 +1,6 @@
 .wrapper{
     width: 100%;
+    height: 100%;
 }
 header{
     display: flex;
@@ -7,6 +8,8 @@ header{
     min-width: 1040px;
     height: 80px;
     background-color: #3894C7;
+    position: absolute;
+    z-index: 999;
 }
 .headerLeft{
     min-width: 200px;
@@ -39,21 +42,27 @@ header{
 }
 .middle{
     width: 100%;
-    height: 556px;
+    height: 100%;
     display: flex;
 }
 .leftContent{
+    flex: 2;
     min-width: 180px;
     height: 100%;
-    flex: 2;
+    position: absolute;
+    z-index: 499;
+    padding-top: 80px;
     background-color: #4F575A;
 }
 .rightContent{
     flex: 13;
+    width: 100%;
     min-width: 860px;
-    height: 556px;
+    height: 100%;
+    position: absolute;
+    padding-left: 180px;
+    padding-top: 80px;
     background-color: #ECEFF4;
-    word-break: break-all;
 }
 .aside li a{
     display: block;
@@ -84,7 +93,7 @@ header{
 
 .mainFrame{
     width: 100%;
-    height: 556px;
+    height: 100%;
     border: none;
 }
 
