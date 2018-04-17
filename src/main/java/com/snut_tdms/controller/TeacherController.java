@@ -64,6 +64,9 @@ public class TeacherController {
         List<Data> dataList = userService.selectDataByParams(userInfo.getUser().getUsername(),null,0,1,null);
         List<DataHelpClass> result = new ArrayList<>();
         for (Data data:dataList) {
+            if(data.getContent()==null||"".equals(data.getContent())){
+                data.setContent("暂无");
+            }
             data.setFileName(data.getFileName().substring(data.getFileName().lastIndexOf("_")+1));
             result.add(new DataHelpClass(data,userService.selectUserInfoByUsername(data.getUser().getUsername())));
         }
