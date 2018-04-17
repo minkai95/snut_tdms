@@ -6,51 +6,49 @@
     <title>学院日志</title>
 </head>
 <body>
-    <div class="teacherCurrentWrapper">
-        <div class="teacherCurrentWrapper">
-            <div class="teacherHeader">
-                <p class="publicDataTitle">学院日志</p>
-            </div>
-            <div class="teacherPublicDataList">
-                <table class="table table-bordered table-striped">
-                    <tr>
-                        <th>#</th>
-                        <th>日志内容</th>
-                        <th>操作行为</th>
-                        <th>时间</th>
-                        <th>操作者</th>
-                        <th>操作对象</th>
-                        <th>描述</th>
-                        <th style="text-align: center">操作</th>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">新增体育学院</td>
-                        <td>新增</td>
-                        <td>2017-01-01</td>
-                        <td>superAdmin</td>
-                        <td>  </td>
-                        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">新增学院，体育学院</td>
-                        <td style="width: 250px;  text-align: center;">
-                            <button class="btn btn-info btn-sm checkLogBtn"><i class="icon-search"></i>查看</button>
-                            <button class="btn btn-primary btn-sm recoverLogBtn"><i class="icon-wrench"></i>恢复</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">新增体育学院</td>
-                        <td>新增</td>
-                        <td>2017-01-01</td>
-                        <td>superAdmin</td>
-                        <td>  </td>
-                        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">新增学院，体育学院>新增学院，体育学院>新增学院，体育学院>新增学院，体育学院>新增学院，体育学院</td>
-                        <td style="width: 250px;  text-align: center;">
-                            <button class="btn btn-info btn-sm checkLogBtn"><i class="icon-search"></i>查看</button>
-                            <button class="btn btn-primary btn-sm recoverLogBtn"><i class="icon-wrench"></i>恢复</button>
-                        </td>
-                    </tr>
-                </table>
-            </div>
+   <div class="teacherCurrentWrapper">
+        <div class="teacherHeader">
+            <p class="publicDataTitle">学院日志</p>
+        </div>
+        <div class="teacherPublicDataList">
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th>#</th>
+                    <th>日志内容</th>
+                    <th>操作行为</th>
+                    <th>时间</th>
+                    <th>操作者</th>
+                    <th>操作对象</th>
+                    <th>描述</th>
+                    <th style="text-align: center">操作</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">新增体育学院</td>
+                    <td>新增</td>
+                    <td>2017-01-01</td>
+                    <td>superAdmin</td>
+                    <td>  </td>
+                     <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">新增学院，体育学院</td>
+                    <td style="width: 250px;  text-align: center;">
+                        <button class="btn btn-info btn-sm checkLogBtn"><i class="icon-search"></i>查看</button>
+                        <button class="btn btn-primary btn-sm recoverLogBtn"><i class="icon-wrench"></i>恢复</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">新增体育学院</td>
+                    <td>新增</td>
+                    <td>2017-01-01</td>
+                    <td>superAdmin</td>
+                    <td>  </td>
+                    <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">新增学院，体育学院>新增学院，体育学院>新增学院，体育学院>新增学院，体育学院>新增学院，体育学院</td>
+                    <td style="width: 250px;  text-align: center;">
+                        <button class="btn btn-info btn-sm checkLogBtn"><i class="icon-search"></i>查看</button>
+                        <button class="btn btn-primary btn-sm recoverLogBtn"><i class="icon-wrench"></i>恢复</button>
+                    </td>
+                </tr>
+             </table>
         </div>
     </div>
 

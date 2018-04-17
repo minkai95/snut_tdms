@@ -1,0 +1,81 @@
+.typePropertyContent{
+    margin-top: 50px;
+}
+.propertyWrapper{
+    display: inline-block;
+    position: relative;
+    min-width: 80px;
+    height: 40px;
+    margin-left: 20px;
+    margin-top: 20px;
+    padding: 0 25px;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+    line-height: 40px;
+    color: #fff;
+    box-shadow: 5px 3px 6px #ccc;
+}
+.iconPosition{
+    position: absolute;
+    top: 4px;
+    right: 4px;
+}
+.iconPosition:hover{
+    cursor: pointer;
+}
+.dropDown{
+    position: absolute;
+    top: 12px;
+    right: 9px;
+}
+.propertyMain{
+    display: inline-block;
+    position: relative;
+}
+.propertyNameCont{
+    display: none;
+    min-width: 110px;
+    position: absolute;
+    left: 0;
+    margin-top: 1px;
+    background: #ffffff;
+    border-radius: 5px;
+    box-shadow: 5px 3px 6px #ccc;
+    color: #000;
+    z-index: 999;
+}
+.propertyNameCont ul li{
+    height: 30px;
+    line-height: 30px;
+    padding: 0 10px;
+    text-align: left;
+    font-size: 14px;
+}
+.typeWrapper{
+    display: inline-block;
+    position: relative;
+    min-width: 160px;
+    height: 40px;
+    margin-left: 20px;
+    margin-top: 20px;
+    padding: 0 25px;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+    line-height: 40px;
+    color: #fff;
+}
+.typeWrapper:hover{
+    cursor: pointer;
+}
+
+.selectPropertyWrapper{
+    display: inline-block;
+    width: 120px;
+    margin: 10px 0 0 30px;
+}
+
+.propertyLabel{
+    font-weight: 100;
+}

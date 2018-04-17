@@ -244,12 +244,11 @@
         var btnResult = 0;
         $("#btn").mousedown(function() {
             if($('#btn').css("left") === "0px"){
-                $("#btn").animate({left:'60px'},"2000");
+                $("#btn").animate({left:'39px'},"fast");
                 $(".cont").addClass("addStyle");
-                $(".switchBtnMiddle").text("是");
                 btnResult = 1;
             }else{
-                $("#btn").animate({left:'0'},"2000");
+                $("#btn").animate({left:'0'},"fast");
                 $(".switchBtnWrapper div").removeClass("addStyle");
                 $(".switchBtnMiddle").text("否");
                 btnResult = 0;
