@@ -67,7 +67,7 @@
                     title: '提示',
                     content: result['message'],
                     buttons: {
-                        关闭: function () {
+                        确定: function () {
                             if (result['message']!="您未做任何修改!") {
                                 location.reload();
                             }

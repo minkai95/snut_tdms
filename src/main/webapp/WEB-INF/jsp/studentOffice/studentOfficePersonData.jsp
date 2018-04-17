@@ -11,7 +11,7 @@
         <p class="publicDataTitle">学办私有资料</p>
         <div class="teacherUpload">
             <p class="uploadTitle">已上传私有资料列表</p>
-            <a href="#" class="upload" data-toggle="modal" data-target="#myModal"><i class="icon-upload"></i>上传私有资料</a>
+            <a href="javascript:void(0)" class="upload" data-toggle="modal" data-target="#myModal"><i class="icon-upload"></i>上传私有资料</a>
         </div>
     </div>
     <div class="teacherPublicDataList">
@@ -31,7 +31,7 @@
                     <td>${dataStatus.index+1}</td>
                     <td>${dataHelp.data.fileName}</td>
                     <td>${dataHelp.data.dataClass.name}</td>
-                    <td>${dataHelp.data.content}</td>
+                    <td style="text-overflow:ellipsis;white-space: normal;max-width: 250px; overflow: hidden;">${dataHelp.data.content}</td>
                     <td>${dataHelp.userInfo.name}</td>
                     <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${dataHelp.data.submitTime}"/></td>
                     <td>私有资料</td>
@@ -90,7 +90,7 @@
                     title: '提示',
                     content: result['message'],
                     buttons: {
-                        关闭: function () {
+                        确定: function () {
                             location.reload();
                         }
                     }

@@ -11,7 +11,7 @@
         <p class="publicDataTitle">学办公共资料</p>
         <div class="teacherUpload">
             <p class="uploadTitle">已上传公共资料列表</p>
-            <a href="#" class="upload" id="openModel"><i class="icon-upload"></i>上传公共资料</a>
+            <a href="javascript:void(0)" class="upload" id="openModel"><i class="icon-upload"></i>上传公共资料</a>
         </div>
     </div>
     <div class="teacherPublicDataList">

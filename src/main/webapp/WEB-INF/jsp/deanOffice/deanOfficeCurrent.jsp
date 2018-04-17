@@ -10,24 +10,24 @@
     <p class="title">运行首页</p>
     <div calss="mainCont">
         <div class="banner">
-            <a class="bannerOne" href="deanOfficePublicData.jsp" target="mainFrame" onclick="changeLiStyle('publicData')">
+            <a class="bannerOne" href="javascript:void(0)" target="mainFrame" onclick="changeLiStyle('publicDataType')">
                 <p class="bannerNumber">
-                    <span>15</span>份 </p>
+                    <span>${publicDataCount}</span>份 </p>
                 <p class="dataType">公共资料</p>
             </a>
-            <a class="bannerTwo" href="deanOfficePersonData.jsp" target="mainFrame" onclick="changeLiStyle('personData')">
+            <a class="bannerTwo" href="${ctx}/user/personData" target="mainFrame" onclick="changeLiStyle('personData')">
                 <p class="bannerNumber">
-                    <span>30</span>份 </p>
+                    <span>${personDataCount}</span>份 </p>
                 <p class="dataType">私有资料</p>
             </a>
-            <a class="bannerThree" href="deanApplyDataClass.jsp" target="mainFrame" onclick="changeLiStyle('dataType')">
+            <a class="bannerThree" href="${ctx}/deanOffice/deanApplyDataClass" target="mainFrame" onclick="changeLiStyle('dataType')">
                 <p class="bannerNumber">
-                    <span>7</span>份 </p>
+                    <span>${dataClassCount}</span>份 </p>
                 <p class="dataType">资料类目</p>
             </a>
-            <a class="bannerFour" href="deanOfficeNews.jsp" target="mainFrame" onclick="changeLiStyle('teacherNews')">
+            <a class="bannerFour" href="${ctx}/deanOffice/deanOfficeNews" target="mainFrame" onclick="changeLiStyle('teacherNews')">
                 <p class="bannerNumber">
-                    <span>9</span>条 </p>
+                    <span>${noticeCount}</span>条 </p>
                 <p class="dataType">消息公告</p>
             </a>
         </div>
@@ -40,8 +40,14 @@
 
 <script>
     function changeLiStyle(liId) {
-        $(".aside li", window.parent.document).siblings().children('a').removeClass("asideAddClass");
-        $("#" + liId, window.parent.document).children('a').addClass('asideAddClass');
+        if (liId=='publicDataType'){
+            $(".aside li", window.parent.document).siblings().children('a').removeClass("asideAddClass");
+            $("#" + liId, window.parent.document).slideToggle();
+        }else {
+            $("#publicDataType", window.parent.document).slideUp();
+            $(".aside li", window.parent.document).siblings().children('a').removeClass("asideAddClass");
+            $("#" + liId, window.parent.document).children('a').addClass('asideAddClass');
+        }
     }
 </script>
 </body>

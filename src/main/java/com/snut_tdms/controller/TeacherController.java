@@ -70,18 +70,6 @@ public class TeacherController {
         model.addAttribute("dataList",result);
         return "teacher/teacherPublicData";
     }
-    @RequestMapping(value = "/teacherPersonData", method = RequestMethod.GET)
-    public String teacherPersonData(HttpSession httpSession, Model model) {
-        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        List<Data> dataList = userService.selectDataByParams(userInfo.getUser().getUsername(),null,0,2,null);
-        List<DataHelpClass> result = new ArrayList<>();
-        for (Data data:dataList) {
-            data.setFileName(data.getFileName().substring(data.getFileName().lastIndexOf("_")+1));
-            result.add(new DataHelpClass(data,userService.selectUserInfoByUsername(data.getUser().getUsername())));
-        }
-        model.addAttribute("dataList",result);
-        return "teacher/teacherPersonData";
-    }
     @RequestMapping(value = "/applyAddDataClass", method = RequestMethod.GET)
     public String applyAddDataClass(HttpSession httpSession, Model model) {
 

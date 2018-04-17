@@ -214,6 +214,57 @@ public class UserController {
                 return "teacher/dataTrace";
             case "studentOffice":
                 return "studentOffice/dataTrace";
+            case "deanOffice":
+                return "deanOffice/dataTrace";
+            default:
+                return "";
+        }
+    }
+
+    @RequestMapping(value = "/personData", method = RequestMethod.GET)
+    public String studentOfficePersonData(HttpSession httpSession, Model model) {
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        UserRole userRole = (UserRole) httpSession.getAttribute("userRole");
+        List<Data> dataList = userService.selectDataByParams(userInfo.getUser().getUsername(),null,0,2,null);
+        List<DataHelpClass> result = new ArrayList<>();
+        for (Data data:dataList) {
+            data.setFileName(data.getFileName().substring(data.getFileName().lastIndexOf("_")+1));
+            result.add(new DataHelpClass(data,userService.selectUserInfoByUsername(data.getUser().getUsername())));
+        }
+        model.addAttribute("dataList",result);
+        switch (userRole.getRole().getName()){
+            case "teacher":
+                return "teacher/teacherPersonData";
+            case "studentOffice":
+                return "studentOffice/studentOfficePersonData";
+            case "deanOffice":
+                return "deanOffice/deanOfficePersonData";
+            default:
+                return "";
+        }
+    }
+
+    @RequestMapping(value = "/rolePublicData", method = RequestMethod.GET)
+    public String rolePublicData(HttpSession httpSession, Model model,@RequestParam("roleId") String roleId) {
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        UserRole userRole = (UserRole) httpSession.getAttribute("userRole");
+        List<DataHelpClass> dataHelpClassList = new ArrayList<>();
+        List<Data> list = userService.selectRoleAllPublicData(userInfo.getDepartment().getCode(),roleId);
+        for (Data data: list) {
+            DataHelpClass dataHelpClass = new DataHelpClass();
+            data.setFileName(data.getFileName().substring(data.getFileName().lastIndexOf("_")+1));
+            dataHelpClass.setData(data);
+            dataHelpClass.setUserInfo(userService.selectUserInfoByUsername(data.getUser().getUsername()));
+            dataHelpClassList.add(dataHelpClass);
+        }
+        model.addAttribute("dataHelpClassList",dataHelpClassList);
+        switch (roleId){
+            case "003":
+                return "studentOffice/studentOfficePublicData";
+            case "004":
+                return "deanOffice/deanOfficePublicData";
+            case "005":
+                return "deanOffice/teachersPublicData";
             default:
                 return "";
         }

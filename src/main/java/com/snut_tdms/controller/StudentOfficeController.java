@@ -56,35 +56,6 @@ public class StudentOfficeController {
         model.addAttribute("noticeCount",studentOfficeService.selectAdminNoticeCount(userInfo.getDepartment().getCode()));
         return "studentOffice/studentOfficeCurrent";
     }
-
-    @RequestMapping(value = "/studentOfficePublicData", method = RequestMethod.GET)
-    public String studentOfficePublicData(HttpSession httpSession, Model model) {
-        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        UserRole userRole = (UserRole) httpSession.getAttribute("userRole");
-        List<DataHelpClass> dataHelpClassList = new ArrayList<>();
-        List<Data> list = userService.selectRoleAllPublicData(userInfo.getDepartment().getCode(),userRole.getRole().getId());
-        for (Data data: list) {
-            DataHelpClass dataHelpClass = new DataHelpClass();
-            data.setFileName(data.getFileName().substring(data.getFileName().lastIndexOf("_")+1));
-            dataHelpClass.setData(data);
-            dataHelpClass.setUserInfo(userService.selectUserInfoByUsername(data.getUser().getUsername()));
-            dataHelpClassList.add(dataHelpClass);
-        }
-        model.addAttribute("dataHelpClassList",dataHelpClassList);
-        return "studentOffice/studentOfficePublicData";
-    }
-    @RequestMapping(value = "/studentOfficePersonData", method = RequestMethod.GET)
-    public String studentOfficePersonData(HttpSession httpSession, Model model) {
-        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        List<Data> dataList = userService.selectDataByParams(userInfo.getUser().getUsername(),null,0,2,null);
-        List<DataHelpClass> result = new ArrayList<>();
-        for (Data data:dataList) {
-            data.setFileName(data.getFileName().substring(data.getFileName().lastIndexOf("_")+1));
-            result.add(new DataHelpClass(data,userService.selectUserInfoByUsername(data.getUser().getUsername())));
-        }
-        model.addAttribute("dataList",result);
-        return "studentOffice/studentOfficePersonData";
-    }
     @RequestMapping(value = "/applyAddDataClass", method = RequestMethod.GET)
     public String applyAddDataClass(HttpSession httpSession, Model model) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");

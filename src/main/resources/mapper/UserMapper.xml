@@ -380,6 +380,7 @@
         WHERE data_class.name NOT IN ('私人类型') AND `data`.flag=0
         AND (SELECT department FROM user_info WHERE user_info.user = `data`.user) = #{departmentCode}
         AND (SELECT role FROM user_role WHERE user_role.`user`=`data`.`user`) = #{roleId}
+        ORDER BY submit_time DESC
     </select>
     <select id="selectClassTypesByDataClassId" parameterType="java.lang.String" resultMap="classTypes">
         SELECT

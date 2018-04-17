@@ -2,6 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.snut_tdms.dao.DeanOfficeDao">
 
-
+    <select id="selectDataCountByParams" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+          COUNT(1) as num
+        FROM `data`
+        LEFT JOIN data_class ON data_class.id = `data`.data_class
+        WHERE `data`.flag = 0 AND data_class.flag = ${dataClassFlag}
+        <if test="username != null and username != ''">
+            AND `data`.user = #{username}
+        </if>
+        <if test="roleId != null and roleId != ''">
+            AND (SELECT role FROM user_role WHERE user_role.`user`=`data`.user) = #{roleId}
+        </if>
+    </select>
 
 </mapper>
