@@ -155,8 +155,33 @@
     function downloadFile(id) {
         var tr = $('#'+id+'');
         var filename = tr.children('td').eq(1).text();
-        console.log(id+"_"+filename);
-        $('.downloadFile').attr("href","${ctx}/user/downloadFile?saveFilename="+id+"_"+filename)
+        $.ajax({
+            type: "GET",
+            url: "${ctx}/user/selectFile?saveFilename="+id+"_"+filename,
+            dataType: "json",
+            success: function (result) {
+                if (result['message']=='您要下载的资源已被删除!') {
+                    $.confirm({
+                        title: '提示',
+                        content: result['message'],
+                        buttons: {
+                            确定: function () {
+                                $.ajax({
+                                    type: "DELETE",
+                                    url: "${ctx}/user/deleteFile?dataId="+id+"&description="+"",
+                                    dataType: "json",
+                                    success: function (result) {
+                                        location.reload();
+                                    }
+                                });
+                            }
+                        }
+                    })
+                }else {
+                    window.location.href = "${ctx}/user/downloadFile?saveFilename="+id+"_"+filename;
+                }
+            }
+        });
     }
 </script>
 </body>

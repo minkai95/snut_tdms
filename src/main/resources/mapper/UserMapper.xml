@@ -135,10 +135,9 @@
         )
     </insert>
 
-    <delete id="deleteDataByIds" parameterType="java.util.Map">
-        DELETE FROM `data`
-        WHERE id IN ${ids}
-    </delete>
+    <update id="deleteDataById" parameterType="java.util.Map">
+        UPDATE `data` SET flag = 2,delete_time = #{deleteTime} WHERE id = #{id}
+    </update>
 
     <update id="updatePassword" parameterType="com.snut_tdms.model.po.User">
         UPDATE `user` SET
@@ -346,6 +345,41 @@
         LEFT JOIN department ON data_class.department = department.code
         LEFT JOIN `user` user2 ON `data`.user = user2.username
         WHERE `data`.id = #{dataId}
+    </select>
+    <select id="selectRoleAllPublicData" parameterType="java.util.Map" resultMap="data">
+        SELECT
+        `data`.id,
+        content,
+        file_name as fileName,
+        src,
+        data_class.id as dataClassId,
+        data_class.name as dataClassName,
+        role.id as dataClassRoleId,
+        role.name as dataClassRoleName,
+        user1.username as dataClassUserUsername,
+        user1.password as dataClassUserPassword,
+        user1.id_card as dataClassUserIdCard,
+        user1.first_login as dataClassUserFirstLogin,
+        department.code as dataClassDepartmentCode,
+        department.name as dataClassDepartmentName,
+        data_class.flag as dataClassFlag,
+        type_contents,
+        user2.username,
+        user2.password,
+        user2.id_card as idCard,
+        user2.first_login as firstLogin,
+        submit_time as submitTime,
+        delete_time as deleteTime,
+        `data`.flag
+        FROM `data`
+        LEFT JOIN data_class ON `data`.data_class = data_class.id
+        LEFT JOIN role ON data_class.role = role.id
+        LEFT JOIN `user` user1 ON data_class.`user` = user1.username
+        LEFT JOIN department ON data_class.department = department.code
+        LEFT JOIN `user` user2 ON `data`.user = user2.username
+        WHERE data_class.name NOT IN ('私人类型') AND `data`.flag=0
+        AND (SELECT department FROM user_info WHERE user_info.user = `data`.user) = #{departmentCode}
+        AND (SELECT role FROM user_role WHERE user_role.`user`=`data`.`user`) = #{roleId}
     </select>
     <select id="selectClassTypesByDataClassId" parameterType="java.lang.String" resultMap="classTypes">
         SELECT

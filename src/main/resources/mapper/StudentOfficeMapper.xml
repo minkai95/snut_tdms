@@ -2,7 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.snut_tdms.dao.StudentOfficeDao">
 
-
     <select id="selectStudentOfficeDataCount" resultType="java.lang.Integer" parameterType="java.util.Map">
         SELECT COUNT(1)
         FROM `data`
@@ -28,4 +27,5 @@
         ) = #{0}
         AND role = '002'
     </select>
+
 </mapper>

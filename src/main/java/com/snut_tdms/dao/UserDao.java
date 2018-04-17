@@ -19,7 +19,7 @@ public interface UserDao {
 
     int insertData(Data data);
 
-    int deleteDataByIds(Map<String,Object> ids);
+    int deleteDataById(Map<String,Object> map);
 
     int updatePassword(User user);
 
@@ -40,6 +40,8 @@ public interface UserDao {
     DataClass selectDataClassById(String dataClassId);
 
     List<Data> selectDataByParams(Map<String,Object> map);
+
+    List<Data> selectRoleAllPublicData(Map<String,Object> map);
 
     Data selectDataById(String dataId);
 

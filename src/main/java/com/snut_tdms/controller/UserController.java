@@ -97,7 +97,8 @@ public class UserController {
     public JSONObject getDepartmentDataClass(HttpSession httpSession) {
         JSONObject json = new JSONObject();
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        json.put("dataClass",userService.selectDataClass(userInfo.getDepartment().getCode(),null,"(1)",null));
+        UserRole userRole = (UserRole) httpSession.getAttribute("userRole");
+        json.put("dataClass",userService.selectDataClass(userInfo.getDepartment().getCode(),userRole.getRole().getId(),"(1)",null));
         return json;
     }
 
@@ -127,13 +128,24 @@ public class UserController {
         System.out.println(code.getnCode());
     }
 
+    @RequestMapping(value = "/selectFile",method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject downloadFile(HttpSession httpSession,HttpServletRequest request,@RequestParam("saveFilename") String saveFilename){
+        JSONObject jsonObject = new JSONObject();
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        request.setAttribute("filename",saveFilename);
+        request.setAttribute("departmentCode",userInfo.getDepartment().getCode());
+        jsonObject.put("message",FileDownloadUtil.selectFile(request).getnCode());
+        return jsonObject;
+    }
+
     @RequestMapping(value = "/deleteFile",method = RequestMethod.DELETE)
     @ResponseBody
     public JSONObject deleteFile(@RequestParam("dataId") String dataId,@RequestParam("description") String description, HttpSession httpSession) {
         JSONObject jsonObject = new JSONObject();
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         Data data = userService.selectDataById(dataId);
-        if(data != null){
+        if(data != null && data.getFlag() != 2){
             jsonObject.put("message",userService.deleteFile(data,description,userInfo.getUser()).getnCode());
         } else {
             jsonObject.put("message", StatusCode.DELETE_ERROR_NOT_FILE.getnCode());

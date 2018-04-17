@@ -1,7 +1,9 @@
 package com.snut_tdms.controller;
 
+import com.snut_tdms.model.po.Data;
 import com.snut_tdms.model.po.UserInfo;
 import com.snut_tdms.model.po.UserRole;
+import com.snut_tdms.model.vo.DataHelpClass;
 import com.snut_tdms.service.StudentOfficeService;
 import com.snut_tdms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.jws.Oneway;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -59,7 +63,16 @@ public class StudentOfficeController {
     public String studentOfficePublicData(HttpSession httpSession, Model model) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         UserRole userRole = (UserRole) httpSession.getAttribute("userRole");
-
+        List<DataHelpClass> dataHelpClassList = new ArrayList<>();
+        List<Data> list = userService.selectRoleAllPublicData(userInfo.getDepartment().getCode(),userRole.getRole().getId());
+        for (Data data: list) {
+            DataHelpClass dataHelpClass = new DataHelpClass();
+            data.setFileName(data.getFileName().substring(data.getFileName().lastIndexOf("_")+1));
+            dataHelpClass.setData(data);
+            dataHelpClass.setUserInfo(userService.selectUserInfoByUsername(data.getUser().getUsername()));
+            dataHelpClassList.add(dataHelpClass);
+        }
+        model.addAttribute("dataHelpClassList",dataHelpClassList);
         return "studentOffice/studentOfficePublicData";
     }
     @RequestMapping(value = "/studentOfficePersonData", method = RequestMethod.GET)
