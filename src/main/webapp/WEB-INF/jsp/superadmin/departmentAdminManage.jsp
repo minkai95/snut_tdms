@@ -132,10 +132,10 @@
                     <div class="form-group">
                         <label for="resetPassword" style="letter-spacing: 2.5px;">重置密码:</label>
                         <div class="switchBtnWrapper switchBtnMove" id="resetPassword">
-                            <div class="switchBtnLeft cont"></div>
-                            <div class="switchBtnMiddle cont">否</div>
-                            <div class="switchBtnRight cont"></div>
-                            <div class="switchBtn" id="btn"></div>
+                            <div class="switchBtnLeft cont" onmousedown="btnMove()"></div>
+                            <div class="switchBtnMiddle cont" onmousedown="btnMove()"></div>
+                            <div class="switchBtnRight cont" onmousedown="btnMove()"></div>
+                            <div class="switchBtn" id="btn" onmousedown="btnMove()"></div>
                         </div>
                     </div>
                 </div>
@@ -242,18 +242,17 @@
 
         //按钮js
         var btnResult = 0;
-        $("#btn").mousedown(function() {
-            if($('#btn').css("left") === "0px"){
-                $("#btn").animate({left:'39px'},"fast");
+        function btnMove() {
+            if ($("#btn").css("left") === "0px") {
+                $("#btn").animate({left: '29px'}, "fast");
                 $(".cont").addClass("addStyle");
                 btnResult = 1;
-            }else{
-                $("#btn").animate({left:'0'},"fast");
+            } else {
+                $("#btn").animate({left: '0'}, "fast");
                 $(".switchBtnWrapper div").removeClass("addStyle");
-                $(".switchBtnMiddle").text("否");
                 btnResult = 0;
             }
-        });
+        }
 
         function deleteAdmin(username) {
             $.confirm({

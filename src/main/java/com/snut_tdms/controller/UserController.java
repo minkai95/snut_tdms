@@ -78,15 +78,32 @@ public class UserController {
     public JSONObject updatePerson(@RequestParam("username") String username, @RequestParam("phone") String phone,@RequestParam("email") String email,@RequestParam("newPassword") String newPassword, HttpSession session){
         JSONObject json = new JSONObject();
         UserInfo userInfo = userService.selectUserInfoByUsername(username);
-        if (userInfo.getPhone().equals(phone) && userInfo.getEmail().equals(email) && (userInfo.getUser().getPassword().equals(newPassword) || "".equals(newPassword) || newPassword==null) ){
+        if ((((userInfo.getPhone()==null||"".equals(userInfo.getPhone()))&&(phone==null||"".equals(phone)))||(userInfo.getPhone()!=null?userInfo.getPhone().equals(phone):phone.equals(userInfo.getPhone())))
+                && (((userInfo.getEmail()==null||"".equals(userInfo.getEmail()))&&((email==null||"".equals(email))))||(userInfo.getEmail()!=null?userInfo.getEmail().equals(email):email.equals(userInfo.getEmail())))
+                && ((userInfo.getUser().getPassword().equals(newPassword)) || ("".equals(newPassword) || newPassword==null)) ){
             json.put("message",StatusCode.UPDATE_NOT.getnCode());
         } else {
             userInfo.setPhone(phone);
             userInfo.setEmail(email);
-            if("".equals(newPassword) || newPassword==null){
+            String upPsw = null;
+            if(!"".equals(newPassword) && newPassword!=null){
                 userInfo.getUser().setPassword(newPassword);
+                User user = new User();
+                user.setUsername(username);
+                user.setPassword(newPassword);
+                user.setIdCard(userInfo.getUser().getIdCard());
+                upPsw = userService.updatePassword(user,userInfo.getUser()).getnCode();
             }
-            json.put("message",userService.updateUserInfo(userInfo,userInfo.getUser()).getnCode());
+            String usIf = userService.updateUserInfo(userInfo,userInfo.getUser()).getnCode();
+            if ((upPsw==null || upPsw.equals(StatusCode.NEW_PASSWORD_EQUALS_OLD.getnCode())) && (usIf.equals(StatusCode.UPDATE_NOT.getnCode()))){
+                json.put("message",StatusCode.UPDATE_NOT.getnCode());
+            }else {
+                if (upPsw==null || !upPsw.equals(StatusCode.UPDATE_SUCCESS.getnCode())){
+                    json.put("message",usIf);
+                }else {
+                    json.put("message",upPsw);
+                }
+            }
         }
         return json;
     }
@@ -203,6 +220,9 @@ public class UserController {
             logHelpClass.setOperatedType(log.getOperatedType());
             if (data != null){
                 data.setFileName(data.getFileName().substring(data.getFileName().lastIndexOf("_")+1));
+                if(data.getContent()==null||"".equals(data.getContent())){
+                    data.setContent("暂无");
+                }
                 logHelpClass.setOperatedData(data);
                 logHelpClass.setOperatedDataClass(data.getDataClass());
             }
@@ -229,6 +249,9 @@ public class UserController {
         List<DataHelpClass> result = new ArrayList<>();
         for (Data data:dataList) {
             data.setFileName(data.getFileName().substring(data.getFileName().lastIndexOf("_")+1));
+            if(data.getContent()==null||"".equals(data.getContent())){
+                data.setContent("暂无");
+            }
             result.add(new DataHelpClass(data,userService.selectUserInfoByUsername(data.getUser().getUsername())));
         }
         model.addAttribute("dataList",result);
@@ -253,6 +276,9 @@ public class UserController {
         for (Data data: list) {
             DataHelpClass dataHelpClass = new DataHelpClass();
             data.setFileName(data.getFileName().substring(data.getFileName().lastIndexOf("_")+1));
+            if(data.getContent()==null||"".equals(data.getContent())){
+                data.setContent("暂无");
+            }
             dataHelpClass.setData(data);
             dataHelpClass.setUserInfo(userService.selectUserInfoByUsername(data.getUser().getUsername()));
             dataHelpClassList.add(dataHelpClass);

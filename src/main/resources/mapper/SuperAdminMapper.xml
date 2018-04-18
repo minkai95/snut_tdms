@@ -69,7 +69,7 @@
         WHERE id = #{0}
     </update>
 
-    <select id="selectAllLogs" resultMap="log">
+    <select id="selectAllLogsByPage" parameterType="java.util.Map" resultMap="log">
         SELECT
           id,
           content,

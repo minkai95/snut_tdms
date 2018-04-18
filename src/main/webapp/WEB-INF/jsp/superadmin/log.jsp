@@ -12,80 +12,83 @@
                 <p class="publicDataTitle">全校日志管理</p>
             </div>
             <div class="teacherPublicDataList">
-                <table class="table table-bordered table-striped">
-                    <tr>
-                        <th>#</th>
-                        <th>日志内容</th>
-                        <th>操作行为</th>
-                        <th>时间</th>
-                        <th>操作者</th>
-                        <th>被操作对象</th>
-                        <th>描述</th>
-                        <th style="text-align: center">操作</th>
-                    </tr>
-                    <c:forEach items="${logHelpClassList}" var="logHelp" varStatus="logHelpStatus">
-                        <tr id="${logHelp.log.id}">
-                            <td>${logHelpStatus.index+1}</td>
-                            <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${logHelp.log.content}</td>
-                            <td>${logHelp.log.action}</td>
-                            <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${logHelp.log.time}"/></td>
-                            <td>${logHelp.operationUserInfo.name}</td>
-                            <td>${logHelp.operatedType}</td>
-                            <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${logHelp.log.description}</td>
-                            <td style="width: 250px;  text-align: center;">
-                                <button class="btn btn-info btn-sm" onclick="checkLogBtn('${logHelp.log.id}')"><i class="icon-search"></i>查看详情</button>
-                                <c:if test="${logHelp.log.action == '逻辑删除'}">
-                                    <c:choose>
-                                        <c:when test="${logHelp.operatedData.flag==1}">
-                                            <button class="btn btn-info btn-sm" onclick="recover('${logHelp.operatedData.id}')"><i class="icon-search"></i>恢复</button>
-                                        </c:when>
-                                        <c:otherwise>
-                                            已被恢复
-                                        </c:otherwise>
-                                    </c:choose>
-                                </c:if>
-                            </td>
-                            <td style="display: none">${logHelp.operationUserRole.role.name}</td>
-                            <td style="display: none">
-                                    ${logHelp.operationUserInfo.phone}<c:if test="${logHelp.operationUserInfo.phone==null}">暂无</c:if>
-                            </td>
-                            <td style="display: none">
-                                    ${logHelp.operationUserInfo.email}<c:if test="${logHelp.operationUserInfo.email==null}">暂无</c:if>
-                            </td>
-                            <c:if test="${logHelp.operatedType == '用户'}">
-                                <td style="display: none">
-                                    <span>${logHelp.operatedUserInfo.name}<c:if test="${logHelp.operatedUserInfo.name==null}">暂无</c:if></span>
-                                    <span>${logHelp.operatedUserRole.role.name}<c:if test="${logHelp.operatedUserRole.role.name==null}">暂无</c:if></span>
-                                    <span>${logHelp.operatedUserInfo.phone}<c:if test="${logHelp.operatedUserInfo.phone==null}">暂无</c:if></span>
-                                    <span>${logHelp.operatedUserInfo.email}<c:if test="${logHelp.operatedUserInfo.email==null}">暂无</c:if></span>
-                                </td>
-                            </c:if>
-                            <c:if test="${logHelp.operatedType == '文件'}">
-                                <td style="display:none;">
-                                    <span>${logHelp.operatedData.fileName}<c:if test="${logHelp.operatedData.fileName==null}">已被删除</c:if></span>
-                                    <span>${logHelp.operatedData.dataClass.name}<c:if test="${logHelp.operatedData.dataClass.name==null}">已被删除</c:if></span>
-                                    <span>${logHelp.operatedDataUserInfo.name}<c:if test="${logHelp.operatedDataUserInfo.name==null}">暂无</c:if></span>
-                                    <span>${logHelp.operatedDataUserRole.role.name}<c:if test="${logHelp.operatedDataUserRole.role.name==null}">暂无</c:if></span>
-                                    <span>${logHelp.operatedDataUserInfo.phone}<c:if test="${logHelp.operatedDataUserInfo.phone==null}">暂无</c:if></span>
-                                    <span>${logHelp.operatedDataUserInfo.email}<c:if test="${logHelp.operatedDataUserInfo.email==null}">暂无</c:if></span>
-                                </td>
-                            </c:if>
-                            <c:if test="${logHelp.operatedType == '院系'}">
-                                <td style="display:none">
-                                    <span>${logHelp.operatedDepartment.code}</span>
-                                    <span>${logHelp.operatedDepartment.name}</span>
-                                </td>
-                            </c:if>
-                            <c:if test="${logHelp.operatedType == '文件类型'}">
-                                <td style="display:none">
-                                    <span>${logHelp.operatedDataClass.name}</span>
-                                    <span>${logHelp.operatedDataClass.department.name}</span>
-                                    <span>${logHelp.operatedDataClass.role.name}</span>
-                                </td>
-                            </c:if>
+                <form id="pageForm" action="${ctx}/superAdmin/superAdminLog" method="get">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>#</th>
+                            <th>日志内容</th>
+                            <th>操作行为</th>
+                            <th>时间</th>
+                            <th>操作者</th>
+                            <th>被操作对象</th>
+                            <th>描述</th>
+                            <th style="text-align: center">操作</th>
                         </tr>
-                    </c:forEach>
-                </table>
+                        <c:forEach items="${logHelpClassList}" var="logHelp" varStatus="logHelpStatus">
+                            <tr id="${logHelp.log.id}">
+                                <td><input id="${logHelpStatus.index+1+(page.currentPage-1)*10}" type="checkbox"><label for="${logHelpStatus.index+1+(page.currentPage-1)*10}">${logHelpStatus.index+1+(page.currentPage-1)*10}</label></td>
+                                <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${logHelp.log.content}</td>
+                                <td>${logHelp.log.action}</td>
+                                <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${logHelp.log.time}"/></td>
+                                <td>${logHelp.operationUserInfo.name}</td>
+                                <td>${logHelp.operatedType}</td>
+                                <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${logHelp.log.description}</td>
+                                <td style="width: 250px;  text-align: center;">
+                                    <button class="btn btn-info btn-sm" onclick="checkLogBtn('${logHelp.log.id}')"><i class="icon-search"></i>查看详情</button>
+                                    <c:if test="${logHelp.log.action == '逻辑删除'}">
+                                        <c:choose>
+                                            <c:when test="${logHelp.operatedData.flag==1}">
+                                                <button class="btn btn-info btn-sm" onclick="recover('${logHelp.operatedData.id}')"><i class="icon-search"></i>恢复</button>
+                                            </c:when>
+                                            <c:otherwise>
+                                                已被恢复
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:if>
+                                </td>
+                                <td style="display: none">${logHelp.operationUserRole.role.name}</td>
+                                <td style="display: none">
+                                        ${logHelp.operationUserInfo.phone}<c:if test="${logHelp.operationUserInfo.phone==null}">暂无</c:if>
+                                </td>
+                                <td style="display: none">
+                                        ${logHelp.operationUserInfo.email}<c:if test="${logHelp.operationUserInfo.email==null}">暂无</c:if>
+                                </td>
+                                <c:if test="${logHelp.operatedType == '用户'}">
+                                    <td style="display: none">
+                                        <span>${logHelp.operatedUserInfo.name}<c:if test="${logHelp.operatedUserInfo.name==null}">暂无</c:if></span>
+                                        <span>${logHelp.operatedUserRole.role.name}<c:if test="${logHelp.operatedUserRole.role.name==null}">暂无</c:if></span>
+                                        <span>${logHelp.operatedUserInfo.phone}<c:if test="${logHelp.operatedUserInfo.phone==null}">暂无</c:if></span>
+                                        <span>${logHelp.operatedUserInfo.email}<c:if test="${logHelp.operatedUserInfo.email==null}">暂无</c:if></span>
+                                    </td>
+                                </c:if>
+                                <c:if test="${logHelp.operatedType == '文件'}">
+                                    <td style="display:none;">
+                                        <span>${logHelp.operatedData.fileName}<c:if test="${logHelp.operatedData.fileName==null}">已被删除</c:if></span>
+                                        <span>${logHelp.operatedData.dataClass.name}<c:if test="${logHelp.operatedData.dataClass.name==null}">已被删除</c:if></span>
+                                        <span>${logHelp.operatedDataUserInfo.name}<c:if test="${logHelp.operatedDataUserInfo.name==null}">暂无</c:if></span>
+                                        <span>${logHelp.operatedDataUserRole.role.name}<c:if test="${logHelp.operatedDataUserRole.role.name==null}">暂无</c:if></span>
+                                        <span>${logHelp.operatedDataUserInfo.phone}<c:if test="${logHelp.operatedDataUserInfo.phone==null}">暂无</c:if></span>
+                                        <span>${logHelp.operatedDataUserInfo.email}<c:if test="${logHelp.operatedDataUserInfo.email==null}">暂无</c:if></span>
+                                    </td>
+                                </c:if>
+                                <c:if test="${logHelp.operatedType == '院系'}">
+                                    <td style="display:none">
+                                        <span>${logHelp.operatedDepartment.code}</span>
+                                        <span>${logHelp.operatedDepartment.name}</span>
+                                    </td>
+                                </c:if>
+                                <c:if test="${logHelp.operatedType == '文件类型'}">
+                                    <td style="display:none">
+                                        <span>${logHelp.operatedDataClass.name}</span>
+                                        <span>${logHelp.operatedDataClass.department.name}</span>
+                                        <span>${logHelp.operatedDataClass.role.name}</span>
+                                    </td>
+                                </c:if>
+                            </tr>
+                        </c:forEach>
+                    </table>
+                    <%@ include file="/WEB-INF/jsp/include/dataPage.jsp" %>
+                </form>
             </div>
         </div>
     </div>

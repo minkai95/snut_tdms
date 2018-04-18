@@ -90,7 +90,7 @@
                     title: '提示',
                     content: result['message'],
                     buttons: {
-                        关闭: function () {
+                        确定: function () {
                             location.reload();
                         }
                     }
