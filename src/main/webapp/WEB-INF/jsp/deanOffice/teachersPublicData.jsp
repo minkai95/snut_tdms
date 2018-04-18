@@ -49,8 +49,8 @@
 </div>
 </body>
 <script>
-    //删除文件
-    function deleteFile(dataId) {
+    //逻辑删除文件
+    function deleteFile(id) {
         $.confirm({
             title: '提示',
             content: '您确认删除吗？<input style="margin-top:5px;" class="form-control" type="text" id="deleteReason" placeholder="请输入删除原因(选填)"/>',
@@ -58,8 +58,8 @@
                 确认: function () {
                     var description = $('#deleteReason').val();
                     $.ajax({
-                        type: "DELETE",
-                        url: "${ctx}/user/deleteFile?dataId="+dataId+"&description="+description,
+                        type: "POST",
+                        url: "${ctx}/user/logicalDeleteDataById?id="+id+"&description="+description,
                         dataType: "json",
                         success: function (result) {
                             $.confirm({

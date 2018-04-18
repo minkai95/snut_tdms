@@ -15,7 +15,7 @@
                         <span>${publicDataCount}</span>份 </p>
                     <p class="dataType">公共资料</p>
                 </a>
-                <a class="bannerTwo" href="${ctx}/teacher/teacherPersonData" target="mainFrame" onclick="changeLiStyle('personData')">
+                <a class="bannerTwo" href="${ctx}/user/personData" target="mainFrame" onclick="changeLiStyle('personData')">
                     <p class="bannerNumber">
                         <span>${personDataCount}</span>份 </p>
                     <p class="dataType">私有资料</p>

@@ -218,7 +218,7 @@ public class SuperAdminController {
     @ResponseBody
     public JSONObject recoverData(@RequestParam("dataId") String dataId,HttpSession httpSession){
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("message",superAdminService.recoverData(dataId,((UserInfo)httpSession.getAttribute("userInfo")).getUser()));
+        jsonObject.put("message",superAdminService.recoverData(dataId,((UserInfo)httpSession.getAttribute("userInfo")).getUser()).getnCode());
         return jsonObject;
     }
 

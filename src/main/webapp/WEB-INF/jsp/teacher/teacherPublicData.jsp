@@ -123,7 +123,7 @@
         };
         $("#submitDataForm").ajaxForm(options);
     });
-    //删除文件
+    //逻辑删除文件
     function deleteFile(id) {
         $.confirm({
             title: '提示',
