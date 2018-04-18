@@ -3,9 +3,11 @@ package com.snut_tdms.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.snut_tdms.model.po.*;
 import com.snut_tdms.model.vo.LogHelpClass;
+import com.snut_tdms.model.vo.Page;
 import com.snut_tdms.service.SuperAdminService;
 import com.snut_tdms.service.UserService;
 import com.snut_tdms.util.StatusCode;
+import com.snut_tdms.util.SystemUtils;
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -46,8 +48,11 @@ public class SuperAdminController {
     }
 
     @RequestMapping(value = "/superAdminLog", method = RequestMethod.GET)
-    public String superAdminLog(HttpSession httpSession, Model model) {
-        List<Log> logList = superAdminService.selectAllLogs();
+    public String superAdminLog(HttpSession httpSession, Model model,
+                                @RequestParam(value = "currentPage", required = false) String currentPage) {
+        Page page = SystemUtils.getPage(currentPage);
+
+        List<Log> logList = superAdminService.selectAllLogs(page);
         List<LogHelpClass> logHelpClassList = new ArrayList<>();
         for (Log log: logList) {
             if (log.getDescription()==null || "".equals(log.getDescription())){
@@ -110,6 +115,7 @@ public class SuperAdminController {
             logHelpClassList.add(logHelpClass);
         }
         model.addAttribute("logHelpClassList",logHelpClassList);
+        model.addAttribute("page", page);
         return "superadmin/log";
     }
     @RequestMapping(value = "/departmentManage", method = RequestMethod.GET)

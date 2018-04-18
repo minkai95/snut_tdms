@@ -7,10 +7,10 @@ import java.util.Arrays;
  * Created by huankai on 2018/3/22.
  */
 public class Page {
-    private int totalNumber;
-    private int currentPage;
-    private int totalPage;
-    private int pageNumber = 10;
+    private int totalNumber;//总记录数
+    private int currentPage;//当前页
+    private int totalPage;//总页数
+    private int pageNumber = 10;//每页数据数
     private int dbIndex;
     private int dbNumber;
     private String[] selectParam;

@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
+ * 分页拦截器
  * Created by huankai on 2018/3/22.
  */
 @Intercepts({@Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class})})

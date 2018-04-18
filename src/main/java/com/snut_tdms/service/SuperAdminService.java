@@ -3,6 +3,7 @@ package com.snut_tdms.service;
 import com.snut_tdms.dao.SuperAdminDao;
 import com.snut_tdms.dao.UserDao;
 import com.snut_tdms.model.po.*;
+import com.snut_tdms.model.vo.Page;
 import com.snut_tdms.util.LogActionType;
 import com.snut_tdms.util.OperatedType;
 import com.snut_tdms.util.StatusCode;
@@ -240,8 +241,10 @@ public class SuperAdminService extends UserService {
      * 查询全校日志记录
      * @return list
      */
-    public List<Log> selectAllLogs(){
-        return superAdminDao.selectAllLogs();
+    public List<Log> selectAllLogs(Page page){
+        Map<String,Object> map = new HashMap<>();
+        map.put("page",page);
+        return superAdminDao.selectAllLogsByPage(map);
     }
 
     /**
