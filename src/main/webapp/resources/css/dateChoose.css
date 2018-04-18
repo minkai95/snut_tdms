@@ -1,0 +1,153 @@
+body,p,ul{
+	margin: 0;
+	padding: 0;
+}
+
+ul{
+	list-style: none;
+}
+
+.dateChoose{
+	display: block;
+	width: 250px;
+	height: 25px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+}
+
+.dateWrapper{
+	display: none;
+    position: absolute;
+    background-color: #fff;
+	width: 250px;
+	height: 280px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+}
+.tittle{
+	margin: 0;
+    padding: 7px;
+    text-align: center;
+    background-color: #6a85ff;
+    color: #fff;
+    border-radius: 5px 5px 0 0;
+}
+.dateTittleCont{
+	display: flex;
+}
+.dateTittleCont div{
+	flex: 1;
+	text-align: center;
+	padding: 5px 0;
+}
+.dateCont{
+	display: flex;
+	width: 230px;
+	height: 175px;
+	margin: 0 auto;
+	border: 1px solid #ccc;
+}
+.dateCont div{
+	flex: 1;
+	text-align: center;
+	overflow-y: scroll;
+}
+.dateCont div ul li{
+	height: 25px;
+	line-height: 25px;
+}
+.dateCont div ul li:hover{
+	cursor: pointer;
+	background-color: #efefef;
+}
+.liAddClass{
+	background-color: #6a85ff !important;
+}
+.dateSpan{
+	position: relative;
+	margin-top: 5px;
+	border-top: 1px solid #ccc;
+}
+.chooseTime{
+	display: inline-block;
+    width: 110px;
+    height: 25px;
+    border: 1px solid #ccc;
+    margin: 2px 0 0 10px;
+    border-radius: 5px;
+    line-height: 25px;
+    text-align: center;
+    letter-spacing: 5px;
+}
+.resetTimeBtn{
+	position: absolute;
+    top: 4px;
+    right: 56px;
+    background-color: rgb(240, 173, 78);
+    outline: none;
+    border: 2px solid rgb(240, 173, 78);
+    color: #fff;
+    border-radius: 3px;
+}
+.confirmTimeBtn{
+	position: absolute;
+    top: 4px;
+    right: 10px;
+    background-color: rgb(106, 133, 255);
+    outline: none;
+    border: 2px solid rgb(106, 133, 255);
+    color: #fff;
+    border-radius: 3px;
+}
+.resetTimeBtn:hover, .confirmTimeBtn:hover{
+	cursor: pointer;
+}
+
+
+
+
+/* 滚动条样式 */
+body{
+          scrollbar-arrow-color: red; /*上下按钮上三角箭头的颜色*/
+          scrollbar-face-color: #CBCBCB; /*滚动条凸出部分的颜色*/
+          scrollbar-3dlight-color: blue; /*滚动条亮边的颜色*/
+          scrollbar-highlight-color: #333; /*滚动条空白部分的颜色*/
+          scrollbar-shadow-color: yellow; /*滚动条阴影的颜色*/
+          scrollbar-darkshadow-color: green; /*滚动条强阴影的颜色*/
+          scrollbar-track-color: #eee; /*滚动条背景颜色*/
+ 
+          scrollbar-base-color: black; /*滚动条的基本颜色*/
+          /*以上2项适用与：body、div、textarea、iframe*/
+      }
+ 
+ 
+      ::-webkit-scrollbar {  /* 滚动条整体部分 */
+          width:10px;
+          margin-right:2px
+      }
+      ::-webkit-scrollbar-button { /* 滚动条两端的按钮 */
+          width:0;
+          display: none;
+          background-color: yellow;
+      }
+      ::-webkit-scrollbar:horizontal {
+          height:0;
+          margin-bottom:2px
+      }
+      ::-webkit-scrollbar-track {  /* 外层轨道 */
+      }
+      ::-webkit-scrollbar-track-piece {  /*内层轨道，滚动条中间部分 */
+          background-color: #efefef;
+      }
+      ::-webkit-scrollbar-thumb {  /* 滑块 */
+          width:10px;
+          border-radius: 5px;
+          background: #CBCBCB;
+      }
+      ::-webkit-scrollbar-corner { /* 边角 */
+          width: 0;
+          background-color: red;
+      }
+      ::-webkit-scrollbar-thumb:hover { /* 鼠标移入滑块 */
+          background: #909090;
+      }

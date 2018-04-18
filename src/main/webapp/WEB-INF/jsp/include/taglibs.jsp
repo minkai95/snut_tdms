@@ -11,6 +11,7 @@
 <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/bootstrap/bootstrap-datetimepicker.css"/>
 <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/confirm/jquery-confirm.css"/>
 <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/common.css"/>
+<link rel="stylesheet" type="text/css" href="${ctx}/resources/css/dateChoose.css"/>
 <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/users/teacherIndex.css"/>
 <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/users/teacherCurrent.css"/>
 <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/users/teacherPublicData.css"/>
@@ -24,4 +25,5 @@
 <script type="text/javascript" src="${ctx}/resources/js/jquery/jquery.form.min.js"></script>
 <script type="text/javascript" src="${ctx}/resources/js/bootstrap/bootstrap.js"></script>
 <script type="text/javascript" src="${ctx}/resources/js/confirm/jquery-confirm.js"></script>
+
 
