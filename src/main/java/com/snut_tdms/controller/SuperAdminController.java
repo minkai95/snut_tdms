@@ -51,7 +51,6 @@ public class SuperAdminController {
     public String superAdminLog(HttpSession httpSession, Model model,
                                 @RequestParam(value = "currentPage", required = false) String currentPage) {
         Page page = SystemUtils.getPage(currentPage);
-
         List<Log> logList = superAdminService.selectAllLogs(page);
         List<LogHelpClass> logHelpClassList = new ArrayList<>();
         for (Log log: logList) {
@@ -119,16 +118,19 @@ public class SuperAdminController {
         return "superadmin/log";
     }
     @RequestMapping(value = "/departmentManage", method = RequestMethod.GET)
-    public String departmentManage(HttpSession httpSession, Model model) {
-        List<Department> departmentList = userService.selectAllDepartment();
+    public String departmentManage(Model model, @RequestParam(value = "currentPage", required = false) String currentPage) {
+        Page page = SystemUtils.getPage(currentPage);
+        List<Department> departmentList = userService.selectAllDepartment(page);
         model.addAttribute("departmentList",departmentList);
+        model.addAttribute("page",page);
         return "superadmin/departmentManage";
     }
     @RequestMapping(value = "/departmentAdminManage", method = RequestMethod.GET)
-    public String departmentAdminManage(HttpSession httpSession, Model model) {
-        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        UserRole userRole = (UserRole) httpSession.getAttribute("userRole");
-        model.addAttribute("adminUserInfoList",superAdminService.selectAllAdmin());
+    public String departmentAdminManage(HttpSession httpSession, Model model,
+                                        @RequestParam(value = "currentPage", required = false) String currentPage) {
+        Page page = SystemUtils.getPage(currentPage);
+        model.addAttribute("adminUserInfoList",superAdminService.selectAllAdmin(page));
+        model.addAttribute("page",page);
         return "superadmin/departmentAdminManage";
     }
 
@@ -230,9 +232,10 @@ public class SuperAdminController {
 
     @RequestMapping(value = "/getAllDepartment", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject getAllDepartment(){
+    public JSONObject getAllDepartment(@RequestParam(value = "currentPage", required = false) String currentPage){
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("departmentList",userService.selectAllDepartment());
+        Page page = SystemUtils.getPage(currentPage);
+        jsonObject.put("departmentList",userService.selectAllDepartment(page));
         return jsonObject;
     }
 

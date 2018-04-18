@@ -2,6 +2,7 @@ package com.snut_tdms.service;
 
 import com.snut_tdms.dao.UserDao;
 import com.snut_tdms.model.po.*;
+import com.snut_tdms.model.vo.Page;
 import com.snut_tdms.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -412,8 +413,10 @@ public class UserService {
      * 查询所有院系
      * @return list
      */
-    public List<Department> selectAllDepartment(){
-        return userDao.selectAllDepartment();
+    public List<Department> selectAllDepartment(Page page){
+        Map<String,Object> map = new HashMap<>();
+        map.put("page",page);
+        return userDao.selectAllDepartmentByPage(map);
     }
 
     /**

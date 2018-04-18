@@ -86,7 +86,7 @@
           LEFT JOIN `user` as user1 ON user1.username =operation_user
           ORDER BY `time` desc
     </select>
-    <select id="selectAllAdmin" resultMap="admin">
+    <select id="selectAllAdminByPage" resultMap="admin">
         SELECT
           `user`.username,
           `user`.password,

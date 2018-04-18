@@ -32,6 +32,6 @@ public interface SuperAdminDao extends UserDao{
 
     List<Log> selectAllLogsByPage(Map<String,Object> map);
 
-    List<UserRole> selectAllAdmin();
+    List<UserRole> selectAllAdminByPage(Map<String,Object> map);
 
 }

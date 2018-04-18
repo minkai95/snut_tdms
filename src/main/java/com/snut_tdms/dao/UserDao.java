@@ -47,7 +47,7 @@ public interface UserDao {
 
     List<ClassType> selectClassTypesByDataClassId(String dataClassId);
 
-    List<Department> selectAllDepartment();
+    List<Department> selectAllDepartmentByPage(Map<String,Object> map);
 
     Department selectDepartmentByCode(String departmentCode);
 

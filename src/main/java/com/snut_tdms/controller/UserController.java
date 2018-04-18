@@ -298,22 +298,24 @@ public class UserController {
 
     // 格式化UserRole
      static UserRole updateUserRole(UserRole userRole){
-        switch (userRole.getRole().getName()){
-            case "superAdmin":
-                userRole.getRole().setName("超级管理员");
-                break;
-            case "admin":
-                userRole.getRole().setName("管理员");
-                break;
-            case "studentOffice":
-                userRole.getRole().setName("学办教师");
-                break;
-            case "deanOffice":
-                userRole.getRole().setName("教务处教师");
-                break;
-            case "teacher":
-                userRole.getRole().setName("教师");
-                break;
+        if (userRole != null) {
+            switch (userRole.getRole().getName()) {
+                case "superAdmin":
+                    userRole.getRole().setName("超级管理员");
+                    break;
+                case "admin":
+                    userRole.getRole().setName("管理员");
+                    break;
+                case "studentOffice":
+                    userRole.getRole().setName("学办教师");
+                    break;
+                case "deanOffice":
+                    userRole.getRole().setName("教务处教师");
+                    break;
+                case "teacher":
+                    userRole.getRole().setName("教师");
+                    break;
+            }
         }
         return userRole;
     }

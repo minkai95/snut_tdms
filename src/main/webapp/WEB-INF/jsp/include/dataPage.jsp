@@ -6,7 +6,7 @@
         <p class="alert alert-info" style="text-align: center;font-size:16px;font-weight: bold;">暂无数据</p>
     </c:when>
     <c:otherwise>
-        <div class="pull-right" style="margin-top: 15px">
+        <div class="pull-right" style="margin-bottom: 15px">
             <span>共 ${page.totalNumber} 条</span>
             <span>当前第${page.currentPage}/${page.totalPage}页</span>
             <c:if test="${page.currentPage != 1}">

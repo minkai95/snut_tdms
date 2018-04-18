@@ -43,7 +43,9 @@ public class SuperAdminService extends UserService {
         List<Department> relDepartmentList = new ArrayList<>();
         List<String> departmentCodeList = new ArrayList<>();
         List<String> departmentNameList = new ArrayList<>();
-        for (Department department:userDao.selectAllDepartment()) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("page",null);
+        for (Department department:userDao.selectAllDepartmentByPage(map)) {
             departmentCodeList.add(department.getCode());
             departmentNameList.add(department.getName());
         }
@@ -115,7 +117,7 @@ public class SuperAdminService extends UserService {
     public String deleteDepartmentListByCodes(List<String> departmentCodeList,User user){
         List<String> reDepartmentCodeList = new ArrayList<>();
         List<String> codeList = new ArrayList<>();
-        for (Department department: selectAllDepartment()){
+        for (Department department: selectAllDepartment(null)){
             codeList.add(department.getCode());
         }
         for (String s:departmentCodeList) {
@@ -251,8 +253,10 @@ public class SuperAdminService extends UserService {
      * 查询所有院系管理员信息
      * @return list
      */
-    public List<UserInfo> selectAllAdmin(){
-        List<UserRole> userRoleList = superAdminDao.selectAllAdmin();
+    public List<UserInfo> selectAllAdmin(Page page){
+        Map<String,Object> map = new HashMap<>();
+        map.put("page",page);
+        List<UserRole> userRoleList = superAdminDao.selectAllAdminByPage(map);
         List<UserInfo> userInfoList = new ArrayList<>();
         for (UserRole userRole: userRoleList) {
             userInfoList.add(selectUserInfoByUsername(userRole.getUser().getUsername()));

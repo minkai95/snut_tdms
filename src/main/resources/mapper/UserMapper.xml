@@ -410,7 +410,7 @@
             ) as b
         ) as c on c.classTypeId = ct.id
     </select>
-    <select id="selectAllDepartment" resultType="com.snut_tdms.model.po.Department">
+    <select id="selectAllDepartmentByPage" resultType="com.snut_tdms.model.po.Department">
         SELECT code,`name` FROM department
     </select>
     <select id="selectDepartmentByCode" parameterType="java.lang.String" resultType="com.snut_tdms.model.po.Department">

@@ -16,25 +16,28 @@
                 </div>
             </div>
             <div class="teacherPublicDataList">
-                <table class="table table-bordered table-striped">
-                    <tr>
-                        <th>#</th>
-                        <th>院系编号</th>
-                        <th>院系名称</th>
-                        <th style="text-align: center">操作</th>
-                    </tr>
-                    <c:forEach items="${departmentList}" var="department" varStatus="departmentStatus">
+                <form id="pageForm" action="${ctx}/superAdmin/departmentManage" method="get">
+                    <table class="table table-bordered table-striped">
                         <tr>
-                            <td>${departmentStatus.index+1}</td>
-                            <td>${department.code}</td>
-                            <td>${department.name}</td>
-                            <td style="width: 250px;  text-align: center;">
-                                <button onclick="amendDepartmentInfo('${department.code}','${department.name}')" class="btn btn-primary btn-sm"><i class="icon-pencil"></i>修改</button>
-                                <button onclick="deleteDepartment('${department.code}')" class="btn btn-danger btn-sm"><i class="icon-remove-circle"></i>删除</button>
-                            </td>
+                            <th>#</th>
+                            <th>院系编号</th>
+                            <th>院系名称</th>
+                            <th style="text-align: center">操作</th>
                         </tr>
-                    </c:forEach>
-                </table>
+                        <c:forEach items="${departmentList}" var="department" varStatus="departmentStatus">
+                            <tr>
+                                <td>${departmentStatus.index+1}</td>
+                                <td>${department.code}</td>
+                                <td>${department.name}</td>
+                                <td style="width: 250px;  text-align: center;">
+                                    <button type="button" onclick="amendDepartmentInfo('${department.code}','${department.name}')" class="btn btn-primary btn-sm"><i class="icon-pencil"></i>修改</button>
+                                    <button type="button" onclick="deleteDepartment('${department.code}')" class="btn btn-danger btn-sm"><i class="icon-remove-circle"></i>删除</button>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </table>
+                    <%@ include file="/WEB-INF/jsp/include/dataPage.jsp" %>
+                </form>
             </div>
         </div>
     </div>

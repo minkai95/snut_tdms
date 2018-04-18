@@ -26,7 +26,7 @@
                         </tr>
                         <c:forEach items="${logHelpClassList}" var="logHelp" varStatus="logHelpStatus">
                             <tr id="${logHelp.log.id}">
-                                <td><input id="${logHelpStatus.index+1+(page.currentPage-1)*10}" type="checkbox"><label for="${logHelpStatus.index+1+(page.currentPage-1)*10}">${logHelpStatus.index+1+(page.currentPage-1)*10}</label></td>
+                                <td>${logHelpStatus.index+1+(page.currentPage-1)*10}</td>
                                 <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${logHelp.log.content}</td>
                                 <td>${logHelp.log.action}</td>
                                 <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${logHelp.log.time}"/></td>
@@ -34,7 +34,7 @@
                                 <td>${logHelp.operatedType}</td>
                                 <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${logHelp.log.description}</td>
                                 <td style="width: 250px;  text-align: center;">
-                                    <button class="btn btn-info btn-sm" onclick="checkLogBtn('${logHelp.log.id}')"><i class="icon-search"></i>查看详情</button>
+                                    <button class="btn btn-info btn-sm" type="button" onclick="checkLogBtn('${logHelp.log.id}')"><i class="icon-search"></i>查看详情</button>
                                     <c:if test="${logHelp.log.action == '逻辑删除'}">
                                         <c:choose>
                                             <c:when test="${logHelp.operatedData.flag==1}">
