@@ -25,6 +25,8 @@ public interface UserDao {
 
     int updateUserInfo(UserInfo userInfo);
 
+    int updateUserRole(UserRole userRole);
+
     int resetAdminPassword(String username);
 
     int logicalDeleteDataByIds(Map<String,Object> map);

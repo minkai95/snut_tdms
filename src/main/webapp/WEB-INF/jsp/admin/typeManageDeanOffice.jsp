@@ -11,7 +11,7 @@
             <p class="publicDataTitle">类目属性——教务处</p>
             <div class="teacherUpload">
                 <p class="uploadTitle">已有类目属性列表</p>
-                <button class="btn btn-success upload batchDelete" data-toggle="modal" data-target="#myModal"><i class="icon-plus-sign" style="margin-right: 5px;"></i>新增类目</button>
+                <button id="openModal" class="btn btn-success upload batchDelete" data-toggle="modal" data-target="#myModal"><i class="icon-plus-sign" style="margin-right: 5px;"></i>新增类目</button>
             </div>
         </div>
         <div class="typePropertyContent">
@@ -166,7 +166,13 @@
             var propertyLength = $("#selectProperty").find("select").length;
             console.log(propertyLength);
             if(propertyLength < "3"){
-                $("#selectProperty").append("<div class='selectPropertyWrapper'><label class='propertyLabel'></label><select class='form-control'><option value='专业'>专业</option><option value='班级'>班级</option></select></div>");
+                $("#selectProperty").append("<div class='selectPropertyWrapper'>" +
+                    "<label class='propertyLabel'></label>" +
+                    "<select class='form-control'>" +
+                        "<option value='专业'>专业</option>" +
+                        "<option value='班级'>班级</option>" +
+                    "</select>" +
+                 "</div>");
                 $("#selectProperty select").attr("id",function(i) {
                     return "property_" + ++i;
                 });
@@ -189,9 +195,11 @@
             }
         });
         $("#removeProperty").click(function(){
-            $("#selectProperty label").last().remove();
-            $("#selectProperty select").last().remove();
+            $(".selectPropertyWrapper").last().remove();
         });
+        $('#openModal').on('click',function () {
+            $(".selectPropertyWrapper").remove();
+        })
     </script>
 </body>
 </html>

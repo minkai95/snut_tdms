@@ -11,7 +11,7 @@
         <p class="publicDataTitle">类目属性——教师</p>
         <div class="teacherUpload">
             <p class="uploadTitle">已有类目属性列表</p>
-            <button class="btn btn-success upload batchDelete" data-toggle="modal" data-target="#myModal"><i class="icon-plus-sign" style="margin-right: 5px;"></i>新增类目</button>
+            <button id="openModal" class="btn btn-success upload batchDelete" data-toggle="modal" data-target="#myModal"><i class="icon-plus-sign" style="margin-right: 5px;"></i>新增类目</button>
         </div>
     </div>
     <div class="typePropertyContent">
@@ -189,9 +189,11 @@
         }
     });
     $("#removeProperty").click(function(){
-        $("#selectProperty label").last().remove();
-        $("#selectProperty select").last().remove();
+        $(".selectPropertyWrapper").last().remove();
     });
+    $('#openModal').on('click',function () {
+        $(".selectPropertyWrapper").remove();
+    })
 </script>
 </body>
 </html>

@@ -23,11 +23,39 @@
         <result column="roleId" jdbcType="VARCHAR" javaType="java.lang.String" property="role.id"/>
         <result column="roleName" jdbcType="VARCHAR" javaType="java.lang.String" property="role.name"/>
     </resultMap>
+    <resultMap id="classType" type="com.snut_tdms.model.po.ClassType">
+        <id column="id" jdbcType="VARCHAR" javaType="java.lang.String" property="id"/>
+        <result column="name" jdbcType="VARCHAR" javaType="java.lang.String" property="name"/>
+        <result column="departmentCode" jdbcType="VARCHAR" javaType="java.lang.String" property="department.code"/>
+        <result column="departmentName" jdbcType="VARCHAR" javaType="java.lang.String" property="department.name"/>
+        <result column="username" jdbcType="VARCHAR" javaType="java.lang.String" property="user.username"/>
+        <result column="password" jdbcType="VARCHAR" javaType="java.lang.String" property="user.password"/>
+        <result column="idCard" jdbcType="VARCHAR" javaType="java.lang.String" property="user.idCard"/>
+        <result column="firstLogin" jdbcType="VARCHAR" javaType="java.lang.Integer" property="user.firstLogin"/>
+    </resultMap>
 
     <insert id="insertUser" parameterType="java.util.Map">
         INSERT INTO `user`(username) VALUES (#{username});
         INSERT INTO user_info(`user`,department) VALUES (#{username},#{departmentCode});
         INSERT INTO user_role VALUES (#{username},#{roleId})
+    </insert>
+    <insert id="insertSystemNotice" parameterType="com.snut_tdms.model.po.SystemNotice">
+        INSERT INTO system_notice VALUES (
+          #{id},
+          #{name},
+          #{content},
+          #{date},
+          #{user.username},
+          #{role.id}
+        )
+    </insert>
+    <insert id="insertClassType" parameterType="com.snut_tdms.model.po.ClassType">
+        INSERT INTO class_type VALUES (
+          #{id},
+          #{name},
+          #{department.code},
+          #{user.username}
+        )
     </insert>
 
     <delete id="deleteUserByUsernameList" parameterType="java.util.List">
@@ -36,6 +64,15 @@
             #{username}
         </foreach>
     </delete>
+    <delete id="deleteClassTypeById" parameterType="java.lang.String">
+        DELETE FROM class_type WHERE id = #{0}
+    </delete>
+
+    <update id="recoverData" parameterType="java.lang.String">
+        UPDATE `data` SET
+        flag = 0
+        WHERE id = #{0}
+    </update>
 
     <select id="selectDepartmentLogs" resultMap="log" parameterType="java.lang.String">
         SELECT
@@ -53,14 +90,26 @@
          FROM log
          LEFT JOIN `user` as user1 ON user1.username =operation_user
          WHERE (
-            SELECT department
-            FROM user_info
-            LEFT JOIN `user` ON `user`.username = user_info.`user`
-            WHERE user_info.`user` = log.operation_user
-         ) = #{0}
+             (
+                SELECT department
+                FROM user_info
+                LEFT JOIN `user` ON `user`.username = user_info.`user`
+                WHERE user_info.`user` = log.operation_user
+             ) = #{0}
+            OR (
+                SELECT department
+                FROM user_info
+                LEFT JOIN `user` ON `user`.username = user_info.`user`
+                WHERE user_info.`user`=(
+                  SELECT `user`
+                  FROM `data`
+                  WHERE `data`.id=log.operated_id
+                )
+            ) = #{0}
+         )
          ORDER BY `time` desc
     </select>
-    <select id="selectUserByRole" resultMap="admin" resultType="java.lang.String">
+    <select id="selectUserByParams" resultMap="admin" parameterType="java.util.Map">
         SELECT
         `user`.username,
         `user`.password,
@@ -71,7 +120,29 @@
         FROM user_role
         LEFT JOIN `user` ON `user`.username = user_role.`user`
         LEFT JOIN role ON role.id = user_role.role
-        WHERE role.id = #{0}
+        WHERE (
+            SELECT department
+            FROM user_info
+            WHERE user_info.`user` = user_role.`user`
+        ) = #{departmentCode}
+        <if test="roleId!=null and roleId!=''">
+            AND role.id = #{roleId}
+        </if>
+    </select>
+    <select id="selectClassTypeByDepartmentCode" parameterType="java.lang.String" resultMap="classType">
+        SELECT
+          id,
+          class_type.`name`,
+          department.code as departmentCode,
+          department.name as departmentName,
+          `user`.username as username,
+          `user`.password as password,
+          `user`.id_card as idCard,
+          `user`.first_login as firstLogin
+        FROM class_type
+        LEFT JOIN department ON department.code = class_type.department
+        LEFT JOIN `user` ON `user`.username = class_type.`user`
+        WHERE department.code = #{0}
     </select>
 
 

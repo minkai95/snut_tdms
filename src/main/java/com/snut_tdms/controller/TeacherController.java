@@ -81,12 +81,7 @@ public class TeacherController {
     @RequestMapping(value = "/teacherNews", method = RequestMethod.GET)
     public String teacherNews(HttpSession httpSession, Model model) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        List<SystemNotice> list = userService.selectSystemNotice(userInfo.getDepartment().getCode(),null);
-        List<NoticeHelpClass> result = new ArrayList<>();
-        for (SystemNotice systemNotice: list) {
-            result.add(new NoticeHelpClass(systemNotice,userService.selectUserInfoByUsername(systemNotice.getUser().getUsername())));
-        }
-        model.addAttribute("noticeHelpList",result);
+        model.addAttribute("noticeHelpList",userService.selectSystemNotice(userInfo.getDepartment().getCode(),null));
         return "teacher/teacherNews";
     }
 

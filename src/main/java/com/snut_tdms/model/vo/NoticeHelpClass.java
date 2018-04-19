@@ -2,6 +2,7 @@ package com.snut_tdms.model.vo;
 
 import com.snut_tdms.model.po.SystemNotice;
 import com.snut_tdms.model.po.UserInfo;
+import com.snut_tdms.model.po.UserRole;
 
 /**
  * 公告辅助类
@@ -11,13 +12,23 @@ public class NoticeHelpClass {
 
     private SystemNotice systemNotice;
     private UserInfo userInfo;
+    private UserRole userRole;
 
     public NoticeHelpClass() {
     }
 
-    public NoticeHelpClass(SystemNotice systemNotice, UserInfo userInfo) {
+    public NoticeHelpClass(SystemNotice systemNotice, UserInfo userInfo, UserRole userRole) {
         this.systemNotice = systemNotice;
         this.userInfo = userInfo;
+        this.userRole = userRole;
+    }
+
+    public UserRole getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(UserRole userRole) {
+        this.userRole = userRole;
     }
 
     public SystemNotice getSystemNotice() {
@@ -41,6 +52,7 @@ public class NoticeHelpClass {
         return "NoticeHelpClass{" +
                 "systemNotice=" + systemNotice +
                 ", userInfo=" + userInfo +
+                ", userRole=" + userRole +
                 '}';
     }
 
@@ -52,13 +64,15 @@ public class NoticeHelpClass {
         NoticeHelpClass that = (NoticeHelpClass) o;
 
         if (systemNotice != null ? !systemNotice.equals(that.systemNotice) : that.systemNotice != null) return false;
-        return userInfo != null ? userInfo.equals(that.userInfo) : that.userInfo == null;
+        if (userInfo != null ? !userInfo.equals(that.userInfo) : that.userInfo != null) return false;
+        return userRole != null ? userRole.equals(that.userRole) : that.userRole == null;
     }
 
     @Override
     public int hashCode() {
         int result = systemNotice != null ? systemNotice.hashCode() : 0;
         result = 31 * result + (userInfo != null ? userInfo.hashCode() : 0);
+        result = 31 * result + (userRole != null ? userRole.hashCode() : 0);
         return result;
     }
 }

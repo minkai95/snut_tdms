@@ -1,7 +1,10 @@
 package com.snut_tdms.service;
 
+import com.snut_tdms.controller.UserController;
 import com.snut_tdms.dao.UserDao;
 import com.snut_tdms.model.po.*;
+import com.snut_tdms.model.vo.LogHelpClass;
+import com.snut_tdms.model.vo.NoticeHelpClass;
 import com.snut_tdms.model.vo.Page;
 import com.snut_tdms.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -265,9 +268,10 @@ public class UserService {
      * @param userInfo 用户信息
      * @return 状态码
      */
-    public StatusCode updateUserInfo(UserInfo userInfo,User operationUser){
-        if(!userInfo.equals(userDao.selectUserInfoByUsername(userInfo.getUser().getUsername()))) {
-            if (userDao.updateUserInfo(userInfo) > 0) {
+    public StatusCode updateUserInfo(UserInfo userInfo,UserRole userRole,User operationUser){
+        if(!userInfo.equals(userDao.selectUserInfoByUsername(userInfo.getUser().getUsername()))
+                || !userRole.equals(selectUserRoleByUsername(userInfo.getUser().getUsername()))) {
+            if (userDao.updateUserInfo(userInfo) > 0 | userDao.updateUserRole(userRole)>0) {
                 Map<String,Object> map = new HashMap<>();
                 map.put("action",LogActionType.UPDATE.getnCode());
                 map.put("content","更新了用户的个人信息!");
@@ -343,11 +347,15 @@ public class UserService {
      * @param roleId 角色ID
      * @return List
      */
-    public List<SystemNotice> selectSystemNotice(String departmentCode,String roleId){
+    public List<NoticeHelpClass> selectSystemNotice(String departmentCode,String roleId){
         Map<String,Object> map = new HashMap<>();
         map.put("departmentCode",departmentCode);
         map.put("roleId",roleId);
-        return userDao.selectSystemNotice(map);
+        List<NoticeHelpClass> result = new ArrayList<>();
+        for (SystemNotice systemNotice: userDao.selectSystemNotice(map)) {
+            result.add(new NoticeHelpClass(systemNotice,selectUserInfoByUsername(systemNotice.getUser().getUsername()),UserController.updateUserRole(selectUserRoleByUsername(systemNotice.getUser().getUsername()))));
+        }
+        return result;
     }
 
     /**
@@ -358,7 +366,7 @@ public class UserService {
      * @param dataClassId 资料类型ID
      * @return List
      */
-    public List<DataClass> selectDataClass(String departmentCode,String roleId,String flag,String dataClassId){
+   public List<DataClass> selectDataClass(String departmentCode,String roleId,String flag,String dataClassId){
         Map<String,Object> map = new HashMap<>();
         map.put("departmentCode",departmentCode);
         map.put("roleId",roleId);
@@ -505,5 +513,70 @@ public class UserService {
         map.put("departmentCode",departmentCode);
         map.put("roleId",roleId);
         return userDao.selectRoleAllPublicData(map);
+    }
+
+    public List<LogHelpClass> formatLog(List<Log> logList){
+        List<LogHelpClass> logHelpClassList = new ArrayList<>();
+        for (Log log: logList) {
+            if (log.getDescription()==null || "".equals(log.getDescription())){
+                log.setDescription("无");
+            }
+            LogHelpClass logHelpClass = new LogHelpClass();
+            logHelpClass.setOperatedType(log.getOperatedType());
+            switch (log.getOperatedType()){
+                case "文件":
+                    Data data = selectDataById(log.getOperatedId());
+                    if (data!=null) {
+                        data.setFileName(data.getFileName().substring(data.getFileName().lastIndexOf("_") + 1));
+                        logHelpClass.setOperatedData(data);
+                        logHelpClass.setOperatedDataUserInfo(selectUserInfoByUsername(data.getUser().getUsername()));
+                        logHelpClass.setOperatedDataUserRole(UserController.updateUserRole(selectUserRoleByUsername(data.getUser().getUsername())));
+                    }
+                    break;
+                case "文件类型":
+                    logHelpClass.setOperatedDataClass(selectDataClassById(log.getOperatedId()));
+                    break;
+                case "用户":
+                    logHelpClass.setOperatedUserInfo(selectUserInfoByUsername(log.getOperatedId()));
+                    logHelpClass.setOperatedUserRole(UserController.updateUserRole(selectUserRoleByUsername(log.getOperatedId())));
+                    break;
+                case "院系":
+                    logHelpClass.setOperatedDepartment(selectDepartmentByCode(log.getOperatedId()));
+                    break;
+            }
+            logHelpClass.setLog(log);
+            if (log.getOperationUser()!=null && selectUserInfoByUsername(log.getOperationUser().getUsername())!=null){
+                logHelpClass.setOperationUserInfo(selectUserInfoByUsername(log.getOperationUser().getUsername()));
+            }else {
+                UserInfo userInfo = new UserInfo();
+                if (log.getOperationUser()!=null && log.getOperationUser().getUsername() != null){
+                    userInfo.setName("该用户已被删除!");
+                    userInfo.setEmail("该用户已被删除!");
+                    userInfo.setPhone("该用户已被删除!");
+                }else {
+                    userInfo.setName("无");
+                    userInfo.setEmail("无");
+                    userInfo.setPhone("无");
+                }
+                logHelpClass.setOperationUserInfo(userInfo);
+            }
+            if (log.getOperationUser()!=null && selectUserRoleByUsername(log.getOperationUser().getUsername())!=null){
+                logHelpClass.setOperationUserRole(UserController.updateUserRole(selectUserRoleByUsername(log.getOperationUser().getUsername())));
+            }else {
+                UserRole userRole = new UserRole();
+                if (log.getOperationUser()!=null && log.getOperationUser().getUsername() != null){
+                    Role role = new Role();
+                    role.setName("该用户已被删除!");
+                    userRole.setRole(role);
+                }else {
+                    Role role = new Role();
+                    role.setName("无");
+                    userRole.setRole(role);
+                }
+                logHelpClass.setOperationUserRole(userRole);
+            }
+            logHelpClassList.add(logHelpClass);
+        }
+        return logHelpClassList;
     }
 }

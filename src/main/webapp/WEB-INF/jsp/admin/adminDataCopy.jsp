@@ -12,7 +12,7 @@
             <div class="teacherUpload">
                 <p class="uploadTitle">已有数据备份列表</p>
                 <button class="btn btn-info upload batchDelete" data-toggle="modal" data-target="#myModal2"><i class="icon-save" style="margin-right: 5px;"></i>手动备份</button>
-                <button class="btn btn-success upload batchDelete" data-toggle="modal" data-target="#myModal"><i class="icon-cogs" style="margin-right: 5px;"></i>自动备份</button>
+                <button id="selfSaveBtn" class="btn btn-success upload batchDelete" data-toggle="modal" data-target="#myModal"><i class="icon-cogs" style="margin-right: 5px;"></i>自动备份</button>
                 <p class="upload batchDelete saveTitle">当前备份时间：每天23:59:00</p>
             </div>
         </div>
@@ -108,7 +108,6 @@
         var liHourText = 0;
         for(var i = 0; i < 24; i++){
             $("#dateHourList").append("<li></li>");
-
         }
         $("#dateHourList li").each(function(){
             if(liHourText < 10){
@@ -120,7 +119,6 @@
         var liMinuteText = 0;
         for(var j = 0; j < 60; j++){
             $("#dateMinuteList").append("<li></li>");
-
         }
         $("#dateMinuteList li").each(function(){
             if(liMinuteText < 10){
@@ -129,8 +127,6 @@
                 $(this).text(liMinuteText++);
             }
         });
-
-
         var spanDateHour = "00";
         var spanDateMinute = "00";
         /*选中li居中并加样式*/
@@ -144,30 +140,29 @@
                 $(this).siblings().removeClass("liAddClass");
                 $(this).parents(".hourCont").scrollTop("25" * (hourLiIndex-3));
             }
-
             spanDateHour = $(this).text();
             $("#chooseTime").text(spanDateHour + ":" + spanDateMinute);
-
         });
         $("#dateMinuteList li").click(function(){
-            var minuteLiIndex = $("#dateMinuteList li").index($(this));
-            if(minuteLiIndex <= "3"){
-                $(this).addClass("liAddClass");
-                $(this).siblings().removeClass("liAddClass");
-
-            } else{
-                $(this).addClass("liAddClass");
-                $(this).siblings().removeClass("liAddClass");
-                $(this).parents(".minuteCont").scrollTop("25" * (minuteLiIndex-3));
+            if ($('#dateHourList').children('li').hasClass('liAddClass')) {
+                var minuteLiIndex = $("#dateMinuteList li").index($(this));
+                if (minuteLiIndex <= "3") {
+                    $(this).addClass("liAddClass");
+                    $(this).siblings().removeClass("liAddClass");
+                } else {
+                    $(this).addClass("liAddClass");
+                    $(this).siblings().removeClass("liAddClass");
+                    $(this).parents(".minuteCont").scrollTop("25" * (minuteLiIndex - 3));
+                }
+                spanDateMinute = $(this).text();
+                $("#chooseTime").text(spanDateHour + ":" + spanDateMinute);
+            }else {
+                alert("请先选择小时!");
             }
-
-            spanDateMinute = $(this).text();
-            $("#chooseTime").text(spanDateHour + ":" + spanDateMinute);
         });
         /*点击span让时间选择器出现*/
         $("#dateChoose").click(function(){
             $("#dateWrapper").slideToggle();
-
         });
         /*点击清除按钮*/
         $("#resetTimeBtn").click(function(){
@@ -178,6 +173,8 @@
             $(".minuteCont").scrollTop("0");
             $("#chooseTime").text("");
             $("#dateChoose").text("");
+            spanDateHour = "00";
+            spanDateMinute = "00";
         });
         /*点击确定按钮*/
         $("#confirmTimeBtn").click(function(){
@@ -188,13 +185,11 @@
                 $("#dateWrapper").slideUp();
             }
         });
-
         $("#closeDate").click(function(){
             $("#dateWrapper").slideUp();
         });
-        $(".fade").mousedown(function(event){
-            event.stopPropagation();
-            $("#dateWrapper").slideUp();
+        $("#selfSaveBtn").click(function(){
+            $("#dateWrapper").css("display","none");
         });
     </script>
 </body>

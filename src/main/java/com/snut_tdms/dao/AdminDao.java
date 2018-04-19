@@ -1,8 +1,6 @@
 package com.snut_tdms.dao;
 
-import com.snut_tdms.model.po.Log;
-import com.snut_tdms.model.po.User;
-import com.snut_tdms.model.po.UserInfo;
+import com.snut_tdms.model.po.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,9 +15,19 @@ public interface AdminDao extends UserDao {
 
     int insertUser(Map<String,Object> map);
 
+    int insertSystemNotice(SystemNotice systemNotice);
+
+    int insertClassType(ClassType classType);
+
     int deleteUserByUsernameList(List<String> usernameList);
+
+    int deleteClassTypeById(String classTypeId);
+
+    int recoverData(String dataId);
 
     List<Log> selectDepartmentLogs(String departmentCode);
 
-    List<User> selectUserByRole(String roleId);
+    List<UserRole> selectUserByParams(Map<String,Object> map);
+
+    List<ClassType> selectClassTypeByDepartmentCode(String departmentCode);
 }

@@ -94,7 +94,7 @@ public class UserController {
                 user.setIdCard(userInfo.getUser().getIdCard());
                 upPsw = userService.updatePassword(user,userInfo.getUser()).getnCode();
             }
-            String usIf = userService.updateUserInfo(userInfo,userInfo.getUser()).getnCode();
+            String usIf = userService.updateUserInfo(userInfo,userService.selectUserRoleByUsername(userInfo.getUser().getUsername()),userInfo.getUser()).getnCode();
             if ((upPsw==null || upPsw.equals(StatusCode.NEW_PASSWORD_EQUALS_OLD.getnCode())) && (usIf.equals(StatusCode.UPDATE_NOT.getnCode()))){
                 json.put("message",StatusCode.UPDATE_NOT.getnCode());
             }else {
@@ -297,7 +297,7 @@ public class UserController {
     }
 
     // 格式化UserRole
-     static UserRole updateUserRole(UserRole userRole){
+    public static UserRole updateUserRole(UserRole userRole){
         if (userRole != null) {
             switch (userRole.getRole().getName()) {
                 case "superAdmin":

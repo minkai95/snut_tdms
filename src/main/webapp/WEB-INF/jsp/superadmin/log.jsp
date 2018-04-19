@@ -173,20 +173,30 @@
 
         // 恢复文件
         function recover(dataId) {
-            $.ajax({
-                url:"${ctx}/superAdmin/recoverData?dataId="+dataId,
-                type:"POST",
-                dataType:"json",
-                success: function (result) {
-                    $.confirm({
-                        title: '提示',
-                        content: result['message'],
-                        buttons: {
-                            确定: function () {
-                                location.reload();
+            $.confirm({
+                title: '提示',
+                content: '确认恢复本条数据?',
+                buttons: {
+                    取消:function () {
+                    },
+                    确定: function () {
+                        $.ajax({
+                            url:"${ctx}/superAdmin/recoverData?dataId="+dataId,
+                            type:"POST",
+                            dataType:"json",
+                            success: function (result) {
+                                $.confirm({
+                                    title: '提示',
+                                    content: result['message'],
+                                    buttons: {
+                                        确定: function () {
+                                            location.reload();
+                                        }
+                                    }
+                                })
                             }
-                        }
-                    })
+                        })
+                    }
                 }
             })
         }

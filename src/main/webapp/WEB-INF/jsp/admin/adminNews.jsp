@@ -19,22 +19,23 @@
                     <th>标题</th>
                     <th>内容</th>
                     <th>时间</th>
-                    <th>职务</th>
                     <th>发布者</th>
+                    <th>发布者职务</th>
                     <th style="text-align: center;">操作</th>
                 </tr>
-                <tr>
-                    <td>1</td>
-                    <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">请按时提交期末考试试卷</td>
-                    <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">请按时提交期末考试试卷请按时提交期末考试试卷请按时提交期末考试试卷请按时提交期末考试试卷</td>
-                    <td>2018-05-31&emsp;23:11:02</td>
-                    <td>教务处</td>
-                    <td>大壮</td>
-                    <td style="width: 140px; text-align: center;">
-                        <button type="button" class="btn btn-info btn-sm newsContent"><i class="icon-search"></i>查看</button>
-                        <button type="button" class="btn btn-danger btn-sm newsDeleteBtn"><i class=" icon-remove-circle"></i>删除</button>
-                    </td>
-                </tr>
+                <c:forEach items="${noticeHelpList}" var="noticeHelp" varStatus="noticeStatus">
+                    <tr id="${noticeHelp.systemNotice.id}">
+                        <td>${noticeStatus.index+1}</td>
+                        <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${noticeHelp.systemNotice.name}</td>
+                        <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${noticeHelp.systemNotice.content}</td>
+                        <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${noticeHelp.systemNotice.date}"/></td>
+                        <td>${noticeHelp.userInfo.name}</td>
+                        <td>${noticeHelp.userRole.role.name}</td>
+                        <td style="width: 140px; text-align: center;">
+                            <button type="button"  onclick="openModel('${noticeHelp.systemNotice.id}')"  class="btn btn-info"><i class="icon-search"></i>查看详情</button>
+                        </td>
+                    </tr>
+                </c:forEach>
             </table>
         </div>
     </div>
@@ -49,17 +50,18 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="content">标题</label>
-                        <div id="content">文件被删除</div>
+                        <label for="title">标题</label>
+                        <div id="title"></div>
                     </div>
                     <div class="form-group">
-                        <label for="description">内容</label>
-                        <div id="description">数学试卷由于不符合许愿要求，被删除数学试卷由于不符合许愿要求，被删除数学试卷由于不符合许愿要求，被删除数学试卷由于不符合许愿要求，被删除</div>
+                        <label for="content">内容</label>
+                        <div id="content"></div>
                     </div>
                     <div class="form-group">
                         <p class="date" style="text-align: right; margin-top: 30px; font-weight: bold;">
-                            <span class="date">2017/09/23</span>
-                            <span id="username">何大壮</span>
+                            发布者：<span id="modalName"></span><br>
+                            职位：<span id="modalJob"></span><br>
+                            <span class="date" id="modalData"></span>
                         </p>
                     </div>
                 </div>
@@ -90,36 +92,49 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="resetBtn" class="btn btn-default">重置</button>
-                    <button type="button" class="btn btn-info">发布</button>
+                    <button type="button" onclick="publishNewsSubmit()" class="btn btn-info">发布</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        $(".newsContent").on("click", function(){
-            $("#myModal").modal();
-        });
-
+        // 打开查看详情模态框
+        function openModel(logId) {
+            var tr = $('#'+logId+'');
+            $('#title').text(tr.children().eq(1).text());
+            $('#content').text(tr.children().eq(2).text());
+            $('#modalData').text(tr.children().eq(3).text());
+            $('#modalName').text(tr.children().eq(4).text());
+            $('#modalJob').text(tr.children().eq(5).text());
+            $('#myModal').modal();
+        }
+        // 发布公告重置
         $("#resetBtn").click(function(){
             $("#newsTitle").val("");
             $("#newsContent").val("");
         });
-
-        $(".newsDeleteBtn").on("click", function(){
-            $.confirm({
-                title: '提示',
-                content: '确认删除该条消息通告？',
-                buttons: {
-                    确定: function(){
-
-                    },
-                    取消: function() {
-
-                    }
+        // 提交发布公告
+        function publishNewsSubmit() {
+            var title = $('#newsTitle').val();
+            var content = $('#newsContent').val();
+            $.ajax({
+                url:"${ctx}/admin/publishNews?title="+title+"&content="+content,
+                type:"POST",
+                dataType:"json",
+                success: function (result) {
+                    $.confirm({
+                        title: '提示',
+                        content: result['message'],
+                        buttons: {
+                            确定: function () {
+                                location.reload();
+                            }
+                        }
+                    })
                 }
-            });
-        });
+            })
+        }
     </script>
 </body>
 </html>
