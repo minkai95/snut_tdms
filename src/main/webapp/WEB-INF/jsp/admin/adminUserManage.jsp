@@ -28,7 +28,7 @@
                     <th style="text-align: center">操作</th>
                 </tr>
                 <tr id="uesr001">
-                    <td style="text-align: center"><input class="checkBtn checkedBtn" type="checkbox">1</td>
+                    <td style="text-align: center"></td>
                     <td>00001</td>
                     <td>杨帆</td>
                     <td>男</td>

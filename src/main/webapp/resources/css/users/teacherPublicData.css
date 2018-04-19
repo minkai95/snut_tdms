@@ -11,7 +11,8 @@
     border-bottom: 2px dashed #ccc;
 }
 .uploadTitle{
-    float: left;
+    display: inline-block;
+    margin: -1px 0 10px;
     font-size: 18px;
     font-family:"Microsoft YaHei", Arial, Helvetica, sans-serif;
     color: #484848;
@@ -20,6 +21,8 @@
     display: block;
     float: right;
     margin-right: 40px;
+    position: relative;
+    z-index: 999;
 }
 .upload:hover{
     cursor: pointer;
@@ -43,9 +46,28 @@
 .fileName{
     width: 90%;
     margin-left: 57px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .chooseFileBtn{
     margin-top: -33px;
+}
+
+.chooseSelect{
+    display: inline-block;
+    width: 91px;
+    height: 25px;
+    line-height: 25px;
+    padding: 0 5px;
+}
+
+.chooseLabel{
+    width: 70px;
+    font-size: 16px;
+    margin-left: 20px;
+    font-weight: 100;
+    color: #3894c7;
 }
 
 /* --管理员页面部分样式-- */

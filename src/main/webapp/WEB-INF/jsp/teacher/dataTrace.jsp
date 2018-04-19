@@ -24,7 +24,7 @@
                 <c:forEach items="${logHelpList}" var="logHelp" varStatus="logStatus">
                     <tr id="${logHelp.log.id}">
                         <td>${logStatus.index+1}</td>
-                        <td>${logHelp.operatedData.fileName}<c:if test="${logHelp.operatedData.fileName==null}">已被删除</c:if></td>
+                        <td style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${logHelp.operatedData.fileName}<c:if test="${logHelp.operatedData.fileName==null}">已被删除</c:if></td>
                         <td>${logHelp.operatedData.dataClass.name}<c:if test="${logHelp.operatedData.dataClass.name==null}">已被删除</c:if></td>
                         <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${logHelp.log.content}</td>
                         <td>${logHelp.log.action}</td>
