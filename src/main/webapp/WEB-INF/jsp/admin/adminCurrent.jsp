@@ -10,25 +10,25 @@
     <p class="title">运行首页</p>
     <div calss="mainCont">
         <div class="banner">
-            <a class="adminBannerOne" href="adminUserManage.jsp" target="mainFrame" onclick="changeLiStyle('publicData')">
+            <a class="adminBannerOne" href="${ctx}/admin/adminUserManage" target="mainFrame" onclick="changeLiStyle('publicData')">
                 <p class="bannerNumber">
-                    <span>15</span>位 </p>
+                    <span>${userCount}</span>位 </p>
                 <p class="dataType">学院用户</p>
             </a>
-            <a class="adminBannerTwo" href="adminLog.jsp" target="mainFrame" onclick="changeLiStyle('personData')">
+            <a class="adminBannerTwo" href="${ctx}/admin/adminLog" target="mainFrame" onclick="changeLiStyle('personData')">
                 <p class="bannerNumber">
                 <p class="bannerNumber">
-                    <span>30</span>条 </p>
+                    <span>${logCount}</span>条 </p>
                 <p class="dataType">系统日志</p>
             </a>
             <a class="adminBannerThree" href="javascript:void(0)" target="mainFrame" onclick="changeLiStyle('dataType')">
                 <p class="bannerNumber">
-                    <span>7</span>条 </p>
+                    <span>${dataClassCount}</span>条 </p>
                 <p class="dataType">公共类目</p>
             </a>
-            <a class="adminBannerFour" href="adminNews.jsp" target="mainFrame" onclick="changeLiStyle('teacherNews')">
+            <a class="adminBannerFour" href="${ctx}/admin/adminNews" target="mainFrame" onclick="changeLiStyle('teacherNews')">
                 <p class="bannerNumber">
-                    <span>9</span>条 </p>
+                    <span>${newsCount}</span>条 </p>
                 <p class="dataType">消息通告</p>
             </a>
         </div>

@@ -66,12 +66,7 @@ public class StudentOfficeController {
     @RequestMapping(value = "/studentOfficeNews", method = RequestMethod.GET)
     public String studentOfficeNews(HttpSession httpSession, Model model) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        List<SystemNotice> list = userService.selectSystemNotice(userInfo.getDepartment().getCode(),"002");
-        List<NoticeHelpClass> result = new ArrayList<>();
-        for (SystemNotice systemNotice: list) {
-            result.add(new NoticeHelpClass(systemNotice,userService.selectUserInfoByUsername(systemNotice.getUser().getUsername())));
-        }
-        model.addAttribute("noticeHelpList",result);
+        model.addAttribute("noticeHelpList",userService.selectSystemNotice(userInfo.getDepartment().getCode(),"002"));
         return "studentOffice/studentOfficeNews";
     }
 }

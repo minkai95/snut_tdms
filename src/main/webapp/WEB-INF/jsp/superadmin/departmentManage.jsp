@@ -26,7 +26,7 @@
                         </tr>
                         <c:forEach items="${departmentList}" var="department" varStatus="departmentStatus">
                             <tr>
-                                <td>${departmentStatus.index+1}</td>
+                                <td><input id="${departmentStatus.index+1+(page.currentPage-1)*10}" type="checkbox"><label for="${departmentStatus.index+1+(page.currentPage-1)*10}">${departmentStatus.index+1+(page.currentPage-1)*10}</label></td>
                                 <td>${department.code}</td>
                                 <td>${department.name}</td>
                                 <td style="width: 250px;  text-align: center;">

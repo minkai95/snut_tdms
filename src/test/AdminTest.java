@@ -42,10 +42,6 @@ public class AdminTest {
         map.put("operationUser",operationUser);
         map.put("operatedUser",operatedUser);
         map.put("description","文件不合格而被删除");
-        List<Log> l  = adminService.selectDepartmentLogs("001");
-        for (Log log: l) {
-            System.out.println(log);
-        }
     }
 
 }

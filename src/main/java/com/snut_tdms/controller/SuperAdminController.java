@@ -51,68 +51,7 @@ public class SuperAdminController {
     public String superAdminLog(HttpSession httpSession, Model model,
                                 @RequestParam(value = "currentPage", required = false) String currentPage) {
         Page page = SystemUtils.getPage(currentPage);
-        List<Log> logList = superAdminService.selectAllLogs(page);
-        List<LogHelpClass> logHelpClassList = new ArrayList<>();
-        for (Log log: logList) {
-            if (log.getDescription()==null || "".equals(log.getDescription())){
-                log.setDescription("无");
-            }
-            LogHelpClass logHelpClass = new LogHelpClass();
-            logHelpClass.setOperatedType(log.getOperatedType());
-            switch (log.getOperatedType()){
-                case "文件":
-                    Data data = userService.selectDataById(log.getOperatedId());
-                    if (data!=null) {
-                        data.setFileName(data.getFileName().substring(data.getFileName().lastIndexOf("_") + 1));
-                        logHelpClass.setOperatedData(data);
-                        logHelpClass.setOperatedDataUserInfo(userService.selectUserInfoByUsername(data.getUser().getUsername()));
-                        logHelpClass.setOperatedDataUserRole(UserController.updateUserRole(userService.selectUserRoleByUsername(data.getUser().getUsername())));
-                    }
-                    break;
-                case "文件类型":
-                    logHelpClass.setOperatedDataClass(userService.selectDataClassById(log.getOperatedId()));
-                    break;
-                case "用户":
-                    logHelpClass.setOperatedUserInfo(userService.selectUserInfoByUsername(log.getOperatedId()));
-                    logHelpClass.setOperatedUserRole(UserController.updateUserRole(userService.selectUserRoleByUsername(log.getOperatedId())));
-                    break;
-                case "院系":
-                    logHelpClass.setOperatedDepartment(userService.selectDepartmentByCode(log.getOperatedId()));
-                    break;
-            }
-            logHelpClass.setLog(log);
-            if (log.getOperationUser()!=null && userService.selectUserInfoByUsername(log.getOperationUser().getUsername())!=null){
-                logHelpClass.setOperationUserInfo(userService.selectUserInfoByUsername(log.getOperationUser().getUsername()));
-            }else {
-                UserInfo userInfo = new UserInfo();
-                if (log.getOperationUser()!=null && log.getOperationUser().getUsername() != null){
-                    userInfo.setName("该用户已被删除!");
-                    userInfo.setEmail("该用户已被删除!");
-                    userInfo.setPhone("该用户已被删除!");
-                }else {
-                    userInfo.setName("无");
-                    userInfo.setEmail("无");
-                    userInfo.setPhone("无");
-                }
-                logHelpClass.setOperationUserInfo(userInfo);
-            }
-            if (log.getOperationUser()!=null && userService.selectUserRoleByUsername(log.getOperationUser().getUsername())!=null){
-                logHelpClass.setOperationUserRole(UserController.updateUserRole(userService.selectUserRoleByUsername(log.getOperationUser().getUsername())));
-            }else {
-                UserRole userRole = new UserRole();
-                if (log.getOperationUser()!=null && log.getOperationUser().getUsername() != null){
-                    Role role = new Role();
-                    role.setName("该用户已被删除!");
-                    userRole.setRole(role);
-                }else {
-                    Role role = new Role();
-                    role.setName("无");
-                    userRole.setRole(role);
-                }
-                logHelpClass.setOperationUserRole(userRole);
-            }
-            logHelpClassList.add(logHelpClass);
-        }
+        List<LogHelpClass> logHelpClassList = superAdminService.selectAllLogs(page);
         model.addAttribute("logHelpClassList",logHelpClassList);
         model.addAttribute("page", page);
         return "superadmin/log";

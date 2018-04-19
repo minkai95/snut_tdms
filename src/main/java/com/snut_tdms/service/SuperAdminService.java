@@ -3,6 +3,7 @@ package com.snut_tdms.service;
 import com.snut_tdms.dao.SuperAdminDao;
 import com.snut_tdms.dao.UserDao;
 import com.snut_tdms.model.po.*;
+import com.snut_tdms.model.vo.LogHelpClass;
 import com.snut_tdms.model.vo.Page;
 import com.snut_tdms.util.LogActionType;
 import com.snut_tdms.util.OperatedType;
@@ -179,7 +180,7 @@ public class SuperAdminService extends UserService {
             logParams.put("operatedType", OperatedType.USER.getnCode());
             logParams.put("description", description);
             for (String username: relUsernameList){
-                logParams.put("operatedType",username);
+                logParams.put("operatedId",username);
                 insertLog(logParams);
             }
         }
@@ -243,10 +244,10 @@ public class SuperAdminService extends UserService {
      * 查询全校日志记录
      * @return list
      */
-    public List<Log> selectAllLogs(Page page){
+    public List<LogHelpClass> selectAllLogs(Page page){
         Map<String,Object> map = new HashMap<>();
         map.put("page",page);
-        return superAdminDao.selectAllLogsByPage(map);
+        return formatLog(superAdminDao.selectAllLogsByPage(map));
     }
 
     /**

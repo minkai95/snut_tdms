@@ -153,6 +153,11 @@
           email = #{email}
         WHERE user_info.`user` = #{user.username}
     </update>
+    <update id="updateUserRole" parameterType="com.snut_tdms.model.po.UserRole">
+        UPDATE user_role SET
+          role = #{role.id}
+        WHERE `user` = #{user.username}
+    </update>
     <update id="logicalDeleteDataByIds" parameterType="java.util.Map">
         UPDATE `data` SET
           flag = 1,

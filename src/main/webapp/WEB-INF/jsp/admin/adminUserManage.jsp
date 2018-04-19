@@ -27,32 +27,22 @@
                     <th>邮箱</th>
                     <th style="text-align: center">操作</th>
                 </tr>
-                <tr id="uesr001">
-                    <td style="text-align: center"></td>
-                    <td>00001</td>
-                    <td>杨帆</td>
-                    <td>男</td>
-                    <td>教师</td>
-                    <td>12345678901</td>
-                    <td>163@163.com</td>
-                    <td style="width: 250px;  text-align: center;">
-                        <button class="btn btn-info btn-sm updateUserInfo"><i class="icon-pencil"></i>修改</button>
-                        <button class="btn btn-danger btn-sm  deleteUser"><i class="icon-remove-circle"></i>删除</button>
-                    </td>
-                </tr>
-                <tr id="uesr002">
-                    <td style="text-align: center"><input class="checkBtn checkedBtn" type="checkbox">2</td>
-                    <td>00001</td>
-                    <td>杨帆</td>
-                    <td>男</td>
-                    <td>教师</td>
-                    <td>12345678901</td>
-                    <td>163@163.com</td>
-                    <td style="width: 250px;  text-align: center;">
-                        <button class="btn btn-info btn-sm updateUserInfo"><i class="icon-pencil"></i>修改</button>
-                        <button class="btn btn-danger btn-sm deleteUser"><i class="icon-remove-circle"></i>删除</button>
-                    </td>
-                </tr>
+                <c:forEach items="${userHelpClassList}" var="userHelp" varStatus="userStatus">
+                    <tr id="${userHelp.userInfo.user.username}">
+                        <td style="text-align: center"><input class="checkBtn checkedBtn" type="checkbox">1</td>
+                        <td>${userHelp.userInfo.user.username}</td>
+                        <td>${userHelp.userInfo.name}</td>
+                        <td>${userHelp.userInfo.sex}</td>
+                        <td>${userHelp.userRole.role.name}</td>
+                        <td>${userHelp.userInfo.phone}</td>
+                        <td>${userHelp.userInfo.email}</td>
+                        <td style="width: 250px;  text-align: center;">
+                            <button class="btn btn-info btn-sm" onclick="openUpdateUserModal('${userHelp.userInfo.user.username}')"><i class="icon-pencil"></i>修改</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteUser('${userHelp.userInfo.user.username}')"><i class="icon-remove-circle"></i>删除</button>
+                        </td>
+                        <td style="display:none;">${userHelp.userRole.role.id}</td>
+                    </tr>
+                </c:forEach>
             </table>
         </div>
     </div>
@@ -67,16 +57,16 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="addUserId" style="letter-spacing: 8px;">用户名:</label>
-                        <input type="text" id="addUserId" class="form-control applyDataName">
-                    </div>
-                    <div class="form-group">
-                        <label for="addUsername" style="letter-spacing: 19px;">姓名:</label>
+                        <label for="addUsername" style="letter-spacing: 8px;">用户名:</label>
                         <input type="text" id="addUsername" class="form-control applyDataName">
                     </div>
                     <div class="form-group">
-                        <label for="addUserSex" style="letter-spacing: 19px;">性别:</label>
-                        <select id="addUserSex" class="form-control applyDataName">
+                        <label for="addName" style="letter-spacing: 19px;">姓名:</label>
+                        <input type="text" id="addName" class="form-control applyDataName">
+                    </div>
+                    <div class="form-group">
+                        <label for="addSex" style="letter-spacing: 19px;">性别:</label>
+                        <select id="addSex" class="form-control applyDataName">
                             <option value="男">男</option>
                             <option value="女">女</option>
                         </select>
@@ -84,23 +74,23 @@
                     <div class="form-group">
                         <label for="addUserJob" style="letter-spacing: 19px;">职务:</label>
                         <select id="addUserJob" class="form-control applyDataName">
-                            <option value="教师">教师</option>
-                            <option value="学办">学办</option>
-                            <option value="教务处">教务处</option>
+                            <option value="005">教师</option>
+                            <option value="003">学办</option>
+                            <option value="004">教务处</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="addUserPhone" style="letter-spacing: 2.5px;">联系方式:</label>
-                        <input type="text" id="addUserPhone" class="form-control applyDataName">
+                        <label for="addPhone" style="letter-spacing: 2.5px;">联系方式:</label>
+                        <input type="text" id="addPhone" class="form-control applyDataName">
                     </div>
                     <div class="form-group">
-                        <label for="addUserEmail" style="letter-spacing: 19px;">邮箱:</label>
-                        <input type="text" id="addUserEmail" class="form-control applyDataName">
+                        <label for="addEmail" style="letter-spacing: 19px;">邮箱:</label>
+                        <input type="text" id="addEmail" class="form-control applyDataName">
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary">提交</button>
+                    <button type="button" class="btn btn-primary" onclick="addUserSubmit()">提交</button>
                 </div>
             </div>
         </div>
@@ -116,34 +106,35 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="updateUserId" style="letter-spacing: 8px;">用户名:</label>
-                        <span id="updateUserId" class="form-control applyDataName">00001</span>
+                        <label for="updateUsername" style="letter-spacing: 8px;">用户名:</label>
+                        <span id="updateUsername" class="form-control applyDataName">00001</span>
                     </div>
                     <div class="form-group">
-                        <label for="updateUsername" style="letter-spacing: 19px;">姓名:</label>
-                        <input type="text" id="updateUsername" class="form-control applyDataName" value="教师1">
+                        <label for="updateName" style="letter-spacing: 19px;">姓名:</label>
+                        <input type="text" id="updateName" class="form-control applyDataName" value="教师1">
                     </div>
                     <div class="form-group">
-                        <label for="updateUserSex" style="letter-spacing: 19px;">性别:</label>
-                        <select id="updateUserSex" class="form-control applyDataName">
-                            <option value="man">男</option>
-                            <option value="woman">女</option>
+                        <label for="updateSex" style="letter-spacing: 19px;">性别:</label>
+                        <select id="updateSex" class="form-control applyDataName">
+                            <option value="男">男</option>
+                            <option value="女">女</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="updateUserJob" style="letter-spacing: 19px;">职务:</label>
                         <select id="updateUserJob" class="form-control applyDataName">
-                            <option value="glxy">管理学院</option>
-                            <option value="sjxy">数计学院</option>
+                            <option value="005">教师</option>
+                            <option value="003">学办</option>
+                            <option value="004">教务处</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="updateUserPhone" style="letter-spacing: 2.5px;">联系方式:</label>
-                        <input type="text" id="updateUserPhone" class="form-control applyDataName" value="12345678901">
+                        <label for="updatePhone" style="letter-spacing: 2.5px;">联系方式:</label>
+                        <input type="text" id="updatePhone" class="form-control applyDataName" value="12345678901">
                     </div>
                     <div class="form-group">
-                        <label for="updateUserEmail" style="letter-spacing: 19px;">邮箱:</label>
-                        <input type="text" id="updateUserEmail" class="form-control applyDataName" value="123456@163.com">
+                        <label for="updateEmail" style="letter-spacing: 19px;">邮箱:</label>
+                        <input type="text" id="updateEmail" class="form-control applyDataName" value="123456@163.com">
                     </div>
                     <div class="form-group">
                         <label for="resetPassword" style="letter-spacing: 2.5px;">重置密码:</label>
@@ -157,7 +148,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary">提交</button>
+                    <button type="button" class="btn btn-primary" onclick="updateUserSubmit()">提交</button>
                 </div>
             </div>
         </div>
@@ -178,7 +169,6 @@
                });
            }
         });
-
         $(".checkedBtn").click(function(){
           $(this).each(function() {
               var allCheckedBox = $(".checkedBtn").length;
@@ -190,7 +180,6 @@
               }
           });
         });
-
         /*批量删除*/
         $("#batchDelete").click(function(){
             var checkedTrId = [];
@@ -198,41 +187,145 @@
                 checkedTrId.push($(this).parents("tr").attr("id"));
             });
         });
-
-        /*按钮js*/
+        // 按钮js
+        var btnResult = 0;
         function btnMove() {
             if ($("#btn").css("left") === "0px") {
                 $("#btn").animate({left: '29px'}, "fast");
                 $(".cont").addClass("addStyle");
+                btnResult = 1;
             } else {
                 $("#btn").animate({left: '0'}, "fast");
                 $(".switchBtnWrapper div").removeClass("addStyle");
+                btnResult = 0;
             }
         }
-
-
-        /*修改用户信息js*/
-        $(".updateUserInfo").on("click", function() {
+        // 打开修改用户的模态框
+        function openUpdateUserModal(username) {
+            var tr = $('#'+username+'');
+            $('#updateUsername').text(tr.children('td').eq(1).text());
+            $('#updateName').val(tr.children('td').eq(2).text());
+            $('#updateSex').val(tr.children('td').eq(3).text()).attr('selected',true);
+            $('#updateUserJob').val(tr.children('td').eq(8).text()).attr('selected',true);
+            $('#updatePhone').val(tr.children('td').eq(5).text());
+            $('#updateEmail').val(tr.children('td').eq(6).text());
             $("#myModal2").modal();
-        })
-
-
-        /*弹窗js*/
-        $(".deleteUser").click(function() {
+        }
+        // 删除用户
+        function deleteUser(username) {
             $.confirm({
                 title: '提示',
-                content: '确认删除该用户？',
+                content: '确认删除该管理员？<input style="margin-top:5px;" class="form-control" type="text" id="deleteReason" placeholder="请输入删除原因(选填)"/>',
                 buttons: {
                     确定: function(){
-
+                        var description = $('#deleteReason').val();
+                        $.ajax({
+                            type: "DELETE",
+                            url: "${ctx}/admin/deleteUser?username="+username+"&description="+description,
+                            dataType: "json",
+                            success: function (result) {
+                                $.confirm({
+                                    title: '提示',
+                                    content: result['message'],
+                                    buttons: {
+                                        确定: function () {
+                                            location.reload();
+                                        }
+                                    }
+                                })
+                            }
+                        })
                     },
                     取消: function() {
-
                     }
                 }
-            });
-        });
+            })
+        }
+        //新增用户
+        function addUserSubmit() {
+            var username = $('#addUsername').val();
+            var name = $('#addName').val();
+            var sex = $('#addSex').val();
+            var roleId = $('#addUserJob').val();
+            var phone = $('#addPhone').val();
+            var email = $('#addEmail').val();
+            var userInfo = {
+                "user":{
+                    "username":username,
+                    "password":"",
+                    "idCard":"",
+                    "firstLogin":0
+                },
+                "name":name,
+                "sex":sex,
+                "phone":phone,
+                "email":email,
+                "department":{
+                    "code":"",
+                    "name":""
+                }
+            };
+            $.ajax({
+                url:"${ctx}/admin/addUser?roleId="+roleId,
+                type:"POST",
+                data:JSON.stringify(userInfo),
+                contentType:"application/json",
+                dataType:"json",
+                success: function (result) {
+                    $.confirm({
+                        title: '提示',
+                        content: result['message'],
+                        buttons: {
+                            确定: function () {
+                                location.reload();
+                            }
+                        }
+                    })
+                }
+            })
+        }
+        function updateUserSubmit() {
+            var username = $('#updateUsername').text();
+            var name = $('#updateName').val();
+            var sex = $('#updateSex').val();
+            var roleId = $('#updateUserJob').val();
+            var phone = $('#updatePhone').val();
+            var email = $('#updateEmail').val();
+            var userInfo = {
+                "user":{
+                    "username":username,
+                    "password":"",
+                    "idCard":"",
+                    "firstLogin":0
+                },
+                "name":name,
+                "sex":sex,
+                "phone":phone,
+                "email":email,
+                "department":{
+                    "code":"",
+                    "name":""
+                }
+            };
+            $.ajax({
+                url:"${ctx}/admin/updateUser?reset="+btnResult+"&roleId="+roleId,
+                type:"POST",
+                data:JSON.stringify(userInfo),
+                contentType:"application/json",
+                dataType:"json",
+                success: function (result) {
+                    $.confirm({
+                        title: '提示',
+                        content: result['message'],
+                        buttons: {
+                            确定: function () {
+                                location.reload();
+                            }
+                        }
+                    })
+                }
+            })
+        }
     </script>
 </body>
-
 </html>
