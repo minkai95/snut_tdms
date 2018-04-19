@@ -11,6 +11,11 @@
         <p class="publicDataTitle">教师私有资料</p>
         <div class="teacherUpload">
             <p class="uploadTitle">已上传私有资料列表</p>
+            <select css="form-">
+                <option value="全部">全部</option>
+                <option value="试卷">试卷</option>
+                <option value="实验报告">实验报告</option>
+            </select>
             <button id="openModel" class="btn btn-success upload batchDelete" data-toggle="modal" data-target="#myModal"><i class="icon-upload" style="margin-right: 5px;"></i>上传私有文件</button>
             <button id="batchDelete" class="btn btn-danger batchDelete"><i class="icon-trash" style="margin-right: 5px;"></i>批量删除</button>
         </div>

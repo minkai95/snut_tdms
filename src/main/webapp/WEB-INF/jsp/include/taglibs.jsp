@@ -26,3 +26,4 @@
 <script type="text/javascript" src="${ctx}/resources/js/bootstrap/bootstrap.js"></script>
 <script type="text/javascript" src="${ctx}/resources/js/confirm/jquery-confirm.js"></script>
 <script type="text/javascript" src="${ctx}/resources/js/common.js"></script>
+<script type="text/javascript" src="${ctx}/resources/js/validator/jquery.validator.min.js?local=zh-CN"></script>
