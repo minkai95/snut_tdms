@@ -11,7 +11,7 @@
         <p class="publicDataTitle">申请类目</p>
         <div class="teacherUpload">
             <p class="uploadTitle">已有类目属性列表</p>
-            <button class="btn btn-success upload batchDelete" data-toggle="modal" data-target="#myModal"><i class="icon-plus-sign" style="margin-right: 5px;"></i>新增类目</button>
+            <button class="btn btn-success upload batchDelete" data-toggle="modal" data-target="#myModal"><i class="icon-plus-sign" style="margin-right: 5px;"></i>申请新增类目</button>
         </div>
     </div>
     <div class="typePropertyContent">

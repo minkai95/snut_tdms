@@ -27,6 +27,7 @@
                                 <li class="personLi"><a href="${ctx}/admin/typeManageTeacher" target="mainFrame">教师</a></li>
                                 <li class="personLi"><a href="${ctx}/admin/typeManageStudentOffice" target="mainFrame">学办</a></li>
                                 <li class="personLi"><a href="${ctx}/admin/typeProperty" target="mainFrame">类目属性</a></li>
+                                <li class="personLi"><a href="${ctx}/admin/typeApplyList" target="mainFrame">申请列表</a></li>
                             </ul>
                         </div>
 

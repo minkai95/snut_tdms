@@ -127,6 +127,14 @@ public class AdminController {
         return "admin/adminDataCopy";
     }
 
+    @RequestMapping(value = "/typeApplyList", method = RequestMethod.GET)
+    public String typeApplyList(HttpSession httpSession, Model model) {
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        UserRole userRole = (UserRole) httpSession.getAttribute("userRole");
+
+        return "admin/typeApplyList";
+    }
+
     @RequestMapping(value = "/addUser", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject addUser(HttpSession httpSession, @RequestBody UserInfo userInfo,@RequestParam("roleId") String roleId) {

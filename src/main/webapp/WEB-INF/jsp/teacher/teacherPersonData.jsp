@@ -81,7 +81,6 @@
 </div>
 <script>
     // 上传文件
-
     $('#submitDataButton').on('click',function () {
         if($("#fileName").text() == null || $("#fileName").text() == ""){
             $.alert({
@@ -129,7 +128,7 @@
                                     type: "DELETE",
                                     url: "${ctx}/user/deleteFile?dataId="+id+"&description="+"",
                                     dataType: "json",
-                                    success: function (result) {
+                                    success: function () {
                                         location.reload();
                                     }
                                 });

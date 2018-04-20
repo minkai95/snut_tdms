@@ -198,7 +198,7 @@
                                     type: "DELETE",
                                     url: "${ctx}/user/deleteFile?dataId="+id+"&description="+"",
                                     dataType: "json",
-                                    success: function (result) {
+                                    success: function () {
                                         location.reload();
                                     }
                                 });
