@@ -15,96 +15,27 @@
         </div>
     </div>
     <div class="typePropertyContent">
-        <div id="type001" class="typeWrapper">
-            <i class="icon-angle-down dropDown"></i>
-            检讨
-            <div class="propertyNameCont">
-                <ul>
-                    <li>属性1：专业</li>
-                    <li>属性2：班级</li>
-                </ul>
+        <c:forEach items="${dataClassHelpClass}" var="dataClassHelp">
+            <div id="${dataClassHelp.dataClass.id}" class="typeWrapper">
+                <i class="icon-remove-sign removeIcon"></i>
+                <i class="icon-angle-down dropDown"></i>
+                <span>${dataClassHelp.dataClass.name}</span>
+                <div class="propertyNameCont">
+                    <ul>
+                        <c:choose>
+                            <c:when test="${dataClassHelp.classTypeList!=null && dataClassHelp.classTypeList.size()!=0 && dataClassHelp.classTypeList.get(0)!=null}">
+                                <c:forEach items="${dataClassHelp.classTypeList}" var="classType">
+                                    <li>${classType.name}</li>
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <li style="text-align: center">暂无属性</li>
+                            </c:otherwise>
+                        </c:choose>
+                    </ul>
+                </div>
             </div>
-        </div>
-        <div id="type002" class="typeWrapper">
-            <i class="icon-angle-down dropDown"></i>
-            材料证明
-            <div class="propertyNameCont">
-                <ul>
-                    <li>属性1：专业</li>
-                    <li>属性2：班级</li>
-                </ul>
-            </div>
-        </div>
-        <div id="type003" class="typeWrapper">
-            <i class="icon-angle-down dropDown"></i>
-            获奖证书
-            <div class="propertyNameCont">
-                <ul>
-                    <li>属性1：专业</li>
-                    <li>属性2：班级</li>
-                </ul>
-            </div>
-        </div>
-        <div id="type004" class="typeWrapper">
-            <i class="icon-angle-down dropDown"></i>
-            试卷试试卷
-            <div class="propertyNameCont">
-                <ul>
-                    <li>属性1：专业专业</li>
-                    <li>属性2：班级</li>
-                </ul>
-            </div>
-        </div>
-        <div id="type006" class="typeWrapper">
-            <i class="icon-angle-down dropDown"></i>
-            试卷
-            <div class="propertyNameCont">
-                <ul>
-                    <li>属性1：专业专业专业</li>
-                    <li>属性2：班级</li>
-                </ul>
-            </div>
-        </div>
-        <div id="type007" class="typeWrapper">
-            <i class="icon-angle-down dropDown"></i>
-            试卷试试卷
-            <div class="propertyNameCont">
-                <ul>
-                    <li>属性1：专业专业</li>
-                    <li>属性2：班级</li>
-                </ul>
-            </div>
-        </div>
-        <div id="type008" class="typeWrapper">
-            <i class="icon-angle-down dropDown"></i>
-            试卷
-            <div class="propertyNameCont">
-                <ul>
-                    <li>属性1：专业专业专业</li>
-                    <li>属性2：班级</li>
-                </ul>
-            </div>
-        </div>
-        <div id="type009" class="typeWrapper">
-            <i class="icon-angle-down dropDown"></i>
-            试卷试试卷
-            <div class="propertyNameCont">
-                <ul>
-                    <li>属性1：专业专业</li>
-                    <li>属性2：班级</li>
-                </ul>
-            </div>
-        </div>
-        <div id="type010" class="typeWrapper">
-            <i class="icon-angle-down dropDown"></i>
-            试卷
-            <div class="propertyNameCont">
-                <ul>
-                    <li>属性1：专业专业专业</li>
-                    <li>属性2：班级</li>
-                </ul>
-            </div>
-        </div>
+        </c:forEach>
     </div>
 </div>
 
@@ -132,25 +63,88 @@
             </div>
             <div class="modal-footer">
                 <button type="button" id="resetBtn" class="btn btn-default">取消</button>
-                <button type="button" class="btn btn-info">确定</button>
+                <button id="addClassTypeSubmit" type="button" class="btn btn-info">提交</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    $(".typeWrapper").click(function(){
-        if($(this).children("i").attr("class") == "icon-angle-down dropDown"){
-            $(this).children("i").attr("class","icon-angle-up dropDown");
-            $(this).children("i").siblings("div").slideDown();
-            $(this).siblings().children("div").slideUp();
-            $(this).siblings().children("i").attr("class","icon-angle-down dropDown");
-
-
-        } else{
-            $(this).children("i").attr("class","icon-angle-down dropDown");
-            $(this).children("i").siblings("div").slideUp();
+    // 提交新增类目
+    $('#addClassTypeSubmit').click(function () {
+        var name = $('#typePropertyName').val();
+        var sp = $('#selectProperty');
+        var spLength = sp.find("select").length;
+        var property1Id = null;
+        var property2Id = null;
+        var property3Id = null;
+        if (spLength>0){
+            property1Id = sp.find('select').eq(0).val();
+            property2Id = sp.find('select').eq(1).val();
+            property3Id = sp.find('select').eq(2).val();
         }
+        $.ajax({
+            url:"${ctx}/admin/addDataClass?name="+name+"&roleId=003"+"&property1Id="+property1Id+"&property2Id="+property2Id+"&property3Id="+property3Id,
+            type:"POST",
+            dataType:"json",
+            success: function (result) {
+                $.confirm({
+                    title: '提示',
+                    content: result['message'],
+                    buttons: {
+                        确定: function () {
+                            location.reload();
+                        }
+                    }
+                });
+            }
+        })
+    });
+
+    // 展开/关闭类目属性菜单
+    $(".typeWrapper").click(function(){
+        if($(this).children("i:nth-child(2)").attr("class") == "icon-angle-down dropDown"){
+            $(this).children("i:nth-child(2)").attr("class","icon-angle-up dropDown");
+            $(this).children("i:nth-child(2)").siblings("div").slideDown();
+            $(this).siblings().children("i:nth-child(2)").attr("class","icon-angle-down dropDown");
+            $(this).siblings().children("div").slideUp();
+        } else{
+            $(this).children("i:nth-child(2)").attr("class","icon-angle-down dropDown");
+            $(this).children("i:nth-child(2)").siblings("div").slideUp();
+        }
+    });
+    // 删除文件类目
+    $(".removeIcon").click(function(event){
+        event.stopPropagation();
+        var dataClassId = $(this).parent('div').attr('id');
+        var typeName = $(this).siblings("span").text();
+        $.confirm({
+            title: '提示',
+            content:'您确认删除 '+typeName+' 类目吗？<input style="margin-top:5px;" class="form-control" type="text" id="deleteReason" placeholder="请输入删除原因(选填)"/>',
+            buttons: {
+                取消: function(){
+                },
+                确定: function(){
+                    var description = $('#deleteReason').val();
+                    $.ajax({
+                        url:"${ctx}/admin/deleteDataClass?dataClassId="+dataClassId+"&description="+description,
+                        type:"DELETE",
+                        dataType:"json",
+                        success: function (result) {
+                            $.confirm({
+                                title: '提示',
+                                content: result['message'],
+                                buttons: {
+                                    确定: function () {
+                                        location.reload();
+                                    }
+                                }
+                            });
+                        }
+                    })
+                }
+            }
+        });
     });
 
     $(".typeWrapper:nth-child(4n-3)").css("backgroundColor","#5cb85c");
@@ -163,30 +157,43 @@
     $(".typeWrapper:nth-child(4n)").children("div").css("border","1px solid #d9534f");
 
     $("#addProperty").click(function(){
-        var propertyLength = $("#selectProperty").find("select").length;
-        console.log(propertyLength);
-        if(propertyLength < "3"){
-            $("#selectProperty").append("<div class='selectPropertyWrapper'><label class='propertyLabel'></label><select class='form-control'><option value='专业'>专业</option><option value='班级'>班级</option></select></div>");
-            $("#selectProperty select").attr("id",function(i) {
-                return "property_" + ++i;
-            });
-            $("#selectProperty label").attr("for",function(i) {
-                return "property_" + ++i;
-            });
-            $("#selectProperty label").text(function(i) {
-                return "属性" + ++i + "：";
-            });
-        } else{
-            $.alert({
-                title: '提示',
-                content: '最多只能添加三个属性！',
-                buttons: {
-                    确定: function () {
-
+        $.ajax({
+            url:"${ctx}/admin/selectClassType",
+            type:"GET",
+            dataType:"json",
+            success: function (result) {
+                var sp = $("#selectProperty");
+                var propertyLength = sp.find("select").length;
+                if(propertyLength < 3){
+                    sp.append("<div class='selectPropertyWrapper'>" +
+                                    "<label class='propertyLabel'></label>" +
+                                    "<select class='form-control'></select>"+
+                              "</div>");
+                    for(var m=0; m<result['classTypeList'].length; m++){
+                        sp.children('div').eq(propertyLength).children('select').append("<option value='" + result['classTypeList'][m]['id'] + "'>" + result['classTypeList'][m]['name'] + "</option >");
                     }
+                    sp.children("select").attr("id",function(i) {
+                        return "property_" + ++i;
+                    });
+                    sp.children("label").attr("for",function(i) {
+                        return "property_" + ++i;
+                    });
+                    $("#selectProperty label").text(function(i) {
+                        return "属性" + ++i + "：";
+                    });
+                } else{
+                    $.alert({
+                        title: '提示',
+                        content: '最多只能添加三个属性！',
+                        buttons: {
+                            确定: function () {
+
+                            }
+                        }
+                    })
                 }
-            })
-        }
+            }
+        })
     });
     $("#removeProperty").click(function(){
         $(".selectPropertyWrapper").last().remove();

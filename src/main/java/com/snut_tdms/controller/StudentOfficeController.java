@@ -4,14 +4,17 @@ import com.snut_tdms.model.po.*;
 import com.snut_tdms.model.vo.DataHelpClass;
 import com.snut_tdms.model.vo.LogHelpClass;
 import com.snut_tdms.model.vo.NoticeHelpClass;
+import com.snut_tdms.model.vo.Page;
 import com.snut_tdms.service.StudentOfficeService;
 import com.snut_tdms.service.UserService;
 import com.snut_tdms.util.LogActionType;
+import com.snut_tdms.util.SystemUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.jws.Oneway;
 import javax.servlet.http.HttpSession;
@@ -64,9 +67,12 @@ public class StudentOfficeController {
         return "studentOffice/applyAddDataClass";
     }
     @RequestMapping(value = "/studentOfficeNews", method = RequestMethod.GET)
-    public String studentOfficeNews(HttpSession httpSession, Model model) {
+    public String studentOfficeNews(HttpSession httpSession, Model model,
+                                    @RequestParam(value = "currentPage", required = false) String currentPage) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        model.addAttribute("noticeHelpList",userService.selectSystemNotice(userInfo.getDepartment().getCode(),"002"));
+        Page page = SystemUtils.getPage(currentPage);
+        model.addAttribute("noticeHelpList",userService.selectSystemNotice(userInfo.getDepartment().getCode(),"002",page));
+        model.addAttribute("page", page);
         return "studentOffice/studentOfficeNews";
     }
 }

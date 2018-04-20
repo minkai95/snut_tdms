@@ -4,13 +4,16 @@ import com.snut_tdms.model.po.SystemNotice;
 import com.snut_tdms.model.po.UserInfo;
 import com.snut_tdms.model.po.UserRole;
 import com.snut_tdms.model.vo.NoticeHelpClass;
+import com.snut_tdms.model.vo.Page;
 import com.snut_tdms.service.DeanOfficeService;
 import com.snut_tdms.service.UserService;
+import com.snut_tdms.util.SystemUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -64,9 +67,12 @@ public class DeanOfficeController {
     }
 
     @RequestMapping(value = "/deanOfficeNews", method = RequestMethod.GET)
-    public String deanOfficeNews(HttpSession httpSession, Model model) {
+    public String deanOfficeNews(HttpSession httpSession, Model model,
+                                 @RequestParam(value = "currentPage", required = false) String currentPage) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        model.addAttribute("noticeHelpList",userService.selectSystemNotice(userInfo.getDepartment().getCode(),null));
+        Page page = SystemUtils.getPage(currentPage);
+        model.addAttribute("noticeHelpList",userService.selectSystemNotice(userInfo.getDepartment().getCode(),null,page));
+        model.addAttribute("page", page);
         return "deanOffice/deanOfficeNews";
     }
 

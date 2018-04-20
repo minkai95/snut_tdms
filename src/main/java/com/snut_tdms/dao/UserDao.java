@@ -35,15 +35,15 @@ public interface UserDao {
 
     UserInfo selectUserInfoByUsername(String username);
 
-    List<SystemNotice> selectSystemNotice(Map<String,Object> map);
+    List<SystemNotice> selectSystemNoticeByPage(Map<String,Object> map);
 
     List<DataClass> selectDataClass(Map<String,Object> map);
 
     DataClass selectDataClassById(String dataClassId);
 
-    List<Data> selectDataByParams(Map<String,Object> map);
+    List<Data> selectDataByParamsByPage(Map<String,Object> map);
 
-    List<Data> selectRoleAllPublicData(Map<String,Object> map);
+    List<Data> selectRoleAllPublicDataByPage(Map<String,Object> map);
 
     Data selectDataById(String dataId);
 
@@ -61,5 +61,7 @@ public interface UserDao {
 
     Integer selectAllNoticeCount(String departmentCode);
 
-    List<Log> selectPersonLogs(String username);
+    List<Log> selectPersonLogsByPage(Map<String,Object> map);
+
+    List<ClassType> selectClassTypeByDepartmentCode(String departmentCode);
 }

@@ -23,11 +23,12 @@ public interface AdminDao extends UserDao {
 
     int deleteClassTypeById(String classTypeId);
 
+    int deleteDataClassById(String dataClassId);
+
     int recoverData(String dataId);
 
-    List<Log> selectDepartmentLogs(String departmentCode);
+    List<Log> selectDepartmentLogsByPage(Map<String,Object> map);
 
-    List<UserRole> selectUserByParams(Map<String,Object> map);
+    List<UserRole> selectUserByParamsByPage(Map<String,Object> map);
 
-    List<ClassType> selectClassTypeByDepartmentCode(String departmentCode);
 }

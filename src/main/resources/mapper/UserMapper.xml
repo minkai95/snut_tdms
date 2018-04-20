@@ -117,6 +117,7 @@
           #{role.id},
           #{user.username},
           #{department.code},
+          #{classTypes},
           #{flag}
         )
     </insert>
@@ -198,7 +199,7 @@
           LEFT JOIN department ON department.code = user_info.department
           WHERE `user`.username = #{0}
     </select>
-    <select id="selectSystemNotice" parameterType="java.util.Map" resultMap="systemNotice">
+    <select id="selectSystemNoticeByPage" parameterType="java.util.Map" resultMap="systemNotice">
          SELECT
             system_notice.id,
             system_notice.`name`,
@@ -272,7 +273,7 @@
         LEFT JOIN department ON data_class.department = department.code
         WHERE data_class.id = #{0}
     </select>
-    <select id="selectDataByParams" parameterType="java.util.Map" resultMap="data">
+    <select id="selectDataByParamsByPage" parameterType="java.util.Map" resultMap="data">
         SELECT
           `data`.id,
           content,
@@ -351,7 +352,7 @@
         LEFT JOIN `user` user2 ON `data`.user = user2.username
         WHERE `data`.id = #{dataId}
     </select>
-    <select id="selectRoleAllPublicData" parameterType="java.util.Map" resultMap="data">
+    <select id="selectRoleAllPublicDataByPage" parameterType="java.util.Map" resultMap="data">
         SELECT
         `data`.id,
         content,
@@ -400,7 +401,7 @@
         FROM  class_type as ct
         LEFT JOIN department ON department.code = ct.department
         LEFT JOIN `user` ON `user`.username = ct.`user`
-        INNER JOIN(
+        RIGHT JOIN(
             SELECT
                 SUBSTRING_INDEX(SUBSTRING_INDEX(b.class_types,'/',b.id),'/','-1') as classTypeId
             FROM (
@@ -441,7 +442,7 @@
           WHERE user_info.`user` = system_notice.`user`
         ) = #{0}
     </select>
-    <select id="selectPersonLogs" parameterType="java.lang.String" resultMap="log">
+    <select id="selectPersonLogsByPage" parameterType="java.util.Map" resultMap="log">
         SELECT
         id,
         content,
@@ -456,7 +457,26 @@
         description
         FROM log
         LEFT JOIN `user` as user1 ON user1.username =operation_user
-        WHERE (operation_user = #{0} OR operated_id in(SELECT id FROM `data` WHERE `data`.user = #{0}))
+        WHERE (operation_user = #{username} OR operated_id in(SELECT id FROM `data` WHERE `data`.user = #{username}))
+        <if test="action!=null and action!=''">
+            AND log.`action` IN ${action}
+        </if>
         ORDER BY `time` desc
     </select>
+    <select id="selectClassTypeByDepartmentCode" parameterType="java.lang.String" resultMap="classTypes">
+        SELECT
+        id,
+        class_type.`name`,
+        department.code as departmentCode,
+        department.name as departmentName,
+        `user`.username as username,
+        `user`.password as password,
+        `user`.id_card as idCard,
+        `user`.first_login as firstLogin
+        FROM class_type
+        LEFT JOIN department ON department.code = class_type.department
+        LEFT JOIN `user` ON `user`.username = class_type.`user`
+        WHERE department.code = #{0}
+    </select>
+
 </mapper>

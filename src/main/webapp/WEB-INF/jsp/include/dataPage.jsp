@@ -3,7 +3,7 @@
 <input type="hidden" name="currentPage" id="currentPageInput" value="${page.currentPage}">
 <c:choose>
     <c:when test="${page.totalNumber == 0}">
-        <p class="alert alert-info" style="text-align: center;font-size:16px;font-weight: bold;">暂无数据</p>
+        <p class="alert alert-info" style="text-align: center;font-size:16px;font-weight: bold;margin-top: -10px;">暂无数据</p>
     </c:when>
     <c:otherwise>
         <div class="pull-right" style="margin-bottom: 15px">

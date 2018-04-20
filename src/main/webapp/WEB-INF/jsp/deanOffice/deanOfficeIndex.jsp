@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>学办首页</title>
+    <title>教务处首页</title>
 </head>
 <body>
 <div class="wrapper">

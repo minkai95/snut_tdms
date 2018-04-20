@@ -32,7 +32,7 @@
 
                     </li>
                     <li id="teacherCenter" class="publicLi"><a href="${ctx}/user/personCenter" target="mainFrame"><i class="icon-user"></i>个人中心</a></li>
-                    <li id="teacherNews" class="publicLi"><a href="${ctx}/admin/adminNews" target="mainFrame"><i class="icon-bell-alt"></i>消息通告</a></li>
+                    <li id="teacherNews" class="publicLi"><a href="${ctx}/admin/adminNews" target="mainFrame"><i class="icon-bell-alt"></i>消息公告</a></li>
                     <li class="publicLi"><a href="${ctx}/admin/adminDataCopy" target="mainFrame"><i class=" icon-tag"></i>数据备份</a></li>
                 </ul>
             </div>
