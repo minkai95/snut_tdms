@@ -3,6 +3,7 @@ package com.snut_tdms.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.snut_tdms.model.po.*;
 import com.snut_tdms.model.vo.LogHelpClass;
+import com.snut_tdms.model.vo.Page;
 import com.snut_tdms.model.vo.UserHelpClass;
 import com.snut_tdms.service.AdminService;
 import com.snut_tdms.service.UserService;
@@ -46,10 +47,10 @@ public class AdminController {
     @RequestMapping(value = "/adminCurrent", method = RequestMethod.GET)
     public String adminCurrent(HttpSession httpSession, Model model) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        Integer userCount = adminService.selectUserByParams(userInfo.getDepartment().getCode(),null).size();
-        Integer logCount = adminService.selectDepartmentLogs(userInfo.getDepartment().getCode()).size();
+        Integer userCount = adminService.selectUserByParams(userInfo.getDepartment().getCode(),"(003,004,005)",null).size();
+        Integer logCount = adminService.selectDepartmentLogs(userInfo.getDepartment().getCode(),null).size();
         Integer dataClassCount = userService.selectDataClass(userInfo.getDepartment().getCode(),null,"(1)",null).size();
-        Integer newsCount = userService.selectSystemNotice(userInfo.getDepartment().getCode(),null).size();
+        Integer newsCount = userService.selectSystemNotice(userInfo.getDepartment().getCode(),null,null).size();
         model.addAttribute("userInfo",userInfo);
         model.addAttribute("userCount",userCount);
         model.addAttribute("logCount",logCount);
@@ -59,59 +60,62 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/adminUserManage", method = RequestMethod.GET)
-    public String adminUserManage(HttpSession httpSession, Model model) {
+    public String adminUserManage(HttpSession httpSession, Model model,@RequestParam(value = "currentPage", required = false) String currentPage) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        List<UserHelpClass> userHelpClassList = adminService.selectUserByParams(userInfo.getDepartment().getCode(),null);
+        Page page = SystemUtils.getPage(currentPage);
+        List<UserHelpClass> userHelpClassList = adminService.selectUserByParams(userInfo.getDepartment().getCode(),"(003,004,005)",page);
         for (UserHelpClass userHelpClass:userHelpClassList) {
             userHelpClass.setUserRole(UserController.updateUserRole(userHelpClass.getUserRole()));
         }
+        model.addAttribute("page", page);
         model.addAttribute("userHelpClassList",userHelpClassList);
         return "admin/adminUserManage";
     }
 
     @RequestMapping(value = "/adminLog", method = RequestMethod.GET)
-    public String adminLog(HttpSession httpSession, Model model) {
+    public String adminLog(HttpSession httpSession, Model model,@RequestParam(value = "currentPage", required = false) String currentPage) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        List<LogHelpClass> logHelpClassList = adminService.selectDepartmentLogs(userInfo.getDepartment().getCode());
+        Page page = SystemUtils.getPage(currentPage);
+        List<LogHelpClass> logHelpClassList = adminService.selectDepartmentLogs(userInfo.getDepartment().getCode(),page);
         model.addAttribute("logHelpClassList",logHelpClassList);
+        model.addAttribute("page", page);
         return "admin/adminLog";
     }
 
     @RequestMapping(value = "/typeManageDeanOffice", method = RequestMethod.GET)
     public String typeManageDeanOffice(HttpSession httpSession, Model model) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        UserRole userRole = (UserRole) httpSession.getAttribute("userRole");
-        model.addAttribute("userInfo",userInfo);
+        model.addAttribute("dataClassHelpClass",adminService.selectDataClassByRole(userInfo.getDepartment().getCode(),"004"));
         return "admin/typeManageDeanOffice";
     }
 
     @RequestMapping(value = "/typeManageTeacher", method = RequestMethod.GET)
     public String typeManageTeacher(HttpSession httpSession, Model model) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        UserRole userRole = (UserRole) httpSession.getAttribute("userRole");
-        model.addAttribute("userInfo",userInfo);
+        model.addAttribute("dataClassHelpClass",adminService.selectDataClassByRole(userInfo.getDepartment().getCode(),"005"));
         return "admin/typeManageTeacher";
     }
 
     @RequestMapping(value = "/typeManageStudentOffice", method = RequestMethod.GET)
     public String typeManageStudentOffice(HttpSession httpSession, Model model) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        UserRole userRole = (UserRole) httpSession.getAttribute("userRole");
-        model.addAttribute("userInfo",userInfo);
+        model.addAttribute("dataClassHelpClass",adminService.selectDataClassByRole(userInfo.getDepartment().getCode(),"003"));
         return "admin/typeManageStudentOffice";
     }
 
     @RequestMapping(value = "/typeProperty", method = RequestMethod.GET)
     public String typeProperty(HttpSession httpSession, Model model) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        model.addAttribute("classTypeList",adminService.selectClassTypeByDepartmentCode(userInfo.getDepartment().getCode()));
+        model.addAttribute("classTypeList",userService.selectClassTypeByDepartmentCode(userInfo.getDepartment().getCode()));
         return "admin/typeProperty";
     }
 
     @RequestMapping(value = "/adminNews", method = RequestMethod.GET)
-    public String adminNews(HttpSession httpSession, Model model) {
+    public String adminNews(HttpSession httpSession, Model model,@RequestParam(value = "currentPage", required = false) String currentPage) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        model.addAttribute("noticeHelpList",userService.selectSystemNotice(userInfo.getDepartment().getCode(),null));
+        Page page = SystemUtils.getPage(currentPage);
+        model.addAttribute("noticeHelpList",userService.selectSystemNotice(userInfo.getDepartment().getCode(),null,page));
+        model.addAttribute("page", page);
         return "admin/adminNews";
     }
 
@@ -208,6 +212,51 @@ public class AdminController {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("message",adminService.deleteClassTypeById(typeClassId,userInfo.getUser(),description).getnCode());
+        return jsonObject;
+    }
+
+    @RequestMapping(value = "/selectClassType", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject selectClassType(HttpSession httpSession){
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("classTypeList",userService.selectClassTypeByDepartmentCode(userInfo.getDepartment().getCode()));
+        return jsonObject;
+    }
+
+    @RequestMapping(value = "/addDataClass", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject addDataClass(HttpSession httpSession,
+                                   @RequestParam("name") String name,
+                                   @RequestParam("roleId") String roleId,
+                                   @RequestParam(value="property1Id" ,required =false ) String property1Id,
+                                   @RequestParam(value="property2Id" ,required =false ) String property2Id,
+                                   @RequestParam(value="property3Id" ,required =false ) String property3Id){
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        JSONObject jsonObject = new JSONObject();
+        StringBuilder sb = new StringBuilder();
+        if (!"undefined".equals(property1Id) && !"null".equals(property1Id)){
+            sb.append(property1Id);
+        }
+        if (!"undefined".equals(property2Id) && !"null".equals(property2Id)){
+            sb.append("/");
+            sb.append(property2Id);
+        }
+        if (!"undefined".equals(property3Id) && !"null".equals(property3Id)){
+            sb.append("/");
+            sb.append(property3Id);
+        }
+        DataClass dataClass = new DataClass(SystemUtils.getUUID(),name,userService.selectRoleById(roleId),userInfo.getUser(),userInfo.getDepartment(),sb.toString(),1);
+        jsonObject.put("message",userService.insertDataClass(dataClass,userInfo.getDepartment().getCode(),userInfo.getUser()).getnCode());
+        return jsonObject;
+    }
+
+    @RequestMapping(value = "/deleteDataClass", method = RequestMethod.DELETE)
+    @ResponseBody
+    public JSONObject deleteDataClass(HttpSession httpSession, @RequestParam("dataClassId") String dataClassId, @RequestParam("description") String description){
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("message",adminService.deleteDataClassById(dataClassId,userInfo.getUser(),description).getnCode());
         return jsonObject;
     }
 }

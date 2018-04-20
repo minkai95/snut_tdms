@@ -25,6 +25,18 @@
 .iconPosition:hover{
     cursor: pointer;
 }
+.removeIcon{
+    position: absolute;
+    top: 12px;
+    left: 8px;
+}
+.removeIcon:hover{
+    cursor: pointer;
+    font-size: 24px !important;
+    position: absolute;
+    top: 8px;
+    left: 6px;
+}
 .dropDown{
     position: absolute;
     top: 12px;
@@ -60,7 +72,7 @@
     height: 40px;
     margin-left: 45px;
     margin-top: 35px;
-    padding: 0 25px;
+    padding: 0 30px;
     border-radius: 5px;
     font-size: 16px;
     text-align: center;

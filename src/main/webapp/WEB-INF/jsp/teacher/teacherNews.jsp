@@ -9,30 +9,33 @@
     <div class="adminCurrentWrapper">
         <p class="publicDataTitle">消息公告</p>
         <div class="mainCont">
-            <table class="table table-bordered table-striped">
-                <tr>
-                    <th>#</th>
-                    <th>标题</th>
-                    <th>内容</th>
-                    <th>时间</th>
-                    <th>发布者</th>
-                    <th>发布者职务</th>
-                    <th style="text-align: center;">操作</th>
-                </tr>
-                <c:forEach items="${noticeHelpList}" var="noticeHelp" varStatus="noticeStatus">
-                    <tr id="${noticeHelp.systemNotice.id}">
-                        <td>${noticeStatus.index+1}</td>
-                        <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${noticeHelp.systemNotice.name}</td>
-                        <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${noticeHelp.systemNotice.content}</td>
-                        <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${noticeHelp.systemNotice.date}"/></td>
-                        <td>${noticeHelp.userInfo.name}</td>
-                        <td>${noticeHelp.userRole.role.name}</td>
-                        <td style="width: 140px; text-align: center;">
-                            <button type="button"  onclick="openModel('${noticeHelp.systemNotice.id}')"  class="btn btn-info"><i class="icon-search"></i>查看详情</button>
-                        </td>
+            <form id="pageForm" action="${ctx}/teacher/teacherNews" method="get">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>#</th>
+                        <th>标题</th>
+                        <th>内容</th>
+                        <th>时间</th>
+                        <th>发布者</th>
+                        <th>发布者职务</th>
+                        <th style="text-align: center;">操作</th>
                     </tr>
-                </c:forEach>
-            </table>
+                    <c:forEach items="${noticeHelpList}" var="noticeHelp" varStatus="noticeStatus">
+                        <tr id="${noticeHelp.systemNotice.id}">
+                            <td>${noticeStatus.index+1}</td>
+                            <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${noticeHelp.systemNotice.name}</td>
+                            <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${noticeHelp.systemNotice.content}</td>
+                            <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${noticeHelp.systemNotice.date}"/></td>
+                            <td>${noticeHelp.userInfo.name}</td>
+                            <td>${noticeHelp.userRole.role.name}</td>
+                            <td style="width: 140px; text-align: center;">
+                                <button type="button"  onclick="openModel('${noticeHelp.systemNotice.id}')"  class="btn btn-info"><i class="icon-search"></i>查看详情</button>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </table>
+                <%@ include file="/WEB-INF/jsp/include/dataPage.jsp" %>
+            </form>
         </div>
 
         <!-- Modal -->

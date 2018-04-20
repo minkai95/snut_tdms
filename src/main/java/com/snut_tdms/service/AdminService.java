@@ -4,8 +4,7 @@ import com.snut_tdms.controller.UserController;
 import com.snut_tdms.dao.AdminDao;
 import com.snut_tdms.dao.UserDao;
 import com.snut_tdms.model.po.*;
-import com.snut_tdms.model.vo.LogHelpClass;
-import com.snut_tdms.model.vo.UserHelpClass;
+import com.snut_tdms.model.vo.*;
 import com.snut_tdms.util.LogActionType;
 import com.snut_tdms.util.OperatedType;
 import com.snut_tdms.util.StatusCode;
@@ -106,6 +105,28 @@ public class AdminService extends UserService{
     }
 
     /**
+     * 管理员删除文件类型
+     * @param dataClassId 文件类型ID
+     * @param operationUser 管理员
+     * @return 状态码
+     */
+    public StatusCode deleteDataClassById(String dataClassId,User operationUser,String description){
+        if (adminDao.deleteDataClassById(dataClassId)>0){
+            Map<String,Object> m = new HashMap<>();
+            m.put("content","管理员删除了一条文件类型!");
+            m.put("action", LogActionType.DELETE.getnCode());
+            m.put("operationUser",operationUser);
+            m.put("operatedId",dataClassId);
+            m.put("operatedType", OperatedType.FILE_TYPE.getnCode());
+            m.put("description",description);
+            insertLog(m);
+            return StatusCode.DELETE_SUCCESS;
+        }else {
+            return StatusCode.DELETE_ERROR;
+        }
+    }
+
+    /**
      * 管理员删除类目属性
      * @param classTypeId 类目属性ID
      * @param operationUser 管理员
@@ -168,8 +189,11 @@ public class AdminService extends UserService{
      * @param departmentCode 院系编码
      * @return List
      */
-    public List<LogHelpClass> selectDepartmentLogs(String departmentCode){
-        return formatLog(adminDao.selectDepartmentLogs(departmentCode));
+    public List<LogHelpClass> selectDepartmentLogs(String departmentCode,Page page){
+        Map<String,Object> map = new HashMap<>();
+        map.put("departmentCode",departmentCode);
+        map.put("page",page);
+        return formatLog(adminDao.selectDepartmentLogsByPage(map));
     }
 
     /**
@@ -177,19 +201,16 @@ public class AdminService extends UserService{
      * @param roleId 角色ID
      * @return list
      */
-    public List<UserHelpClass> selectUserByParams(String departmentCode, String roleId){
+    public List<UserHelpClass> selectUserByParams(String departmentCode, String roleId, Page page){
         Map<String,Object> map = new HashMap<>();
         map.put("roleId",roleId);
         map.put("departmentCode",departmentCode);
-        String[] strArr = {"teacher","deanOffice","studentOffice"};
-        List<String> target = Arrays.asList(strArr);
+        map.put("page",page);
         List<UserHelpClass> userHelpClassList = new ArrayList<>();
-        List<UserRole> list = adminDao.selectUserByParams(map);
+        List<UserRole> list = adminDao.selectUserByParamsByPage(map);
         for (UserRole userRole:list) {
             UserInfo userInfo = selectUserInfoByUsername(userRole.getUser().getUsername());
-            if (userInfo.getDepartment().getCode().equals(departmentCode) && target.contains(userRole.getRole().getName())){
-                userHelpClassList.add(new UserHelpClass(userInfo,userRole));
-            }
+            userHelpClassList.add(new UserHelpClass(userInfo,userRole));
         }
         return userHelpClassList;
     }
@@ -216,11 +237,23 @@ public class AdminService extends UserService{
     }
 
     /**
-     * 查询本院所有类目属性
+     * 查询不同角色的文件类型
      * @param departmentCode 院系编码
+     * @param roleId 角色ID
      * @return List
      */
-    public List<ClassType> selectClassTypeByDepartmentCode(String departmentCode){
-        return adminDao.selectClassTypeByDepartmentCode(departmentCode);
+    public List<DataClassHelpClass> selectDataClassByRole(String departmentCode,String roleId){
+        List<DataClassHelpClass> result = new ArrayList<>();
+        List<DataClass> dataClassList = selectDataClass(departmentCode,roleId,"(1)",null);
+        for (DataClass dataClass: dataClassList) {
+            List<ClassType> classTypeList = selectClassTypesByDataClassId(dataClass.getId());
+            if (classTypeList.size()>0 && classTypeList.get(0)!= null) {
+                for (int i = 0; i < classTypeList.size(); i++) {
+                    classTypeList.get(i).setName("属性" + (i + 1) + ":" + classTypeList.get(i).getName());
+                }
+            }
+            result.add(new DataClassHelpClass(dataClass,classTypeList));
+        }
+        return result;
     }
 }

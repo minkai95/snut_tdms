@@ -8,47 +8,47 @@
 <div class="adminCurrentWrapper">
     <p class="publicDataTitle">资料追踪</p>
     <div class="mainCont">
-        <table class="table table-bordered table-striped">
-            <tr>
-                <th>#</th>
-                <th>文件名</th>
-                <th>文件类型</th>
-                <th>内容</th>
-                <th>动作</th>
-                <th>时间</th>
-                <th>操作者</th>
-                <th>描述</th>
-                <th style="text-align: center;">操作</th>
-            </tr>
-            <c:forEach items="${logHelpList}" var="logHelp" varStatus="logStatus">
-                <tr id="${logHelp.log.id}">
-                    <td>${logStatus.index+1}</td>
-                    <td>${logHelp.operatedData.fileName}<c:if test="${logHelp.operatedData.fileName==null}">已被删除</c:if></td>
-                    <td>${logHelp.operatedData.dataClass.name}<c:if test="${logHelp.operatedData.dataClass.name==null}">已被删除</c:if></td>
-                    <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${logHelp.log.content}</td>
-                    <td>${logHelp.log.action}</td>
-                    <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${logHelp.log.time}"/></td>
-                    <td>${logHelp.operationUserInfo.name}</td>
-                    <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${logHelp.log.description}</td>
-                    <td style="width: 140px; text-align: center;">
-                        <button type="button" onclick="openModel('${logHelp.log.id}')" class="btn btn-info"><i class="icon-search"></i>查看详情</button>
-                    </td>
-                    <td style="display: none">${logHelp.operationUserRole.role.name}</td>
-                    <td style="display: none">${logHelp.operationUserInfo.phone}</td>
-                    <td style="display: none">${logHelp.operationUserInfo.email}</td>
-                    <td style="display:none">${logHelp.operatedType}</td>
-                    <c:if test="${logHelp.operatedType == '文件'}">
-                        <td style="display:none;">
-                            <span>${logHelp.operatedData.fileName}<c:if test="${logHelp.operatedData.fileName==null}">已被删除</c:if></span>
-                            <span>${logHelp.operatedData.dataClass.name}<c:if test="${logHelp.operatedData.dataClass.name==null}">已被删除</c:if></span>
-                        </td>
-                    </c:if>
+        <form id="pageForm" action="${ctx}/user/dataTrace" method="get">
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th>#</th>
+                    <th>文件名</th>
+                    <th>文件类型</th>
+                    <th>内容</th>
+                    <th>动作</th>
+                    <th>时间</th>
+                    <th>操作者</th>
+                    <th>描述</th>
+                    <th style="text-align: center;">操作</th>
                 </tr>
-            </c:forEach>
-        </table>
-        <c:if test="${logHelpList==null||logHelpList.size()==0}">
-            <p class="bg-info noData">暂无数据</p>
-        </c:if>
+                <c:forEach items="${logHelpList}" var="logHelp" varStatus="logStatus">
+                    <tr id="${logHelp.log.id}">
+                        <td>${logStatus.index+1}</td>
+                        <td>${logHelp.operatedData.fileName}<c:if test="${logHelp.operatedData.fileName==null}">已被删除</c:if></td>
+                        <td>${logHelp.operatedData.dataClass.name}<c:if test="${logHelp.operatedData.dataClass.name==null}">已被删除</c:if></td>
+                        <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${logHelp.log.content}</td>
+                        <td>${logHelp.log.action}</td>
+                        <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${logHelp.log.time}"/></td>
+                        <td>${logHelp.operationUserInfo.name}</td>
+                        <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${logHelp.log.description}</td>
+                        <td style="width: 140px; text-align: center;">
+                            <button type="button" onclick="openModel('${logHelp.log.id}')" class="btn btn-info"><i class="icon-search"></i>查看详情</button>
+                        </td>
+                        <td style="display: none">${logHelp.operationUserRole.role.name}</td>
+                        <td style="display: none">${logHelp.operationUserInfo.phone}</td>
+                        <td style="display: none">${logHelp.operationUserInfo.email}</td>
+                        <td style="display:none">${logHelp.operatedType}</td>
+                        <c:if test="${logHelp.operatedType == '文件'}">
+                            <td style="display:none;">
+                                <span>${logHelp.operatedData.fileName}<c:if test="${logHelp.operatedData.fileName==null}">已被删除</c:if></span>
+                                <span>${logHelp.operatedData.dataClass.name}<c:if test="${logHelp.operatedData.dataClass.name==null}">已被删除</c:if></span>
+                            </td>
+                        </c:if>
+                    </tr>
+                </c:forEach>
+            </table>
+            <%@ include file="/WEB-INF/jsp/include/dataPage.jsp" %>
+        </form>
     </div>
 
     <!-- Modal -->

@@ -347,12 +347,13 @@ public class UserService {
      * @param roleId 角色ID
      * @return List
      */
-    public List<NoticeHelpClass> selectSystemNotice(String departmentCode,String roleId){
+    public List<NoticeHelpClass> selectSystemNotice(String departmentCode,String roleId,Page page){
         Map<String,Object> map = new HashMap<>();
         map.put("departmentCode",departmentCode);
         map.put("roleId",roleId);
+        map.put("page",page);
         List<NoticeHelpClass> result = new ArrayList<>();
-        for (SystemNotice systemNotice: userDao.selectSystemNotice(map)) {
+        for (SystemNotice systemNotice: userDao.selectSystemNoticeByPage(map)) {
             result.add(new NoticeHelpClass(systemNotice,selectUserInfoByUsername(systemNotice.getUser().getUsername()),UserController.updateUserRole(selectUserRoleByUsername(systemNotice.getUser().getUsername()))));
         }
         return result;
@@ -398,14 +399,15 @@ public class UserService {
      * @param username 用户名
      * @return List
      */
-    public List<Data> selectDataByParams(String username,String dataClassId,Integer dataFlag,Integer dataClassFlag,String dataId){
+    public List<Data> selectDataByParams(String username,String dataClassId,Integer dataFlag,Integer dataClassFlag,String dataId,Page page){
         Map<String,Object> map = new HashMap<>();
         map.put("username",username);
         map.put("dataClassId",dataClassId);
         map.put("dataFlag",String.valueOf(dataFlag));
         map.put("dataClassFlag",String.valueOf(dataClassFlag));
         map.put("dataId",dataId);
-        return userDao.selectDataByParams(map);
+        map.put("page",page);
+        return userDao.selectDataByParamsByPage(map);
     }
 
     /**
@@ -498,8 +500,12 @@ public class UserService {
      * @param username 用户名
      * @return list
      */
-    public List<Log> selectPersonLogs(String username){
-        return userDao.selectPersonLogs(username);
+    public List<Log> selectPersonLogs(String username,String action,Page page){
+        Map<String,Object> map = new HashMap<>();
+        map.put("username",username);
+        map.put("action",action);
+        map.put("page",page);
+        return userDao.selectPersonLogsByPage(map);
     }
 
     /**
@@ -508,11 +514,21 @@ public class UserService {
      * @param roleId 角色ID
      * @return List
      */
-    public List<Data> selectRoleAllPublicData(String departmentCode,String roleId){
+    public List<Data> selectRoleAllPublicData(String departmentCode,String roleId,Page page){
         Map<String,Object> map = new HashMap<>();
         map.put("departmentCode",departmentCode);
         map.put("roleId",roleId);
-        return userDao.selectRoleAllPublicData(map);
+        map.put("page",page);
+        return userDao.selectRoleAllPublicDataByPage(map);
+    }
+
+    /**
+     * 查询院系所有类目属性
+     * @param departmentCode 院系编码
+     * @return List
+     */
+    public List<ClassType> selectClassTypeByDepartmentCode(String departmentCode){
+        return userDao.selectClassTypeByDepartmentCode(departmentCode);
     }
 
     public List<LogHelpClass> formatLog(List<Log> logList){

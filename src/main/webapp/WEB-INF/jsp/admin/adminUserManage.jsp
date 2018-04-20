@@ -16,34 +16,37 @@
             </div>
         </div>
         <div class="teacherPublicDataList">
-            <table class="table table-bordered table-striped">
-                <tr>
-                    <th style="text-align: center"><input id="allCheckBtn" class="checkBtn" type="checkbox">#</th>
-                    <th>用户名</th>
-                    <th>姓名</th>
-                    <th>性别</th>
-                    <th>职务</th>
-                    <th>联系方式</th>
-                    <th>邮箱</th>
-                    <th style="text-align: center">操作</th>
-                </tr>
-                <c:forEach items="${userHelpClassList}" var="userHelp" varStatus="userStatus">
-                    <tr id="${userHelp.userInfo.user.username}">
-                        <td style="text-align: center"><input class="checkBtn checkedBtn" type="checkbox">1</td>
-                        <td>${userHelp.userInfo.user.username}</td>
-                        <td>${userHelp.userInfo.name}</td>
-                        <td>${userHelp.userInfo.sex}</td>
-                        <td>${userHelp.userRole.role.name}</td>
-                        <td>${userHelp.userInfo.phone}</td>
-                        <td>${userHelp.userInfo.email}</td>
-                        <td style="width: 250px;  text-align: center;">
-                            <button class="btn btn-info btn-sm" onclick="openUpdateUserModal('${userHelp.userInfo.user.username}')"><i class="icon-pencil"></i>修改</button>
-                            <button class="btn btn-danger btn-sm" onclick="deleteUser('${userHelp.userInfo.user.username}')"><i class="icon-remove-circle"></i>删除</button>
-                        </td>
-                        <td style="display:none;">${userHelp.userRole.role.id}</td>
+            <form id="pageForm" action="${ctx}/admin/adminUserManage" method="get">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th style="text-align: center"><input id="allCheckBtn" class="checkBtn" type="checkbox">#</th>
+                        <th>用户名</th>
+                        <th>姓名</th>
+                        <th>性别</th>
+                        <th>职务</th>
+                        <th>联系方式</th>
+                        <th>邮箱</th>
+                        <th style="text-align: center">操作</th>
                     </tr>
-                </c:forEach>
-            </table>
+                    <c:forEach items="${userHelpClassList}" var="userHelp" varStatus="userStatus">
+                        <tr id="${userHelp.userInfo.user.username}">
+                            <td style="text-align: center"><input class="checkBtn checkedBtn" type="checkbox">1</td>
+                            <td>${userHelp.userInfo.user.username}</td>
+                            <td>${userHelp.userInfo.name}</td>
+                            <td>${userHelp.userInfo.sex}</td>
+                            <td>${userHelp.userRole.role.name}</td>
+                            <td>${userHelp.userInfo.phone}</td>
+                            <td>${userHelp.userInfo.email}</td>
+                            <td style="width: 250px;  text-align: center;">
+                                <button type="button" class="btn btn-info btn-sm" onclick="openUpdateUserModal('${userHelp.userInfo.user.username}')"><i class="icon-pencil"></i>修改</button>
+                                <button type="button" class="btn btn-danger btn-sm" onclick="deleteUser('${userHelp.userInfo.user.username}')"><i class="icon-remove-circle"></i>删除</button>
+                            </td>
+                            <td style="display:none;">${userHelp.userRole.role.id}</td>
+                        </tr>
+                    </c:forEach>
+                </table>
+                <%@ include file="/WEB-INF/jsp/include/dataPage.jsp" %>
+            </form>
         </div>
     </div>
 
@@ -215,7 +218,7 @@
         function deleteUser(username) {
             $.confirm({
                 title: '提示',
-                content: '确认删除该管理员？<input style="margin-top:5px;" class="form-control" type="text" id="deleteReason" placeholder="请输入删除原因(选填)"/>',
+                content: '确认删除该用户？<input style="margin-top:5px;" class="form-control" type="text" id="deleteReason" placeholder="请输入删除原因(选填)"/>',
                 buttons: {
                     确定: function(){
                         var description = $('#deleteReason').val();

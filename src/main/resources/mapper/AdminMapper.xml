@@ -23,16 +23,6 @@
         <result column="roleId" jdbcType="VARCHAR" javaType="java.lang.String" property="role.id"/>
         <result column="roleName" jdbcType="VARCHAR" javaType="java.lang.String" property="role.name"/>
     </resultMap>
-    <resultMap id="classType" type="com.snut_tdms.model.po.ClassType">
-        <id column="id" jdbcType="VARCHAR" javaType="java.lang.String" property="id"/>
-        <result column="name" jdbcType="VARCHAR" javaType="java.lang.String" property="name"/>
-        <result column="departmentCode" jdbcType="VARCHAR" javaType="java.lang.String" property="department.code"/>
-        <result column="departmentName" jdbcType="VARCHAR" javaType="java.lang.String" property="department.name"/>
-        <result column="username" jdbcType="VARCHAR" javaType="java.lang.String" property="user.username"/>
-        <result column="password" jdbcType="VARCHAR" javaType="java.lang.String" property="user.password"/>
-        <result column="idCard" jdbcType="VARCHAR" javaType="java.lang.String" property="user.idCard"/>
-        <result column="firstLogin" jdbcType="VARCHAR" javaType="java.lang.Integer" property="user.firstLogin"/>
-    </resultMap>
 
     <insert id="insertUser" parameterType="java.util.Map">
         INSERT INTO `user`(username) VALUES (#{username});
@@ -67,6 +57,9 @@
     <delete id="deleteClassTypeById" parameterType="java.lang.String">
         DELETE FROM class_type WHERE id = #{0}
     </delete>
+    <delete id="deleteDataClassById" parameterType="java.lang.String">
+        DELETE FROM data_class WHERE id = #{0}
+    </delete>
 
     <update id="recoverData" parameterType="java.lang.String">
         UPDATE `data` SET
@@ -74,7 +67,7 @@
         WHERE id = #{0}
     </update>
 
-    <select id="selectDepartmentLogs" resultMap="log" parameterType="java.lang.String">
+    <select id="selectDepartmentLogsByPage" parameterType="java.util.Map" resultMap="log">
         SELECT
           id,
           content,
@@ -95,7 +88,7 @@
                 FROM user_info
                 LEFT JOIN `user` ON `user`.username = user_info.`user`
                 WHERE user_info.`user` = log.operation_user
-             ) = #{0}
+             ) = #{departmentCode}
             OR (
                 SELECT department
                 FROM user_info
@@ -105,11 +98,11 @@
                   FROM `data`
                   WHERE `data`.id=log.operated_id
                 )
-            ) = #{0}
+            ) = #{departmentCode}
          )
          ORDER BY `time` desc
     </select>
-    <select id="selectUserByParams" resultMap="admin" parameterType="java.util.Map">
+    <select id="selectUserByParamsByPage" parameterType="java.util.Map" resultMap="admin">
         SELECT
         `user`.username,
         `user`.password,
@@ -126,23 +119,8 @@
             WHERE user_info.`user` = user_role.`user`
         ) = #{departmentCode}
         <if test="roleId!=null and roleId!=''">
-            AND role.id = #{roleId}
+            AND role.id IN ${roleId}
         </if>
-    </select>
-    <select id="selectClassTypeByDepartmentCode" parameterType="java.lang.String" resultMap="classType">
-        SELECT
-          id,
-          class_type.`name`,
-          department.code as departmentCode,
-          department.name as departmentName,
-          `user`.username as username,
-          `user`.password as password,
-          `user`.id_card as idCard,
-          `user`.first_login as firstLogin
-        FROM class_type
-        LEFT JOIN department ON department.code = class_type.department
-        LEFT JOIN `user` ON `user`.username = class_type.`user`
-        WHERE department.code = #{0}
     </select>
 
 

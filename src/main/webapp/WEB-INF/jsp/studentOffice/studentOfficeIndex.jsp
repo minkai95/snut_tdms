@@ -22,7 +22,7 @@
                 <li id="dataType"><a href="${ctx}/studentOffice/applyAddDataClass" target="mainFrame"><i class="icon-plus-sign"></i>申请类目</a></li>
                 <li id="teacherCenter"><a href="${ctx}/user/personCenter" target="mainFrame"><i class="icon-user"></i>个人中心</a></li>
                 <li><a href="${ctx}/user/dataTrace" target="mainFrame"><i class="icon-screenshot"></i>资料追踪</a></li>
-                <li id="teacherNews"><a href="${ctx}/studentOffice/studentOfficeNews" target="mainFrame"><i class="icon-bell-alt"></i>消息通告</a></li>
+                <li id="teacherNews"><a href="${ctx}/studentOffice/studentOfficeNews" target="mainFrame"><i class="icon-bell-alt"></i>消息公告</a></li>
             </ul>
         </div>
         <div class="rightContent">

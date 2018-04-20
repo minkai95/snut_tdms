@@ -4,10 +4,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.snut_tdms.model.po.*;
 import com.snut_tdms.model.vo.DataHelpClass;
 import com.snut_tdms.model.vo.LogHelpClass;
+import com.snut_tdms.model.vo.Page;
 import com.snut_tdms.service.UserService;
 import com.snut_tdms.util.FileDownloadUtil;
 import com.snut_tdms.util.LogActionType;
 import com.snut_tdms.util.StatusCode;
+import com.snut_tdms.util.SystemUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -192,22 +194,15 @@ public class UserController {
     }
 
     @RequestMapping(value = "/dataTrace", method = RequestMethod.GET)
-    public String dataTrace(HttpSession httpSession, Model model) {
+    public String dataTrace(HttpSession httpSession, Model model,
+                            @RequestParam(value = "currentPage", required = false) String currentPage) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         UserRole userRole = (UserRole) httpSession.getAttribute("userRole");
-        List<Log> logs = userService.selectPersonLogs(userInfo.getUser().getUsername());
-        List<Log> resultLog = new ArrayList<>();
-        String[] strArr = {LogActionType.INSERT.getnCode(),LogActionType.DELETE.getnCode(),LogActionType.LOGICAL_DELETE.getnCode(),LogActionType.RECOVER.getnCode()};
-        List<String> list = Arrays.asList(strArr);
-        if (logs.size()>0) {
-            for (Log log : logs) {
-                if (list.contains(log.getAction())) {
-                    resultLog.add(log);
-                }
-            }
-        }
+        Page page = SystemUtils.getPage(currentPage);
+        String action = "('新增','删除','逻辑删除','恢复')";
+        List<Log> logs = userService.selectPersonLogs(userInfo.getUser().getUsername(),action,page);
         List<LogHelpClass> result = new ArrayList<>();
-        for (Log log:resultLog) {
+        for (Log log:logs) {
             if (log.getDescription()==null || "".equals(log.getDescription())){
                 log.setDescription("暂无");
             }
@@ -228,6 +223,7 @@ public class UserController {
             }
             result.add(logHelpClass);
         }
+        model.addAttribute("page", page);
         model.addAttribute("logHelpList",result);
         switch (userRole.getRole().getName()){
             case "teacher":
@@ -242,10 +238,12 @@ public class UserController {
     }
 
     @RequestMapping(value = "/personData", method = RequestMethod.GET)
-    public String studentOfficePersonData(HttpSession httpSession, Model model) {
+    public String studentOfficePersonData(HttpSession httpSession, Model model,
+                                          @RequestParam(value = "currentPage", required = false) String currentPage) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         UserRole userRole = (UserRole) httpSession.getAttribute("userRole");
-        List<Data> dataList = userService.selectDataByParams(userInfo.getUser().getUsername(),null,0,2,null);
+        Page page = SystemUtils.getPage(currentPage);
+        List<Data> dataList = userService.selectDataByParams(userInfo.getUser().getUsername(),null,0,2,null,page);
         List<DataHelpClass> result = new ArrayList<>();
         for (Data data:dataList) {
             data.setFileName(data.getFileName().substring(data.getFileName().lastIndexOf("_")+1));
@@ -255,6 +253,7 @@ public class UserController {
             result.add(new DataHelpClass(data,userService.selectUserInfoByUsername(data.getUser().getUsername())));
         }
         model.addAttribute("dataList",result);
+        model.addAttribute("page", page);
         switch (userRole.getRole().getName()){
             case "teacher":
                 return "teacher/teacherPersonData";
@@ -268,11 +267,12 @@ public class UserController {
     }
 
     @RequestMapping(value = "/rolePublicData", method = RequestMethod.GET)
-    public String rolePublicData(HttpSession httpSession, Model model,@RequestParam("roleId") String roleId) {
+    public String rolePublicData(HttpSession httpSession, Model model,@RequestParam("roleId") String roleId,
+                                 @RequestParam(value = "currentPage", required = false) String currentPage) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        UserRole userRole = (UserRole) httpSession.getAttribute("userRole");
+        Page page = SystemUtils.getPage(currentPage);
         List<DataHelpClass> dataHelpClassList = new ArrayList<>();
-        List<Data> list = userService.selectRoleAllPublicData(userInfo.getDepartment().getCode(),roleId);
+        List<Data> list = userService.selectRoleAllPublicData(userInfo.getDepartment().getCode(),roleId,page);
         for (Data data: list) {
             DataHelpClass dataHelpClass = new DataHelpClass();
             data.setFileName(data.getFileName().substring(data.getFileName().lastIndexOf("_")+1));
@@ -284,6 +284,7 @@ public class UserController {
             dataHelpClassList.add(dataHelpClass);
         }
         model.addAttribute("dataHelpClassList",dataHelpClassList);
+        model.addAttribute("page", page);
         switch (roleId){
             case "003":
                 return "studentOffice/studentOfficePublicData";

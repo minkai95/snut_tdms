@@ -29,7 +29,7 @@ public class UserTest {
 
     @Test
     public void testData() {
-        System.out.print(userService.selectDataByParams("teacher",null,0,null,""));
+
     }
 
 }

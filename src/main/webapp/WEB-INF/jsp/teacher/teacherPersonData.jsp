@@ -11,45 +11,40 @@
         <p class="publicDataTitle">教师私有资料</p>
         <div class="teacherUpload">
             <p class="uploadTitle">已上传私有资料列表</p>
-            <select css="form-">
-                <option value="全部">全部</option>
-                <option value="试卷">试卷</option>
-                <option value="实验报告">实验报告</option>
-            </select>
             <button id="openModel" class="btn btn-success upload batchDelete" data-toggle="modal" data-target="#myModal"><i class="icon-upload" style="margin-right: 5px;"></i>上传私有文件</button>
             <button id="batchDelete" class="btn btn-danger batchDelete"><i class="icon-trash" style="margin-right: 5px;"></i>批量删除</button>
         </div>
     </div>
     <div class="teacherPublicDataList">
-        <table class="table table-bordered table-striped">
-            <tr>
-                <th style="text-align: center;"><input id="allCheckBtn" class="checkBtn" type="checkbox">#</th>
-                <th>文件名称</th>
-                <th>描述</th>
-                <th>上传者</th>
-                <th>上传日期</th>
-                <th>资料类型</th>
-                <th style="text-align: center;">操作</th>
-            </tr>
-            <c:forEach items="${dataList}" var="dataHelp" varStatus="dataStatus">
-                <tr id="${dataHelp.data.id}">
-                    <td style="text-align: center;"><input class="checkBtn checkedBtn" type="checkbox">${dataStatus.index+1}</td>
-                    <td title="${dataHelp.data.fileName}" style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${dataHelp.data.fileName}</td>
-                    <td title="${dataHelp.data.content}" style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${dataHelp.data.content}</td>
-                    <td>${dataHelp.userInfo.name}</td>
-                    <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${dataHelp.data.submitTime}"/></td>
-                    <td>私有资料</td>
-                    <td style="width: 210px;  text-align: center;">
-                        <button class="btn btn-info btn-sm"><i class="icon-search"></i>查看</button>
-                        <button onclick="downloadFile('${dataHelp.data.id}')" class="btn btn-primary btn-sm"><i class="icon-download"></i>下载</button>
-                        <button onclick="deleteFile('${dataHelp.data.id}')" class="btn btn-danger btn-sm"><i class="icon-remove-circle"></i>删除</button>
-                    </td>
+        <form id="pageForm" action="${ctx}/user/personData" method="get">
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th style="text-align: center;"><input id="allCheckBtn" class="checkBtn" type="checkbox">#</th>
+                    <th>文件名称</th>
+                    <th>描述</th>
+                    <th>上传者</th>
+                    <th>上传日期</th>
+                    <th>资料类型</th>
+                    <th style="text-align: center;">操作</th>
                 </tr>
-            </c:forEach>
-        </table>
-        <c:if test="${dataList==null||dataList.size()==0}">
-            <p class="bg-info noData">暂无文件</p>
-        </c:if>
+                <c:forEach items="${dataList}" var="dataHelp" varStatus="dataStatus">
+                    <tr id="${dataHelp.data.id}">
+                        <td style="text-align: center;"><input class="checkBtn checkedBtn" type="checkbox">${dataStatus.index+1}</td>
+                        <td title="${dataHelp.data.fileName}" style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${dataHelp.data.fileName}</td>
+                        <td title="${dataHelp.data.content}" style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${dataHelp.data.content}</td>
+                        <td>${dataHelp.userInfo.name}</td>
+                        <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${dataHelp.data.submitTime}"/></td>
+                        <td>私有资料</td>
+                        <td style="width: 210px;  text-align: center;">
+                            <button type="button" class="btn btn-info btn-sm"><i class="icon-search"></i>查看</button>
+                            <button type="button" onclick="downloadFile('${dataHelp.data.id}')" class="btn btn-primary btn-sm"><i class="icon-download"></i>下载</button>
+                            <button type="button" onclick="deleteFile('${dataHelp.data.id}')" class="btn btn-danger btn-sm"><i class="icon-remove-circle"></i>删除</button>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </table>
+            <%@ include file="/WEB-INF/jsp/include/dataPage.jsp" %>
+        </form>
     </div>
 </div>
 

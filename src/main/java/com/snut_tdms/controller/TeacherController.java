@@ -4,15 +4,18 @@ import com.snut_tdms.model.po.*;
 import com.snut_tdms.model.vo.DataHelpClass;
 import com.snut_tdms.model.vo.LogHelpClass;
 import com.snut_tdms.model.vo.NoticeHelpClass;
+import com.snut_tdms.model.vo.Page;
 import com.snut_tdms.service.TeacherService;
 import com.snut_tdms.service.UserService;
 import com.snut_tdms.util.LogActionType;
 import com.snut_tdms.util.OperatedType;
+import com.snut_tdms.util.SystemUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -59,9 +62,11 @@ public class TeacherController {
     }
 
     @RequestMapping(value = "/teacherPublicData", method = RequestMethod.GET)
-    public String teacherPublicData(HttpSession httpSession, Model model) {
+    public String teacherPublicData(HttpSession httpSession, Model model,
+                                    @RequestParam(value = "currentPage", required = false) String currentPage) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        List<Data> dataList = userService.selectDataByParams(userInfo.getUser().getUsername(),null,0,1,null);
+        Page page = SystemUtils.getPage(currentPage);
+        List<Data> dataList = userService.selectDataByParams(userInfo.getUser().getUsername(),null,0,1,null,page);
         List<DataHelpClass> result = new ArrayList<>();
         for (Data data:dataList) {
             if(data.getContent()==null||"".equals(data.getContent())){
@@ -71,6 +76,7 @@ public class TeacherController {
             result.add(new DataHelpClass(data,userService.selectUserInfoByUsername(data.getUser().getUsername())));
         }
         model.addAttribute("dataList",result);
+        model.addAttribute("page", page);
         return "teacher/teacherPublicData";
     }
     @RequestMapping(value = "/applyAddDataClass", method = RequestMethod.GET)
@@ -79,9 +85,12 @@ public class TeacherController {
         return "teacher/applyAddDataClass";
     }
     @RequestMapping(value = "/teacherNews", method = RequestMethod.GET)
-    public String teacherNews(HttpSession httpSession, Model model) {
+    public String teacherNews(HttpSession httpSession, Model model,
+                              @RequestParam(value = "currentPage", required = false) String currentPage) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        model.addAttribute("noticeHelpList",userService.selectSystemNotice(userInfo.getDepartment().getCode(),null));
+        Page page = SystemUtils.getPage(currentPage);
+        model.addAttribute("noticeHelpList",userService.selectSystemNotice(userInfo.getDepartment().getCode(),null,page));
+        model.addAttribute("page", page);
         return "teacher/teacherNews";
     }
 
