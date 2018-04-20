@@ -86,25 +86,35 @@
 </div>
 <script>
     // 上传文件
+
     $('#submitDataButton').on('click',function () {
-        var options = {
-            dataType:"json",
-            url:"${ctx}/user/uploadFile?description="+$('#description').val(),
-            resetForm: true,
-            success: function (result) {
-                $.confirm({
-                    title: '提示',
-                    content: result['message'],
-                    buttons: {
-                        确定: function () {
-                            location.reload();
+        if($("#fileName").text() == null || $("#fileName").text() == ""){
+            $.alert({
+                title: '提示',
+                content: '文件不能为空！'
+            });
+            return false;
+        }else{
+            var options = {
+                dataType:"json",
+                url:"${ctx}/user/uploadFile?description="+$('#description').val(),
+                resetForm: true,
+                success: function (result) {
+                    $.confirm({
+                        title: '提示',
+                        content: result['message'],
+                        buttons: {
+                            确定: function () {
+                                location.reload();
+                            }
                         }
-                    }
-                })
-            }
-        };
-        $("#submitDataForm").ajaxSubmit(options);
+                    })
+                }
+            };
+            $("#submitDataForm").ajaxSubmit(options);
+        }
     });
+
     //下载文件
     function downloadFile(id) {
         var tr = $('#'+id+'');

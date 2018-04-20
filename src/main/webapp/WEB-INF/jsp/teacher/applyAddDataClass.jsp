@@ -155,6 +155,7 @@
                 <div class="form-group">
                     <label for="typePropertyName">类目名称:</label>
                     <input id="typePropertyName" class="form-control" type="text">
+                    <span id="nameError" class="nameError"><i class=" icon-remove"></i>请输入2-8位类目名称</span>
                 </div>
                 <div class="form-group">
                     <label>类目属性:</label>
@@ -166,8 +167,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" id="resetBtn" class="btn btn-default">取消</button>
-                <button type="button" class="btn btn-info">确定</button>
+                <button type="button" class="btn btn-default">取消</button>
+                <button id="submitBtn" type="button" class="btn btn-info">确定</button>
             </div>
         </div>
     </div>
@@ -239,6 +240,16 @@
     });
     $("#removeProperty").click(function(){
         $(".selectPropertyWrapper").last().remove();
+    });
+
+    /*提交*/
+    $("#submitBtn").click(function(){
+        var typePropertyName = $("#typePropertyName").val();
+        if(typePropertyName.length < 2|| typePropertyName.length > 6){
+            $("#nameError").css("display","block");
+            $("#nameError").focus;
+            return false;
+        }
     });
 </script>
 </body>
