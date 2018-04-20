@@ -135,10 +135,10 @@
                             location.reload();
                         }
                     }
-                })
+                });
             }
         };
-        $("#submitDataForm").ajaxForm(options);
+        $("#submitDataForm").ajaxSubmit(options);
     });
     //逻辑删除文件
     function deleteFile(id) {

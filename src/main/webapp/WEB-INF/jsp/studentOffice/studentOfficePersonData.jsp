@@ -100,7 +100,7 @@
                 })
             }
         };
-        $("#submitDataForm").ajaxForm(options);
+        $("#submitDataForm").ajaxSubmit(options);
     });
     //下载文件
     function downloadFile(id) {
