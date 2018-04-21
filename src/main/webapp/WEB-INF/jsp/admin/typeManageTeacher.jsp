@@ -84,7 +84,7 @@
             property3Id = sp.find('select').eq(2).val();
         }
         $.ajax({
-            url:"${ctx}/admin/addDataClass?name="+name+"&roleId=005"+"&property1Id="+property1Id+"&property2Id="+property2Id+"&property3Id="+property3Id,
+            url:"${ctx}/user/addDataClass?name="+name+"&roleId=005"+"&property1Id="+property1Id+"&property2Id="+property2Id+"&property3Id="+property3Id,
             type:"POST",
             dataType:"json",
             success: function (result) {
@@ -127,8 +127,8 @@
                 确定: function(){
                     var description = $('#deleteReason').val();
                     $.ajax({
-                        url:"${ctx}/admin/deleteDataClass?dataClassId="+dataClassId+"&description="+description,
-                        type:"DELETE",
+                        url:"${ctx}/admin/updateDataClass?flag=3"+"&dataClassId="+dataClassId+"&description="+description,
+                        type:"POST",
                         dataType:"json",
                         success: function (result) {
                             $.confirm({
@@ -158,7 +158,7 @@
 
     $("#addProperty").click(function(){
         $.ajax({
-            url:"${ctx}/admin/selectClassType",
+            url:"${ctx}/user/selectClassType",
             type:"GET",
             dataType:"json",
             success: function (result) {

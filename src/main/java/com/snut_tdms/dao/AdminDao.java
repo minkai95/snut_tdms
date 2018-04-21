@@ -27,6 +27,8 @@ public interface AdminDao extends UserDao {
 
     int recoverData(String dataId);
 
+    int updateDataClass(Map<String,Object> map);
+
     List<Log> selectDepartmentLogsByPage(Map<String,Object> map);
 
     List<UserRole> selectUserByParamsByPage(Map<String,Object> map);

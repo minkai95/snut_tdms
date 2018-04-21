@@ -66,6 +66,11 @@
         flag = 0
         WHERE id = #{0}
     </update>
+    <update id="updateDataClass" parameterType="java.util.Map">
+        UPDATE data_class SET
+        flag = ${flag}
+        WHERE id = #{dataClassId}
+    </update>
 
     <select id="selectDepartmentLogsByPage" parameterType="java.util.Map" resultMap="log">
         SELECT

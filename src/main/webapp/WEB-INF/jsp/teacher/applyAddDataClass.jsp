@@ -15,130 +15,50 @@
         </div>
     </div>
     <div class="typePropertyContent">
-        <div id="type001" class="typeWrapper">
-            <i class="icon-angle-down dropDown"></i>
-            试卷试
-            <div class="propertyNameCont">
-                <ul>
-                    <li>属性1：专业</li>
-                    <li>属性2：班级</li>
-                </ul>
+        <c:forEach items="${haveDataClassList}" var="dataClassHelp">
+            <div class="typeWrapper">
+                <i class="icon-angle-down dropDown"></i>
+                ${dataClassHelp.dataClass.name}
+                <div class="propertyNameCont">
+                    <ul>
+                        <c:choose>
+                            <c:when test="${dataClassHelp.classTypeList!=null && dataClassHelp.classTypeList.size()!=0 && dataClassHelp.classTypeList.get(0)!=null}">
+                                <c:forEach items="${dataClassHelp.classTypeList}" var="classType">
+                                    <li>${classType.name}</li>
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <li style="text-align: center">暂无属性</li>
+                            </c:otherwise>
+                        </c:choose>
+                    </ul>
+                </div>
             </div>
-        </div>
-        <div id="type002" class="typeWrapper">
-            <i class="icon-angle-down dropDown"></i>
-            实验报告
-            <div class="propertyNameCont">
-                <ul>
-                    <li>属性1：专业</li>
-                    <li>属性2：班级</li>
-                </ul>
-            </div>
-        </div>
-        <div id="type003" class="typeWrapper">
-            <i class="icon-angle-down dropDown"></i>
-            作业
-            <div class="propertyNameCont">
-                <ul>
-                    <li>属性1：专业</li>
-                    <li>属性2：班级</li>
-                </ul>
-            </div>
-        </div>
-        <div id="type004" class="typeWrapper">
-            <i class="icon-angle-down dropDown"></i>
-            试卷试试卷
-            <div class="propertyNameCont">
-                <ul>
-                    <li>属性1：专业专业</li>
-                    <li>属性2：班级</li>
-                </ul>
-            </div>
-        </div>
-        <div id="type006" class="typeWrapper">
-            <i class="icon-angle-down dropDown"></i>
-            试卷
-            <div class="propertyNameCont">
-                <ul>
-                    <li>属性1：专业专业专业</li>
-                    <li>属性2：班级</li>
-                </ul>
-            </div>
-        </div>
-        <div id="type007" class="typeWrapper">
-            <i class="icon-angle-down dropDown"></i>
-            试卷试试卷
-            <div class="propertyNameCont">
-                <ul>
-                    <li>属性1：专业专业</li>
-                    <li>属性2：班级</li>
-                </ul>
-            </div>
-        </div>
-        <div id="type008" class="typeWrapper">
-            <i class="icon-angle-down dropDown"></i>
-            试卷
-            <div class="propertyNameCont">
-                <ul>
-                    <li>属性1：专业专业专业</li>
-                    <li>属性2：班级</li>
-                </ul>
-            </div>
-        </div>
-        <div id="type009" class="typeWrapper">
-            <i class="icon-angle-down dropDown"></i>
-            试卷试试卷
-            <div class="propertyNameCont">
-                <ul>
-                    <li>属性1：专业专业</li>
-                    <li>属性2：班级</li>
-                </ul>
-            </div>
-        </div>
-        <div id="type010" class="typeWrapper">
-            <i class="icon-angle-down dropDown"></i>
-            试卷
-            <div class="propertyNameCont">
-                <ul>
-                    <li>属性1：专业专业专业</li>
-                    <li>属性2：班级</li>
-                </ul>
-            </div>
-        </div>
+        </c:forEach>
     </div>
     <div class="waitCheckWrapper">
         <p class="uploadTitle">待审核类目属性列表</p>
         <div class="waitCheckCont">
-            <div id="waitCheck001" class="waitCheckTypeWrapper">
-                <i class="icon-angle-down dropDown"></i>
-                试卷试
-                <div class="waitCheckNameCont">
-                    <ul>
-                        <li>属性1：专业</li>
-                        <li>属性2：班级</li>
-                    </ul>
+            <c:forEach items="${applyingDataClassList}" var="dataClassHelp">
+                <div class="waitCheckTypeWrapper">
+                    <i class="icon-angle-down dropDown"></i>
+                    ${dataClassHelp.dataClass.name}
+                    <div class="waitCheckNameCont">
+                        <ul>
+                            <c:choose>
+                                <c:when test="${dataClassHelp.classTypeList!=null && dataClassHelp.classTypeList.size()!=0 && dataClassHelp.classTypeList.get(0)!=null}">
+                                    <c:forEach items="${dataClassHelp.classTypeList}" var="classType">
+                                        <li>${classType.name}</li>
+                                    </c:forEach>
+                                </c:when>
+                                <c:otherwise>
+                                    <li style="text-align: center">暂无属性</li>
+                                </c:otherwise>
+                            </c:choose>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-            <div id="waitCheck002" class="waitCheckTypeWrapper">
-                <i class="icon-angle-down dropDown"></i>
-                实验报告报告
-                <div class="waitCheckNameCont">
-                    <ul>
-                        <li>属性1：专业专业专业</li>
-                        <li>属性2：班级专业专业</li>
-                    </ul>
-                </div>
-            </div>
-            <div id="waitCheck003" class="waitCheckTypeWrapper">
-                <i class="icon-angle-down dropDown"></i>
-                试卷试
-                <div class="waitCheckNameCont">
-                    <ul>
-                        <li>属性1：专业</li>
-                        <li>属性2：班级</li>
-                    </ul>
-                </div>
-            </div>
+            </c:forEach>
         </div>
     </div>
 </div>
@@ -161,9 +81,7 @@
                     <label>类目属性:</label>
                     <button id="addProperty" class="btn btn-success btn-sm" style="margin-left: -30px;">添加属性</button>
                     <button id="removeProperty" class="btn btn-warning btn-sm">删除属性</button>
-                    <div id="selectProperty" class="form-group">
-
-                    </div>
+                    <div id="selectProperty" class="form-group"></div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -175,28 +93,24 @@
 </div>
 
 <script>
+    // 展开/关闭类目属性菜单
     $(".typeWrapper").click(function(){
         if($(this).children("i").attr("class") == "icon-angle-down dropDown"){
             $(this).children("i").attr("class","icon-angle-up dropDown");
             $(this).children("i").siblings("div").slideDown();
             $(this).siblings().children("div").slideUp();
             $(this).siblings().children("i").attr("class","icon-angle-down dropDown");
-
-
         } else{
             $(this).children("i").attr("class","icon-angle-down dropDown");
             $(this).children("i").siblings("div").slideUp();
         }
     });
-
     $(".waitCheckTypeWrapper").click(function(){
         if($(this).children("i").attr("class") == "icon-angle-down dropDown"){
             $(this).children("i").attr("class","icon-angle-up dropDown");
             $(this).children("i").siblings("div").slideDown();
             $(this).siblings().children("div").slideUp();
             $(this).siblings().children("i").attr("class","icon-angle-down dropDown");
-
-
         } else{
             $(this).children("i").attr("class","icon-angle-down dropDown");
             $(this).children("i").siblings("div").slideUp();
@@ -213,42 +127,82 @@
     $(".typeWrapper:nth-child(4n)").children("div").css("border","1px solid #d9534f");
 
     $("#addProperty").click(function(){
-        var propertyLength = $("#selectProperty").find("select").length;
-        console.log(propertyLength);
-        if(propertyLength < "3"){
-            $("#selectProperty").append("<div class='selectPropertyWrapper'><label class='propertyLabel'></label><select class='form-control'><option value='专业'>专业</option><option value='班级'>班级</option></select></div>");
-            $("#selectProperty select").attr("id",function(i) {
-                return "property_" + ++i;
-            });
-            $("#selectProperty label").attr("for",function(i) {
-                return "property_" + ++i;
-            });
-            $("#selectProperty label").text(function(i) {
-                return "属性" + ++i + "：";
-            });
-        } else{
-            $.alert({
-                title: '提示',
-                content: '最多只能添加三个属性！',
-                buttons: {
-                    确定: function () {
-
+        $.ajax({
+            url:"${ctx}/user/selectClassType",
+            type:"GET",
+            dataType:"json",
+            success: function (result) {
+                var sp = $("#selectProperty");
+                var propertyLength = sp.find("select").length;
+                if(propertyLength < 3){
+                    sp.append("<div class='selectPropertyWrapper'>" +
+                        "<label class='propertyLabel'></label>" +
+                        "<select class='form-control'></select>"+
+                        "</div>");
+                    for(var m=0; m<result['classTypeList'].length; m++){
+                        sp.children('div').eq(propertyLength).children('select').append("<option value='" + result['classTypeList'][m]['id'] + "'>" + result['classTypeList'][m]['name'] + "</option >");
                     }
+                    sp.children("select").attr("id",function(i) {
+                        return "property_" + ++i;
+                    });
+                    sp.children("label").attr("for",function(i) {
+                        return "property_" + ++i;
+                    });
+                    $("#selectProperty label").text(function(i) {
+                        return "属性" + ++i + "：";
+                    });
+                } else{
+                    $.alert({
+                        title: '提示',
+                        content: '最多只能添加三个属性！',
+                        buttons: {
+                            确定: function () {
+
+                            }
+                        }
+                    })
                 }
-            })
-        }
+            }
+        })
     });
     $("#removeProperty").click(function(){
         $(".selectPropertyWrapper").last().remove();
     });
 
-    /*提交*/
+    // 提交申请新增类目
     $("#submitBtn").click(function(){
-        var typePropertyName = $("#typePropertyName").val();
-        if(typePropertyName.length < 2|| typePropertyName.length > 6){
+        var name = $("#typePropertyName").val();
+        if(name.length < 2|| name.length > 6){
             $("#nameError").css("display","block");
             $("#nameError").focus;
             return false;
+        }else {
+            var sp = $('#selectProperty');
+            var spLength = sp.find("select").length;
+            var property1Id = null;
+            var property2Id = null;
+            var property3Id = null;
+            if (spLength>0){
+                property1Id = sp.find('select').eq(0).val();
+                property2Id = sp.find('select').eq(1).val();
+                property3Id = sp.find('select').eq(2).val();
+            }
+            $.ajax({
+                url:"${ctx}/user/addDataClass?name="+name+"&property1Id="+property1Id+"&property2Id="+property2Id+"&property3Id="+property3Id,
+                type:"POST",
+                dataType:"json",
+                success: function (result) {
+                    $.confirm({
+                        title: '提示',
+                        content: result['message'],
+                        buttons: {
+                            确定: function () {
+                                location.reload();
+                            }
+                        }
+                    });
+                }
+            })
         }
     });
 </script>

@@ -81,7 +81,10 @@ public class TeacherController {
     }
     @RequestMapping(value = "/applyAddDataClass", method = RequestMethod.GET)
     public String applyAddDataClass(HttpSession httpSession, Model model) {
-
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        UserRole userRole = (UserRole) httpSession.getAttribute("userRole");
+        model.addAttribute("haveDataClassList",userService.selectDataClassRHelp(userInfo.getDepartment().getCode(),userRole.getRole().getId(),"(1)",null));
+        model.addAttribute("applyingDataClassList",userService.selectDataClassRHelp(userInfo.getDepartment().getCode(),userRole.getRole().getId(),"(0)",null));
         return "teacher/applyAddDataClass";
     }
     @RequestMapping(value = "/teacherNews", method = RequestMethod.GET)
