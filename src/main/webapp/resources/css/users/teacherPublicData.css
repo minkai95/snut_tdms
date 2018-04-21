@@ -88,3 +88,10 @@
     border-radius: 5px;
     display: block;
 }
+.upLoadDescription{
+    resize: none;
+    width: 100%;
+    height: 80px !important;
+    border-radius: 5px;
+    display: block;
+}

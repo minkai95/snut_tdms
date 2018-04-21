@@ -11,6 +11,13 @@
             <p class="publicDataTitle">用户管理</p>
             <div class="teacherUpload">
                 <p class="uploadTitle">学院用户资料列表</p>
+                <label for="chooseSelect" class="chooseLabel" style="width: 38px;">职务:</label>
+                <select id="chooseSelect" class="form-control chooseSelect">
+                    <option value="全部">全部</option>
+                    <option value="试卷">教师</option>
+                    <option value="实验报告">教务处教师</option>
+                    <option value="实验报告">学办教师</option>f
+                </select>
                 <button id="batchDelete" class="btn btn-danger batchDelete"><i class="icon-trash" style="margin-right: 5px;"></i>批量删除</button>
                 <button class="btn btn-success upload batchDelete" data-toggle="modal" data-target="#myModal"><i class="icon-upload" style="margin-right: 5px;"></i>新增用户</button>
             </div>

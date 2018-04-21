@@ -116,3 +116,10 @@ header{
     color: #AA6708;
     text-align: center;
 }
+.loginOut{
+    margin-left: 20px;
+}
+.loginOut:hover{
+    cursor: pointer;
+    color: #FFF;
+}

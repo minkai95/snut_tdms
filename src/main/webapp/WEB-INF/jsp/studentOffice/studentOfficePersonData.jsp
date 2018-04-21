@@ -79,7 +79,7 @@
                     <form id="submitDataForm" action="${ctx}/user/uploadFile" method="POST" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="description">文件描述:</label>
-                            <textarea class="form-control" id="description" name="description" placeholder="请输入文件描述" ></textarea>
+                            <textarea class="form-control upLoadDescription" id="description" name="description" placeholder="请输入文件描述" ></textarea>
                         </div>
                         <div class="form-group">
                             <label for="chooseFile" class="control-label">选择文件:</label>

@@ -1,0 +1,74 @@
+.forgetPSWWrapper{
+    border: 1px solid #ccc;
+    width: 800px;
+    height:400px;
+    margin: 70px auto 0;
+    border-radius: 12px;
+    box-shadow: 0 0 6px #ccc;
+}
+.forgetPSWTitle{
+    margin: 50px 0 20px;
+    height: 30px;
+    font-size: 24px;
+    text-align: center;
+    line-height: 30px;
+    color: #636363;
+    letter-spacing: 8px;
+
+}
+.forgetPSWHeader{
+    display: inline-flex;
+    width: 100%;
+}
+.forgetPSWHeader div{
+    flex: 1;
+    height: 25px;
+    line-height: 25px;
+    font-size: 16px;
+    text-align: center;
+}
+.forgetPSWHeader div span{
+    display: block;
+    width: 150px;
+    height: 27px;
+    line-height: 23px;
+    margin: 0 auto;
+    border-bottom: 2px solid #808080;
+    letter-spacing: 3px;
+    color: #808080;
+}
+.forgetPSWCont{
+    width: 500px;
+    height:300px;
+    overflow: hidden;
+    margin: 10px auto;
+}
+.stepOneCont, .stepTwoCont{
+    margin-top: 40px;
+    height: 250px;
+}
+.forgetPSWCont label{
+    width: 72px;
+}
+.idLabel{
+    letter-spacing: 13px;
+}
+.newPSWLabel{
+    letter-spacing: 5px;
+}
+.forgetPSWCont input{
+    display: inline-block;
+    width: 84%;
+}
+.nextBtn{
+    margin: 35px auto;
+    width: 130px;
+    letter-spacing: 5px;
+}
+.active{
+    border-bottom: 2px solid #5faee3 !important;
+}
+.rightStyle{
+    color: #2da511 !important;
+    border-bottom: 2px solid #2da511 !important;
+}

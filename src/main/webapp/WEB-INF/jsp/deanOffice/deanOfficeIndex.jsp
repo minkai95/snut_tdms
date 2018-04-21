@@ -10,7 +10,7 @@
     <header class="header">
         <div class="headerLeft">高校资料管理系统</div>
         <div class="headerRight">
-            <div class="welcome">你好，<a href="${ctx}/user/personCenter" target="mainFrame" id="username">${userInfo.name}</a></div>
+            <div class="welcome">你好，<a href="${ctx}/user/personCenter" target="mainFrame" id="username">${userInfo.name}</a> <span class="loginOut"><i class="icon-signout"></i>注销</span></div>
         </div>
     </header>
     <div class="middle">
@@ -63,7 +63,22 @@
             $("#publicDataType").slideUp();
             $("#publicDataType ul li a").removeClass("asideAddClass")
         });
-    })
+
+        /*注销*/
+        $(".loginOut").click(function(){
+            $.confirm({
+                title: '提示',
+                content: '是否注销？',
+                buttons: {
+                    确定:function(){
+                    },
+                    取消: function(){
+
+                    }
+                }
+            });
+        });
+    });
 </script>
 </body>
 </html>
