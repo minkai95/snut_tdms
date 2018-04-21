@@ -12,21 +12,22 @@
                 <p class="publicDataTitle">院系管理</p>
                 <div class="teacherUpload">
                     <p class="uploadTitle">已有院系列表</p>
-                    <a href="#" class="upload" onclick="openMyModal()"><i class="icon-plus-sign"></i>新增院系</a>
+                    <button id="openModel" class="btn btn-success upload batchDelete" onclick="openMyModal()"><i class="icon-upload" style="margin-right: 5px;"></i>新增院系</button>
+                    <button id="batchDelete" class="btn btn-danger batchDelete"><i class="icon-trash" style="margin-right: 5px;"></i>批量删除</button>
                 </div>
             </div>
             <div class="teacherPublicDataList">
                 <form id="pageForm" action="${ctx}/superAdmin/departmentManage" method="get">
                     <table class="table table-bordered table-striped">
                         <tr>
-                            <th>#</th>
+                            <th style="text-align: center; width: 5%;"><input id="allCheckBtn" class="checkBtn" type="checkbox">#</th>
                             <th>院系编号</th>
                             <th>院系名称</th>
                             <th style="text-align: center">操作</th>
                         </tr>
                         <c:forEach items="${departmentList}" var="department" varStatus="departmentStatus">
-                            <tr>
-                                <td><input id="${departmentStatus.index+1+(page.currentPage-1)*10}" type="checkbox"><label for="${departmentStatus.index+1+(page.currentPage-1)*10}">${departmentStatus.index+1+(page.currentPage-1)*10}</label></td>
+                            <tr id="${department.code}">
+                                <td style="text-align: center; width: 5%;"><input class="checkBtn checkedBtn" type="checkbox">${departmentStatus.index+1+(page.currentPage-1)*10}</td>
                                 <td>${department.code}</td>
                                 <td>${department.name}</td>
                                 <td style="width: 250px;  text-align: center;">
@@ -187,6 +188,42 @@
                 }
             })
         }
+
+        /* --全选JS-- */
+        $("#allCheckBtn").click(function() {
+            if($(this).is(':checked') == true){
+                $("#allCheckBtn").attr("checked",true);
+                $('.checkedBtn').each(function() {
+                    this.checked = true;
+                });
+            } else{
+                $("#allCheckBtn").attr("checked",false);
+                $('.checkedBtn').each(function() {
+                    this.checked = false;
+                });
+            }
+        });
+
+        $(".checkedBtn").click(function(){
+            $(this).each(function() {
+                var allCheckedBox = $(".checkedBtn").length;
+                var CheckedBox = $(".checkedBtn:checked").length;
+                if(allCheckedBox == CheckedBox){
+                    $("#allCheckBtn").prop("checked",true);
+                } else{
+                    $("#allCheckBtn").prop("checked",false);
+                }
+            });
+        });
+
+        /*批量删除*/
+        $("#batchDelete").click(function(){
+            var checkedTrId = [];
+            $(".checkedBtn:checked").each(function(){
+                checkedTrId.push($(this).parents("tr").attr("id"));
+            });
+            console.log(checkedTrId);
+        });
     </script>
 </body>
 </html>

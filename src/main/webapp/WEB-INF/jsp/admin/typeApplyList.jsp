@@ -11,6 +11,12 @@
         <p class="publicDataTitle">申请列表</p>
         <div class="teacherUpload">
             <p class="uploadTitle">类目申请列表</p>
+            <label for="chooseSelect" class="chooseLabel">所属角色:</label>
+            <select id="chooseSelect" class="form-control chooseSelect">
+                <option value="全部">全部</option>
+                <option value="试卷">试卷</option>
+                <option value="实验报告">实验报告</option>
+            </select>
         </div>
     </div>
     <div class="teacherPublicDataList">

@@ -7,11 +7,23 @@
 <body>
 <div class="adminCurrentWrapper">
     <p class="publicDataTitle">资料追踪</p>
+    <label for="chooseSelect" class="chooseLabel" style="margin-left: 0;">文件类型:</label>
+    <select id="chooseSelect" class="form-control chooseSelect">
+        <option value="全部">全部</option>
+        <option value="试卷">试卷</option>
+        <option value="实验报告">实验报告</option>
+    </select>
+    <label for="chooseSelect2" class="chooseLabel">操作动作:</label>
+    <select id="chooseSelect2" class="form-control chooseSelect">
+        <option value="全部">全部</option>
+        <option value="试卷">试卷</option>
+        <option value="实验报告">实验报告</option>
+    </select>
     <div class="mainCont">
         <form id="pageForm" action="${ctx}/user/dataTrace" method="get">
             <table class="table table-bordered table-striped">
                 <tr>
-                    <th>#</th>
+                    <th style="text-align: center">#</th>
                     <th>文件名</th>
                     <th>文件类型</th>
                     <th>内容</th>
@@ -23,14 +35,14 @@
                 </tr>
                 <c:forEach items="${logHelpList}" var="logHelp" varStatus="logStatus">
                     <tr id="${logHelp.log.id}">
-                        <td>${logStatus.index+1}</td>
-                        <td>${logHelp.operatedData.fileName}<c:if test="${logHelp.operatedData.fileName==null}">已被删除</c:if></td>
+                        <td style="text-align: center">${logStatus.index+1}</td>
+                        <td title="${logHelp.operatedData.fileName}" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${logHelp.operatedData.fileName}<c:if test="${logHelp.operatedData.fileName==null}">已被删除</c:if></td>
                         <td>${logHelp.operatedData.dataClass.name}<c:if test="${logHelp.operatedData.dataClass.name==null}">已被删除</c:if></td>
-                        <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${logHelp.log.content}</td>
+                        <td title="${logHelp.log.content}" style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${logHelp.log.content}</td>
                         <td>${logHelp.log.action}</td>
                         <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${logHelp.log.time}"/></td>
                         <td>${logHelp.operationUserInfo.name}</td>
-                        <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${logHelp.log.description}</td>
+                        <td title="${logHelp.log.description}" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${logHelp.log.description}</td>
                         <td style="width: 140px; text-align: center;">
                             <button type="button" onclick="openModel('${logHelp.log.id}')" class="btn btn-info"><i class="icon-search"></i>查看详情</button>
                         </td>

@@ -12,14 +12,15 @@
                 <p class="publicDataTitle">院系管理员管理</p>
                 <div class="teacherUpload">
                     <p class="uploadTitle">院系管理员列表</p>
-                    <a href="#" class="upload" onclick="openAddAdminModal()"><i class="icon-plus-sign"></i>新增管理员</a>
+                    <button id="openModel" class="btn btn-success upload batchDelete" onclick="openAddAdminModal()"><i class="icon-upload" style="margin-right: 5px;"></i>新增管理员</button>
+                    <button id="batchDelete" class="btn btn-danger batchDelete"><i class="icon-trash" style="margin-right: 5px;"></i>批量删除</button>
                 </div>
             </div>
             <div class="teacherPublicDataList">
                 <form id="pageForm" action="${ctx}/superAdmin/departmentAdminManage" method="get">
                     <table class="table table-bordered table-striped">
                         <tr>
-                            <th>#</th>
+                            <th style="text-align: center; width: 5%;"><input id="allCheckBtn" class="checkBtn" type="checkbox">#</th>
                             <th>用户名</th>
                             <th>姓名</th>
                             <th>性别</th>
@@ -30,7 +31,7 @@
                         </tr>
                         <c:forEach items="${adminUserInfoList}" var="userInfo" varStatus="userInfoStatus">
                             <tr id="${userInfo.user.username}">
-                                <td><input id="${userInfoStatus.index+1+(page.currentPage-1)*10}" type="checkbox"><label for="${userInfoStatus.index+1+(page.currentPage-1)*10}">${userInfoStatus.index+1+(page.currentPage-1)*10}</label></td>
+                                <td style="text-align: center; width: 5%;"><input class="checkBtn checkedBtn" type="checkbox">${userInfoStatus.index+1}</td>
                                 <td>${userInfo.user.username}</td>
                                 <td>${userInfo.name}</td>
                                 <td>${userInfo.sex}</td>
@@ -329,6 +330,42 @@
                 }
             })
         }
+
+        /* --全选JS-- */
+        $("#allCheckBtn").click(function() {
+            if($(this).is(':checked') == true){
+                $("#allCheckBtn").attr("checked",true);
+                $('.checkedBtn').each(function() {
+                    this.checked = true;
+                });
+            } else{
+                $("#allCheckBtn").attr("checked",false);
+                $('.checkedBtn').each(function() {
+                    this.checked = false;
+                });
+            }
+        });
+
+        $(".checkedBtn").click(function(){
+            $(this).each(function() {
+                var allCheckedBox = $(".checkedBtn").length;
+                var CheckedBox = $(".checkedBtn:checked").length;
+                if(allCheckedBox == CheckedBox){
+                    $("#allCheckBtn").prop("checked",true);
+                } else{
+                    $("#allCheckBtn").prop("checked",false);
+                }
+            });
+        });
+
+        /*批量删除*/
+        $("#batchDelete").click(function(){
+            var checkedTrId = [];
+            $(".checkedBtn:checked").each(function(){
+                checkedTrId.push($(this).parents("tr").attr("id"));
+            });
+            console.log(checkedTrId);
+        });
     </script>
 </body>
 </html>

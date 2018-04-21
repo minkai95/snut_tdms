@@ -10,6 +10,18 @@
         <div class="teacherCurrentWrapper">
             <div class="teacherHeader">
                 <p class="publicDataTitle">全校日志管理</p>
+                <label for="chooseSelect" class="chooseLabel" style="margin-left: 0;">操作行为:</label>
+                <select id="chooseSelect" class="form-control chooseSelect">
+                    <option value="全部">全部</option>
+                    <option value="试卷">试卷</option>
+                    <option value="实验报告">实验报告</option>
+                </select>
+                <label for="chooseSelect2" class="chooseLabel">操作对象:</label>
+                <select id="chooseSelect2" class="form-control chooseSelect">
+                    <option value="全部">全部</option>
+                    <option value="试卷">试卷</option>
+                    <option value="实验报告">实验报告</option>
+                </select>
             </div>
             <div class="teacherPublicDataList">
                 <form id="pageForm" action="${ctx}/superAdmin/superAdminLog" method="get">

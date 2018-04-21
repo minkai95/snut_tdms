@@ -9,6 +9,18 @@
    <div class="teacherCurrentWrapper">
         <div class="teacherHeader">
             <p class="publicDataTitle">学院日志</p>
+            <label for="chooseSelect" class="chooseLabel" style="margin-left: 0;">操作行为:</label>
+            <select id="chooseSelect" class="form-control chooseSelect">
+                <option value="全部">全部</option>
+                <option value="试卷">试卷</option>
+                <option value="实验报告">实验报告</option>
+            </select>
+            <label for="chooseSelect2" class="chooseLabel">操作对象:</label>
+            <select id="chooseSelect2" class="form-control chooseSelect">
+                <option value="全部">全部</option>
+                <option value="试卷">试卷</option>
+                <option value="实验报告">实验报告</option>
+            </select>
         </div>
         <div class="teacherPublicDataList">
             <form id="pageForm" action="${ctx}/admin/adminLog" method="get">
@@ -26,13 +38,13 @@
                     <c:forEach items="${logHelpClassList}" var="logHelp" varStatus="logHelpStatus">
                         <tr id="${logHelp.log.id}">
                             <td>1</td>
-                            <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${logHelp.log.content}</td>
+                            <td title="${logHelp.log.content}" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${logHelp.log.content}</td>
                             <td>${logHelp.log.action}</td>
                             <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${logHelp.log.time}"/></td>
                             <td>${logHelp.operationUserInfo.name}</td>
                             <td>${logHelp.operatedType}</td>
-                            <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${logHelp.log.description}</td>
-                            <td style="width: 250px;  text-align: center;">
+                            <td title="${logHelp.log.description}" style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${logHelp.log.description}</td>
+                            <td style="width: 140px;  text-align: center;">
                                 <button class="btn btn-info btn-sm" type="button" onclick="checkLogBtn('${logHelp.log.id}')"><i class="icon-search"></i> 查看详情</button>
                                 <c:if test="${logHelp.log.action == '逻辑删除'}">
                                     <c:choose>
