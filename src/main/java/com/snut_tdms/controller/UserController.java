@@ -297,6 +297,50 @@ public class UserController {
         }
     }
 
+    @RequestMapping(value = "/selectClassType", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject selectClassType(HttpSession httpSession){
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("classTypeList",userService.selectClassTypeByDepartmentCode(userInfo.getDepartment().getCode()));
+        return jsonObject;
+    }
+
+    @RequestMapping(value = "/addDataClass", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject addDataClass(HttpSession httpSession,
+                                   @RequestParam("name") String name,
+                                   @RequestParam(value="roleId", required =false) String roleId,
+                                   @RequestParam(value="property1Id" ,required =false ) String property1Id,
+                                   @RequestParam(value="property2Id" ,required =false ) String property2Id,
+                                   @RequestParam(value="property3Id" ,required =false ) String property3Id){
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        UserRole userRole = (UserRole) httpSession.getAttribute("userRole");
+        if (roleId==null){
+            roleId = userRole.getRole().getId();
+        }
+        int flag = 0;
+        if ("admin".equals(userRole.getRole().getName())){
+            flag = 1;
+        }
+        JSONObject jsonObject = new JSONObject();
+        StringBuilder sb = new StringBuilder();
+        if (!"undefined".equals(property1Id) && !"null".equals(property1Id)){
+            sb.append(property1Id);
+        }
+        if (!"undefined".equals(property2Id) && !"null".equals(property2Id)){
+            sb.append("/");
+            sb.append(property2Id);
+        }
+        if (!"undefined".equals(property3Id) && !"null".equals(property3Id)){
+            sb.append("/");
+            sb.append(property3Id);
+        }
+        DataClass dataClass = new DataClass(SystemUtils.getUUID(),name,userService.selectRoleById(roleId),userInfo.getUser(),userInfo.getDepartment(),sb.toString(),flag);
+        jsonObject.put("message",userService.insertDataClass(dataClass,userInfo.getDepartment().getCode(),userInfo.getUser()).getnCode());
+        return jsonObject;
+    }
+
     // 格式化UserRole
     public static UserRole updateUserRole(UserRole userRole){
         if (userRole != null) {

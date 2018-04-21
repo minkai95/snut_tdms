@@ -3,6 +3,7 @@ package com.snut_tdms.service;
 import com.snut_tdms.controller.UserController;
 import com.snut_tdms.dao.UserDao;
 import com.snut_tdms.model.po.*;
+import com.snut_tdms.model.vo.DataClassHelpClass;
 import com.snut_tdms.model.vo.LogHelpClass;
 import com.snut_tdms.model.vo.NoticeHelpClass;
 import com.snut_tdms.model.vo.Page;
@@ -66,9 +67,7 @@ public class UserService {
         String content = request.getParameter("description");
         data.setContent(content);
         String departmentCode = userDao.selectUserInfoByUsername(user.getUsername()).getDepartment().getCode();
-        DataClass dataClass = selectDataClass(departmentCode,
-                null,
-                null,dataClassId).get(0);
+        DataClass dataClass = selectDataClassById(dataClassId);
         data.setDataClass(dataClass);
         request.setAttribute("departmentCode",selectUserInfoByUsername(user.getUsername()).getDepartment().getCode());
         Map<String,Object> resultMap = FileUploadUtil.upload(request);
@@ -101,7 +100,7 @@ public class UserService {
      * @return 状态码
      */
     public StatusCode insertDataClass(DataClass dataClass,String departmentCode,User operationUser){
-        List<DataClass> dataClassList = selectDataClass(departmentCode,"","(0,1,2)","");
+        List<DataClass> dataClassList = selectDataClass(departmentCode,"(0,1,2)","",null);
         List<String> list = new ArrayList<>();
         for (DataClass d: dataClassList) {
             if(d!=null){
@@ -360,23 +359,6 @@ public class UserService {
     }
 
     /**
-     * 查询本院资料类型,如果roleId为空则查询本院所有资料类型
-     * @param departmentCode 院系编码
-     * @param roleId 角色ID
-     * @param flag 备注
-     * @param dataClassId 资料类型ID
-     * @return List
-     */
-   public List<DataClass> selectDataClass(String departmentCode,String roleId,String flag,String dataClassId){
-        Map<String,Object> map = new HashMap<>();
-        map.put("departmentCode",departmentCode);
-        map.put("roleId",roleId);
-        map.put("flag",flag);
-        map.put("dataClassId",dataClassId);
-        return userDao.selectDataClass(map);
-    }
-
-    /**
      * 根据用户名查询用户资料
      * @param username 用户名
      * @return UserInfo
@@ -594,5 +576,73 @@ public class UserService {
             logHelpClassList.add(logHelpClass);
         }
         return logHelpClassList;
+    }
+
+    /**
+     * 查询本院资料类型,如果roleId为空则查询本院所有资料类型
+     * @param departmentCode 院系编码
+     * @param roleId 角色ID
+     * @param flag 备注
+     * @return List
+     */
+    public List<DataClass> selectDataClass(String departmentCode,String roleId,String flag,String userType){
+        Map<String,Object> map = new HashMap<>();
+        map.put("departmentCode",departmentCode);
+        map.put("roleId",roleId);
+        map.put("flag",flag);
+        map.put("userType",userType);
+        return userDao.selectDataClass(map);
+    }
+
+    /**
+     * 查询不同角色的文件类型
+     * @param departmentCode 院系编码
+     * @param roleId 角色ID
+     * @return List
+     */
+    public List<DataClassHelpClass> selectDataClassRHelp(String departmentCode, String roleId, String flag,String userType){
+        List<DataClass> dataClassList = selectDataClass(departmentCode,roleId,flag,userType);
+        return formatDataClass(dataClassList);
+    }
+
+    /**
+     * 分页查询不同角色的文件类型
+     * @param departmentCode 院系编码
+     * @param roleId 角色ID
+     * @return List
+     */
+    public List<DataClassHelpClass> selectDataClassRHelpByPage(String departmentCode, String roleId, String flag,String userType,Page page) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("departmentCode", departmentCode);
+        map.put("roleId", roleId);
+        map.put("flag", flag);
+        map.put("userType", userType);
+        map.put("page", page);
+        List<DataClassHelpClass> result = formatDataClass(userDao.selectDataClassByPage(map));
+        for (DataClassHelpClass dataClassHelpClass : result) {
+            if (dataClassHelpClass.getClassTypeList().size() > 0 && dataClassHelpClass.getClassTypeList().get(0) != null) {
+                for (int i = 0; i < dataClassHelpClass.getClassTypeList().size(); i++) {
+                    dataClassHelpClass.getClassTypeList().get(i).setName(dataClassHelpClass.getClassTypeList().get(i).getName().substring(4));
+                }
+            }
+        }
+        return result;
+    }
+
+    // 格式化DataClass
+    private List<DataClassHelpClass> formatDataClass(List<DataClass> dataClassList){
+        List<DataClassHelpClass> result = new ArrayList<>();
+        for (DataClass dataClass: dataClassList) {
+            List<ClassType> classTypeList = selectClassTypesByDataClassId(dataClass.getId());
+            if (classTypeList.size()>0 && classTypeList.get(0)!= null) {
+                for (int i = 0; i < classTypeList.size(); i++) {
+                    classTypeList.get(i).setName("属性" + (i + 1) + ":" + classTypeList.get(i).getName());
+                }
+            }
+            UserInfo userInfo = selectUserInfoByUsername(dataClass.getUser().getUsername());
+            UserRole userRole = UserController.updateUserRole(selectUserRoleByUsername(dataClass.getUser().getUsername()));
+            result.add(new DataClassHelpClass(dataClass,classTypeList,userInfo,userRole));
+        }
+        return result;
     }
 }

@@ -243,14 +243,51 @@
           LEFT JOIN `user` ON data_class.`user` = `user`.username
           LEFT JOIN department ON data_class.department = department.code
         WHERE department.code = #{departmentCode}
-        <if test="dataClassId != null and dataClassId != ''">
-            AND data_class.id = #{dataClassId}
-        </if>
         <if test="flag != null and flag!= ''">
             AND data_class.flag in ${flag}
         </if>
         <if test="roleId != null and roleId!= ''">
             AND role.id = #{roleId}
+        </if>
+        <if test="userType!=null and userType!=''">
+            AND (SELECT role.name
+                FROM user_role
+                LEFT JOIN role ON user_role.role = role.id
+                WHERE user_role.user=data_class.user)
+                IN ${userType}
+        </if>
+    </select>
+    <select id="selectDataClassByPage" parameterType="java.util.Map" resultMap="dataClass">
+        SELECT
+        data_class.id,
+        data_class.`name`,
+        role.id as roleId,
+        role.name as roleName,
+        `user`.username,
+        `user`.password,
+        `user`.id_card as idCard,
+        `user`.first_login as firstLogin,
+        department.code as departmentCode,
+        department.name as departmentName,
+        class_types as classTypes,
+        data_class.flag
+        FROM data_class
+        LEFT JOIN role ON data_class.role = role.id
+        LEFT JOIN `user` ON data_class.`user` = `user`.username
+        LEFT JOIN department ON data_class.department = department.code
+        WHERE department.code = #{departmentCode}
+        <if test="flag != null and flag!= ''">
+            AND data_class.flag in ${flag}
+        </if>
+        <if test="roleId != null and roleId!= ''">
+            AND role.id = #{roleId}
+        </if>
+        <if test="userType!=null and userType!=''">
+            AND (SELECT role.name
+            FROM user_role
+            LEFT JOIN role ON user_role.role = role.id
+            WHERE user_role.user=data_class.user)
+            IN ${userType}
         </if>
     </select>
     <select id="selectDataClassById" parameterType="java.lang.String" resultMap="dataClass">

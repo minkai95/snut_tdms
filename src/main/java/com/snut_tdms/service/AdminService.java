@@ -237,23 +237,39 @@ public class AdminService extends UserService{
     }
 
     /**
-     * 查询不同角色的文件类型
-     * @param departmentCode 院系编码
-     * @param roleId 角色ID
-     * @return List
+     * 处理用户的申请
+     * @param dataClassId 文件类目ID
+     * @param flag 1表示同意,3表示拒绝
+     * @param operationUser 超级管理员
+     * @return StatusCode
      */
-    public List<DataClassHelpClass> selectDataClassByRole(String departmentCode,String roleId){
-        List<DataClassHelpClass> result = new ArrayList<>();
-        List<DataClass> dataClassList = selectDataClass(departmentCode,roleId,"(1)",null);
-        for (DataClass dataClass: dataClassList) {
-            List<ClassType> classTypeList = selectClassTypesByDataClassId(dataClass.getId());
-            if (classTypeList.size()>0 && classTypeList.get(0)!= null) {
-                for (int i = 0; i < classTypeList.size(); i++) {
-                    classTypeList.get(i).setName("属性" + (i + 1) + ":" + classTypeList.get(i).getName());
+    public StatusCode updateDataClass(String dataClassId,Integer flag,User operationUser,String description){
+        Map<String,Object> m = new HashMap<>();
+        m.put("dataClassId",dataClassId);
+        m.put("flag",flag);
+        if (adminDao.updateDataClass(m)>0){
+            Map<String,Object> map = new HashMap<>();
+            if ("admin".equals(selectUserRoleByUsername(selectDataClassById(dataClassId).getUser().getUsername()).getRole().getName())) {
+                if (flag == 1) {
+                    map.put("content", "管理员同意了一条用户申请的文件类型!");
+                    map.put("action",LogActionType.UPDATE.getnCode());
+                } else {
+                    map.put("content", "管理员拒绝了一条用户申请的文件类型!");
+                    map.put("action",LogActionType.DELETE.getnCode());
                 }
+            }else {
+                map.put("content", "管理员逻辑删除了一条文件类型!");
+                map.put("action",LogActionType.DELETE.getnCode());
             }
-            result.add(new DataClassHelpClass(dataClass,classTypeList));
+            map.put("description",description);
+            map.put("operatedId",dataClassId);
+            map.put("operatedType",OperatedType.FILE_TYPE.getnCode());
+            map.put("operationUser",operationUser);
+            insertLog(map);
+            return StatusCode.UPDATE_SUCCESS;
+        }else {
+            return StatusCode.UPDATE_ERROR;
         }
-        return result;
     }
+
 }

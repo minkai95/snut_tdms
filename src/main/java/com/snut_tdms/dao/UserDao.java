@@ -39,6 +39,8 @@ public interface UserDao {
 
     List<DataClass> selectDataClass(Map<String,Object> map);
 
+    List<DataClass> selectDataClassByPage(Map<String,Object> map);
+
     DataClass selectDataClassById(String dataClassId);
 
     List<Data> selectDataByParamsByPage(Map<String,Object> map);
