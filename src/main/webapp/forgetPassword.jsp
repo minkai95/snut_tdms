@@ -16,10 +16,10 @@
             <p class="forgetPSWTitle">找回密码</p>
             <div class="forgetPSWHeader">
                 <div class="stepOne">
-                    <span id="stepOneSpan" class="active"><i class=" icon-ok-circle" style="font-size: 18px; margin-right: 5px;"></i>第一步</span>
+                    <span id="stepOneSpan" class="active"><i class=" icon-ok-circle" style="font-size: 18px; margin-right: 5px;"></i>验证身份</span>
                 </div>
                 <div class="stepOne">
-                    <span id="stepTwoSpan"><i class=" icon-ok-circle" style="font-size: 18px; margin-right: 5px;"></i>第二步</span>
+                    <span id="stepTwoSpan"><i class=" icon-ok-circle" style="font-size: 18px; margin-right: 5px;"></i>重置密码</span>
                 </div>
             </div>
             <div class="forgetPSWCont">

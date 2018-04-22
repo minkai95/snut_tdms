@@ -1,0 +1,46 @@
+.firstLoginWrapper{
+    width: 100%;
+}
+.firstLoginTitle{
+    font-size: 24px;
+    margin: 45px 0 10px 0;
+    text-align: center;
+    text-shadow: 5px 4px 6px #ccc;
+    letter-spacing: 5px;
+}
+.secondTitle{
+    font-size: 16px;
+    margin: 0 0 20px;
+    text-align: center;
+    color: #f00;
+}
+
+.firstLoginContent{
+    width: 350px;
+    margin: 0 auto;
+}
+.firstLoginContent input{
+    display: inline-block;
+    width: 70%;
+}
+.firstLoginContent span{
+    display: inline-block;
+    width: 70%;
+}
+.firstLoginContent select{
+    display: inline-block;
+    width: 70%;
+}
+.firstLoginContent label{
+    width: 75px;
+}
+.btnCont{
+    text-align: center !important;
+    margin-top: 25px;
+}
+.btnCont button{
+    width: 90px;
+}
+.btnCont button:last-child{
+    margin-left: 20px;
+}

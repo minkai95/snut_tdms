@@ -116,6 +116,13 @@ public class AdminController {
         return "admin/typeProperty";
     }
 
+    @RequestMapping(value = "/propertyContent", method = RequestMethod.GET)
+    public String propertyContent(HttpSession httpSession, Model model) {
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        model.addAttribute("classTypeList",userService.selectClassTypeByDepartmentCode(userInfo.getDepartment().getCode()));
+        return "admin/propertyContent";
+    }
+
     @RequestMapping(value = "/adminNews", method = RequestMethod.GET)
     public String adminNews(HttpSession httpSession, Model model,@RequestParam(value = "currentPage", required = false) String currentPage) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
