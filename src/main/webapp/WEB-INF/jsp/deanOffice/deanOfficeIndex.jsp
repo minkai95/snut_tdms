@@ -18,11 +18,11 @@
             <ul class="aside">
                 <li><a href="${ctx}/deanOffice/deanOfficeCurrent" target="mainFrame" class="asideAddClass"><i class="icon-home"></i>运行首页</a></li>
                 <li id="publicData">
-                    <a id="publicDataClass" class="asideAddClass_2" href="javascript:void(0)" target="mainFrame"><i class="icon-folder-open"></i>公共资料</a>
+                    <a id="publicDataClass" class="asideAddClass_2" href="javascript:void(0)" target="mainFrame" style="position: relative"><i class="icon-folder-open"></i>公共资料<i class="icon-angle-down iconDown" id="iconDown"></i></a>
                     <div class="publicDataType" id="publicDataType">
                         <ul>
-                            <li><a href="${ctx}/user/rolePublicData?roleId=004" target="mainFrame">教务处</a></li>
-                            <li><a href="${ctx}/user/rolePublicData?roleId=005" target="mainFrame">教师</a></li>
+                            <li class="personLi"><a href="${ctx}/user/rolePublicData?roleId=004" target="mainFrame">教务处</a></li>
+                            <li class="personLi"><a href="${ctx}/user/rolePublicData?roleId=005" target="mainFrame">教师</a></li>
                         </ul>
                     </div>
                 </li>
@@ -56,10 +56,17 @@
 
         /*菜单展开*/
         $("#publicDataClass").click(function() {
-            $("#publicDataType").slideToggle();
+            if($("#publicDataType").css("display") == "none"){
+                $("#publicDataType").slideDown();
+                $("#iconDown").attr("class","icon-angle-up iconDown");
+            } else{
+                $("#publicDataType").slideUp();
+                $("#iconDown").attr("class","icon-angle-down iconDown");
+            }
         });
         /*菜单关闭*/
-        $("#publicData").siblings().children("a").click(function() {
+        $("#publicDataClass").parent().siblings().children("a").click(function() {
+            $("#iconDown").attr("class","icon-angle-down iconDown");
             $("#publicDataType").slideUp();
             $("#publicDataType ul li a").removeClass("asideAddClass")
         });
