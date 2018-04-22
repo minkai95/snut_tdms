@@ -4,23 +4,18 @@
 <html>
 <head>
     <title>忘记密码</title>
+    <link rel="icon" href="${ctx}/resources/images/title.ico" type="image/x-icon">
     <style>
-        .n-error{
-            top: 4px;
-            left: -152px;
-        }
+        .n-error{top: 4px;left: -152px;}
     </style>
 </head>
 <body>
         <div class="forgetPSWWrapper">
             <p class="forgetPSWTitle">找回密码</p>
             <div class="forgetPSWHeader">
-                <div class="stepOne">
-                    <span id="stepOneSpan" class="active"><i class=" icon-ok-circle" style="font-size: 18px; margin-right: 5px;"></i>验证身份</span>
-                </div>
-                <div class="stepOne">
-                    <span id="stepTwoSpan"><i class=" icon-ok-circle" style="font-size: 18px; margin-right: 5px;"></i>重置密码</span>
-                </div>
+                <span id="stepOneSpan" class="spanNextActive">验证身份</span>
+                <span id="stepTwoSpan">重置密码</span>
+                <span id="stepThreeSpan">找回密码成功</span>
             </div>
             <div class="forgetPSWCont">
                 <div class="stepOneCont">
@@ -50,14 +45,20 @@
                         <input type="email" class="form-control" id="forgetPSWAgain" placeholder="请再次输入">
                     </div>
                     <a href="index.jsp" class="btn btn-warning nextBtn" style="margin-left: 120px">返回登录</a>
-                    <button class="btn btn-info nextBtn" type="submit">提交</button>
+                    <button id="submitBtn" class="btn btn-info nextBtn" type="submit">提交</button>
+                </div>
+                <div class="stepThreeCont">
+                    <div class="laughCont">
+                        <img src="${ctx}/resources/images/laugh.png" alt="找回密码成功！">
+                    </div>
+                    <p class="findPSWSuccess">找回密码成功！返回<a href="index.jsp">登录页面</a>....</p>
                 </div>
             </div>
         </div>
 
     <script>
 
-        $("#forgetPSWFormOne").on('valid.form', function () {
+/*        $("#forgetPSWFormOne").on('valid.form', function () {
             var forgetUserId = $("#forgetUserId").val();
             var forgetIdCard = $("#forgetIdCard").val();
             $.ajax({
@@ -73,14 +74,26 @@
                     }
                 }
             });
-        });
+        });*/
 
         $("#nextBtn").click(function(){
-            $("#stepOneSpan").removeClass("active");
-            $("#stepOneSpan").addClass("rightStyle");
+            $(".forgetPSWHeader").css("background","url('../resources/images/secondNextBgi.png') no-repeat 266px 0,#e0e0e0");
+            $("#stepOneSpan").removeClass("spanNextActive");
+            $("#stepOneSpan").append("<i class='icon-ok-circle passIcon'></i>");
+            $("#stepOneSpan").addClass("passStyle");
+            $("#stepTwoSpan").addClass("spanNextActive");
             $(".stepOneCont").css("display","none");
             $(".stepTwoCont").css("display","block");
-            $("#stepTwoSpan").addClass("active");
+        });
+        $("#submitBtn").click(function(){
+            $("#stepTwoSpan").removeClass("spanNextActive");
+            $("#stepTwoSpan").addClass("passStyle");
+            $("#stepTwoSpan").append("<i class='icon-ok-circle passIcon'></i>");
+            $("#stepThreeSpan").addClass("spanNextActive");
+            $(".forgetPSWHeader").css("background","url('../resources/images/threeBgi.png') no-repeat 534px 0,#e0e0e0");
+            $(".stepTwoCont").css("display","none");
+            $(".stepThreeCont").css("display","block");
+
         });
     </script>
 </body>

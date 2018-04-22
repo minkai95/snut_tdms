@@ -1,13 +1,14 @@
 .forgetPSWWrapper{
     border: 1px solid #ccc;
     width: 800px;
-    height:400px;
+    height: 400px;
+    overflow: hidden;
     margin: 70px auto 0;
     border-radius: 12px;
     box-shadow: 0 0 6px #ccc;
 }
 .forgetPSWTitle{
-    margin: 50px 0 20px;
+    margin: 40px 0 20px;
     height: 30px;
     font-size: 24px;
     text-align: center;
@@ -17,13 +18,16 @@
 
 }
 .forgetPSWHeader{
-    display: inline-flex;
+    display: flex;
     width: 100%;
+    background: url("../images/nextBgi3.png") no-repeat 0 0,#e0e0e0;
 }
-.forgetPSWHeader div{
+.forgetPSWHeader span{
+    position: relative;
+    display: block;
     flex: 1;
-    height: 25px;
-    line-height: 25px;
+    height: 30px;
+    line-height: 30px;
     font-size: 16px;
     text-align: center;
 }
@@ -65,10 +69,25 @@
     width: 130px;
     letter-spacing: 5px;
 }
-.active{
-    border-bottom: 2px solid #5faee3 !important;
+.spanNextActive{
+    color: #fff !important;
 }
-.rightStyle{
-    color: #2da511 !important;
-    border-bottom: 2px solid #2da511 !important;
+.passStyle{
+    color: #168716 !important;
+}
+
+.laughCont{
+    display: inline-block;
+    margin: 53px 0 0;
+}
+.findPSWSuccess{
+    display: inline-block;
+    margin-left: 50px;
+    font-size: 18px;
+}
+.passIcon{
+    position: absolute;
+    top: 7px;
+    left: 80px;
+    font-size: 18px;
 }
