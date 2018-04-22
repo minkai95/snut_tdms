@@ -19,15 +19,21 @@ public interface AdminDao extends UserDao {
 
     int insertClassType(ClassType classType);
 
+    int insertTypeContent(TypeContent typeContent);
+
     int deleteUserByUsernameList(List<String> usernameList);
 
     int deleteClassTypeById(String classTypeId);
 
     int deleteDataClassById(String dataClassId);
 
+    int deleteTypeContentById(String typeContentId);
+
     int recoverData(String dataId);
 
     int updateDataClass(Map<String,Object> map);
+
+    int updateTypeContent(Map<String,Object> map);
 
     List<Log> selectDepartmentLogsByPage(Map<String,Object> map);
 

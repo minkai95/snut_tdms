@@ -505,12 +505,15 @@ public class UserService {
     }
 
     /**
-     * 查询院系所有类目属性
+     * 查询院系类目属性
      * @param departmentCode 院系编码
      * @return List
      */
-    public List<ClassType> selectClassTypeByDepartmentCode(String departmentCode){
-        return userDao.selectClassTypeByDepartmentCode(departmentCode);
+    public List<ClassType> selectClassTypeByDepartmentCode(String departmentCode,String classTypeId){
+        Map<String,Object> map = new HashMap<>();
+        map.put("departmentCode",departmentCode);
+        map.put("classTypeId",classTypeId);
+        return userDao.selectClassType(map);
     }
 
     public List<LogHelpClass> formatLog(List<Log> logList){
@@ -645,4 +648,30 @@ public class UserService {
         }
         return result;
     }
+
+    /**
+     * 查询本院的类目属性内容
+     * @param departmentCode 院系编码
+     * @param classTypeId 类目属性ID
+     * @param page 分页参数
+     * @return List
+     */
+    public List<TypeContent> selectTypeContentByPage(String departmentCode,String classTypeId,Page page){
+        Map<String,Object> map = new HashMap<>();
+        map.put("departmentCode",departmentCode);
+        map.put("page",page);
+        map.put("classTypeId",classTypeId);
+        return userDao.selectTypeContentByPage(map);
+    }
+
+    /**
+     * 通过ID查询类目属性内容
+     * @param typeContentId ID
+     * @return TypeContent
+     */
+    public TypeContent selectTypeContentById(String typeContentId){
+        return userDao.selectTypeContentById(typeContentId);
+    }
+
+
 }

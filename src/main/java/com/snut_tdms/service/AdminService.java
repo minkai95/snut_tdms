@@ -32,6 +32,27 @@ public class AdminService extends UserService{
     }
 
     /**
+     * 管理员新增类目属性内容
+     * @param typeContent 类目属性
+     * @param operationUser 管理员
+     * @return 状态码
+     */
+    public StatusCode insertTypeContent(TypeContent typeContent,User operationUser){
+        if (adminDao.insertTypeContent(typeContent)>0){
+            Map<String,Object> m = new HashMap<>();
+            m.put("content","管理员新增了一条类目属性内容!");
+            m.put("action", LogActionType.INSERT.getnCode());
+            m.put("operationUser",operationUser);
+            m.put("operatedId",typeContent.getId());
+            m.put("operatedType", OperatedType.CLASS_TYPE_CONTENT.getnCode());
+            insertLog(m);
+            return StatusCode.INSERT_SUCCESS;
+        }else {
+            return StatusCode.INSERT_ERROR;
+        }
+    }
+
+    /**
      * 管理员发布公告
      * @param systemNotice 公告
      * @param operationUser 管理员
@@ -218,7 +239,7 @@ public class AdminService extends UserService{
     /**
      * 恢复用户删除文件
      * @param dataId 文件ID
-     * @param operationUser 超级管理员
+     * @param operationUser 管理员
      * @return StatusCode
      */
     public StatusCode recoverData(String dataId,User operationUser){
@@ -233,6 +254,33 @@ public class AdminService extends UserService{
             return StatusCode.RECOVER_SUCCESS;
         }else {
             return StatusCode.RECOVER_ERROR;
+        }
+    }
+
+    /**
+     * 更新类目属性内容
+     * @param typeContentId 类目属性内容ID
+     * @param typeContentName 类目属性内容名称
+     * @return StatusCode
+     */
+    public StatusCode updateTypeContent(String typeContentId,String typeContentName,User operationUser){
+        Map<String,Object> m = new HashMap<>();
+        m.put("id",typeContentId);
+        m.put("name",typeContentName);
+        if (selectTypeContentById(typeContentId).getName().equals(typeContentName)){
+            return StatusCode.UPDATE_NOT;
+        }
+        if (adminDao.updateTypeContent(m)>0){
+            Map<String,Object> map = new HashMap<>();
+            map.put("content","管理员更新了一条类目属性内容!");
+            map.put("action",LogActionType.UPDATE.getnCode());
+            map.put("operatedId",typeContentId);
+            map.put("operatedType",OperatedType.CLASS_TYPE_CONTENT.getnCode());
+            map.put("operationUser",operationUser);
+            insertLog(map);
+            return StatusCode.UPDATE_SUCCESS;
+        }else {
+            return StatusCode.UPDATE_ERROR;
         }
     }
 
@@ -269,6 +317,28 @@ public class AdminService extends UserService{
             return StatusCode.UPDATE_SUCCESS;
         }else {
             return StatusCode.UPDATE_ERROR;
+        }
+    }
+
+    /**
+     * 删除类目属性内容
+     * @param typeContentId 类目属性内容ID
+     * @param operationUser 管理员
+     * @return StatusCode
+     */
+    public StatusCode deleteTypeContent(String typeContentId,String description,User operationUser){
+        if (adminDao.deleteTypeContentById(typeContentId)>0){
+            Map<String,Object> map = new HashMap<>();
+            map.put("content","管理员删除了一条类目属性内容!");
+            map.put("action",LogActionType.DELETE.getnCode());
+            map.put("operatedId",typeContentId);
+            map.put("operatedType",OperatedType.CLASS_TYPE_CONTENT.getnCode());
+            map.put("operationUser",operationUser);
+            map.put("description",description);
+            insertLog(map);
+            return StatusCode.DELETE_SUCCESS;
+        }else {
+            return StatusCode.DELETE_ERROR;
         }
     }
 

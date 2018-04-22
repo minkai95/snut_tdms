@@ -2,6 +2,7 @@ package com.snut_tdms.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.snut_tdms.model.po.*;
+import com.snut_tdms.model.vo.DataClassHelpClass;
 import com.snut_tdms.model.vo.DataHelpClass;
 import com.snut_tdms.model.vo.LogHelpClass;
 import com.snut_tdms.model.vo.Page;
@@ -116,7 +117,13 @@ public class UserController {
         JSONObject json = new JSONObject();
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         UserRole userRole = (UserRole) httpSession.getAttribute("userRole");
-        json.put("dataClass",userService.selectDataClass(userInfo.getDepartment().getCode(),userRole.getRole().getId(),"(1)",null));
+        List<DataClass> dataClassList=userService.selectDataClass(userInfo.getDepartment().getCode(),userRole.getRole().getId(),"(1)",null);
+        List<DataClassHelpClass> result = new ArrayList<>();
+        for (DataClass dataClass: dataClassList) {
+            DataClassHelpClass dataClassHelpClass = new DataClassHelpClass(dataClass,userService.selectClassTypesByDataClassId(dataClass.getId()),userService.selectUserInfoByUsername(dataClass.getUser().getUsername()),userService.selectUserRoleByUsername(dataClass.getUser().getUsername()));
+            result.add(dataClassHelpClass);
+        }
+        json.put("dataClassHelp",result);
         return json;
     }
 
@@ -302,7 +309,7 @@ public class UserController {
     public JSONObject selectClassType(HttpSession httpSession){
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("classTypeList",userService.selectClassTypeByDepartmentCode(userInfo.getDepartment().getCode()));
+        jsonObject.put("classTypeList",userService.selectClassTypeByDepartmentCode(userInfo.getDepartment().getCode(),null));
         return jsonObject;
     }
 
