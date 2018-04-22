@@ -16,41 +16,45 @@
 <body>
 <div class="teacherCurrentWrapper">
     <div class="teacherCurrentWrapper">
-        <div class="teacherHeader">
-            <p class="publicDataTitle">属性内容管理</p>
-            <div class="teacherUpload">
-                <p class="uploadTitle">已有属性内容列表</p>
-                <label for="chooseSelect" class="chooseLabel">属性名称:</label>
-                <select id="chooseSelect" class="form-control chooseSelect">
-                    <option value="全部">全部</option>
-                    <option value="试卷">班级</option>
-                    <option value="实验报告">专业</option>
-                </select>
-                <button id="openModel" class="btn btn-success upload batchDelete" onclick="openMyModal()"><i class="icon-upload" style="margin-right: 5px;"></i>新增属性内容</button>
-                <button id="batchDelete" class="btn btn-danger batchDelete"><i class="icon-trash" style="margin-right: 5px;"></i>批量删除</button>
+        <form id="pageForm" action="${ctx}/admin/propertyContent" method="get">
+            <div class="teacherHeader">
+                <p class="publicDataTitle">属性内容管理</p>
+                <div class="teacherUpload">
+                    <p class="uploadTitle">已有属性内容列表</p>
+                    <label for="chooseSelect" class="chooseLabel">属性名称:</label>
+                    <select id="chooseSelect" class="form-control chooseSelect">
+                        <option value="">全部</option>
+                        <c:forEach items="${classTypeList}" var="classType" >
+                            <option value="${classType.id}" <c:if test="${page.selectParam[0] == classType.id}">selected</c:if>>${classType.name}</option>
+                        </c:forEach>
+                    </select>
+                    <button id="openModel" type="button" class="btn btn-success upload batchDelete" data-toggle="modal" data-target="#myModal"><i class="icon-upload" style="margin-right: 5px;"></i>新增属性内容</button>
+                    <button id="batchDelete" type="button" class="btn btn-danger batchDelete"><i class="icon-trash" style="margin-right: 5px;"></i>批量删除</button>
+                </div>
             </div>
-        </div>
-        <div class="teacherPublicDataList">
-            <form id="pageForm" action="<%--${ctx}/superAdmin/departmentManage--%>" method="get">
+            <div class="teacherPublicDataList">
                 <table class="table table-bordered table-striped">
                     <tr>
-                        <th style="text-align: center; width: 5%;"><input id="allCheckBtn" class="checkBtn" type="checkbox">#</th>
+                        <th style="text-align: center; width: 5%;"><input id="allCheckBtn" class="checkBtn" type="checkbox"/>#</th>
                         <th>属性名称</th>
                         <th>属性内容</th>
                         <th style="text-align: center">操作</th>
                     </tr>
-                    <tr id="">
-                        <td style="text-align: center; width: 5%;"><input class="checkBtn checkedBtn" type="checkbox">1</td>
-                        <td>班级</td>
-                        <td>1401</td>
-                        <td style="width: 250px;  text-align: center;">
-                            <button type="button" class="btn btn-primary btn-sm" onclick="openMyModal2()"><i class="icon-pencil"></i>修改</button>
-                            <button type="button"  class="btn btn-danger btn-sm"><i class="icon-remove-circle"></i>删除</button>
-                        </td>
-                    </tr>
+                    <c:forEach items="${typeContentList}" var="typeContent" varStatus="typeContentStatus">
+                        <tr id="${typeContent.id}">
+                            <td style="text-align: center; width: 5%;"><input class="checkBtn checkedBtn" type="checkbox"/>1</td>
+                            <td>${typeContent.classType.name}</td>
+                            <td>${typeContent.name}</td>
+                            <td style="width: 250px;  text-align: center;">
+                                <button type="button" class="btn btn-primary btn-sm" onclick="openMyModal2('${typeContent.id}')"><i class="icon-pencil"></i>修改</button>
+                                <button type="button"  class="btn btn-danger btn-sm" onclick="deleteTypeContent('${typeContent.id}');"><i class="icon-remove-circle"></i>删除</button>
+                            </td>
+                        </tr>
+                    </c:forEach>
                 </table>
-            </form>
-        </div>
+                <%@ include file="/WEB-INF/jsp/include/dataPage.jsp" %>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -64,21 +68,21 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="propertyName">属性名称:</label>
-                    <select id="propertyName" class="form-control applyDataName">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
+                    <label for="addPropertyName">属性名称:</label>
+                    <select id="addPropertyName" class="form-control applyDataName">
+                        <c:forEach items="${classTypeList}" var="classType" >
+                            <option value="${classType.id}">${classType.name}</option>
+                        </c:forEach>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="propertyCont">属性内容:</label>
-                    <input type="text" id="propertyCont" class="form-control applyDataName">
+                    <label for="addPropertyCont">属性内容:</label>
+                    <input type="text" id="addPropertyCont" class="form-control applyDataName">
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button class="btn btn-primary">提交</button>
+                <button type="button" class="btn btn-primary" onclick="submitAddTypeContent()">提交</button>
             </div>
         </div>
     </div>
@@ -94,30 +98,111 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="amendPropertyName">属性名称:</label>
-                    <span id="amendPropertyName" class="form-control applyDataName">班级</span>
+                    <label for="updateClassTypeName">属性名称:</label>
+                    <span id="updateClassTypeName" class="form-control applyDataName"></span>
                 </div>
                 <div class="form-group">
-                    <label for="amendPropertyCont">属性内容:</label>
-                    <input type="text" id="amendPropertyCont" class="form-control applyDataName" value="1401">
+                    <label for="updateTypeContentName">属性内容:</label>
+                    <input type="text" id="updateTypeContentName" class="form-control applyDataName">
                 </div>
             </div>
+            <input id="typeContentId" style="display: none;"/>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button onclick="updateDepartment()" class="btn btn-primary">提交</button>
+                <button onclick="updateTypeContent()" class="btn btn-primary">提交</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    /*打开新增Modal*/
-    function openMyModal(){
-        $("#myModal").modal();
+
+    $("#chooseSelect").change(function () {
+        $("#currentPageInput").val("1");
+        $("#chooseSelect").attr("name", "classTypeId");
+        $("#pageForm").submit();
+    });
+
+    // 提交新增属性内容
+    function submitAddTypeContent() {
+        var classTypeId = $('#addPropertyName').val();
+        var typeContentName = $('#addPropertyCont').val();
+        $.ajax({
+            url:"${ctx}/admin/addTypeContent?classTypeId="+classTypeId+"&typeContentName="+typeContentName,
+            type:"POST",
+            dataType:"json",
+            success: function (result) {
+                $.confirm({
+                    title: '提示',
+                    content: result['message'],
+                    buttons: {
+                        确定: function () {
+                            location.reload();
+                        }
+                    }
+                });
+            }
+        })
+    }
+
+    function deleteTypeContent(typeContentId) {
+        $.confirm({
+            title: '提示',
+            content: '您确认删除该属性内容吗？<input style="margin-top:5px;" class="form-control" type="text" id="deleteReason" placeholder="请输入删除原因(选填)"/>',
+            buttons: {
+                取消: function () {
+                },
+                确定: function () {
+                    var description = $('#deleteReason').val();
+                    $.ajax({
+                        url:"${ctx}/admin/deleteTypeContent?typeContentId="+typeContentId+"&description="+description,
+                        type:"DELETE",
+                        dataType:"json",
+                        success: function (result) {
+                            $.confirm({
+                                title: '提示',
+                                content: result['message'],
+                                buttons: {
+                                    确定: function () {
+                                        location.reload();
+                                    }
+                                }
+                            });
+                        }
+                    })
+                }
+            }
+        });
+    }
+
+    // 提交更新属性内容
+    function updateTypeContent() {
+        var typeContentId = $('#typeContentId').val();
+        var typeContentName = $('#updateTypeContentName').val();
+        $.ajax({
+            url:"${ctx}/admin/updateTypeContent?typeContentId="+typeContentId+"&typeContentName="+typeContentName,
+            type:"POST",
+            dataType:"json",
+            success: function (result) {
+                $.confirm({
+                    title: '提示',
+                    content: result['message'],
+                    buttons: {
+                        确定: function () {
+                            location.reload();
+                        }
+                    }
+                });
+            }
+        })
     }
 
     /*打开修改Modal*/
-    function openMyModal2(){
+    function openMyModal2(typeContentId){
+        var tr = $('#'+typeContentId+'');
+        $('#updateClassTypeName').text(tr.children('td').eq(1).text());
+        $('#updateTypeContentName').val(tr.children('td').eq(2).text());
+        $('#typeContentId').val(typeContentId);
         $("#myModal2").modal();
     }
 

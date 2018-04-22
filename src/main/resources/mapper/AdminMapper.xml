@@ -47,6 +47,14 @@
           #{user.username}
         )
     </insert>
+    <insert id="insertTypeContent" parameterType="com.snut_tdms.model.po.TypeContent">
+        INSERT INTO type_content VALUES (
+          #{id},
+          #{name},
+          #{classType.id},
+          #{user.username}
+        )
+    </insert>
 
     <delete id="deleteUserByUsernameList" parameterType="java.util.List">
         DELETE FROM `user` WHERE username in
@@ -60,6 +68,9 @@
     <delete id="deleteDataClassById" parameterType="java.lang.String">
         DELETE FROM data_class WHERE id = #{0}
     </delete>
+    <delete id="deleteTypeContentById" parameterType="java.lang.String">
+        DELETE FROM type_content WHERE id = #{0}
+    </delete>
 
     <update id="recoverData" parameterType="java.lang.String">
         UPDATE `data` SET
@@ -70,6 +81,11 @@
         UPDATE data_class SET
         flag = ${flag}
         WHERE id = #{dataClassId}
+    </update>
+    <update id="updateTypeContent" parameterType="java.util.Map">
+        UPDATE type_content SET
+        `name` = #{name}
+        WHERE id = #{id}
     </update>
 
     <select id="selectDepartmentLogsByPage" parameterType="java.util.Map" resultMap="log">

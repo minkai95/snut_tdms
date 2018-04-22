@@ -112,14 +112,21 @@ public class AdminController {
     @RequestMapping(value = "/typeProperty", method = RequestMethod.GET)
     public String typeProperty(HttpSession httpSession, Model model) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        model.addAttribute("classTypeList",userService.selectClassTypeByDepartmentCode(userInfo.getDepartment().getCode()));
+        model.addAttribute("classTypeList",userService.selectClassTypeByDepartmentCode(userInfo.getDepartment().getCode(),null));
         return "admin/typeProperty";
     }
 
     @RequestMapping(value = "/propertyContent", method = RequestMethod.GET)
-    public String propertyContent(HttpSession httpSession, Model model) {
+    public String propertyContent(HttpSession httpSession, Model model,
+                                  @RequestParam(value = "classTypeId",required = false) String classTypeId,
+                                  @RequestParam(value = "currentPage", required = false) String currentPage) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        model.addAttribute("classTypeList",userService.selectClassTypeByDepartmentCode(userInfo.getDepartment().getCode()));
+        Page page = SystemUtils.getPage(currentPage);
+        model.addAttribute("classTypeList",userService.selectClassTypeByDepartmentCode(userInfo.getDepartment().getCode(),null));
+        model.addAttribute("typeContentList",userService.selectTypeContentByPage(userInfo.getDepartment().getCode(),classTypeId,page));
+        String[] selectParam = {classTypeId};
+        page.setSelectParam(selectParam);
+        model.addAttribute("page", page);
         return "admin/propertyContent";
     }
 
@@ -225,6 +232,37 @@ public class AdminController {
         JSONObject jsonObject = new JSONObject();
         ClassType classType = new ClassType(SystemUtils.getUUID(),name,userInfo.getDepartment(),userInfo.getUser());
         jsonObject.put("message",adminService.insertClassType(classType,userInfo.getUser()).getnCode());
+        return jsonObject;
+    }
+
+    @RequestMapping(value = "/addTypeContent", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject addTypeContent(@RequestParam("classTypeId") String classTypeId,
+                                     @RequestParam("typeContentName") String typeContentName,HttpSession httpSession){
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        JSONObject jsonObject = new JSONObject();
+        TypeContent typeContent = new TypeContent(SystemUtils.getUUID(),typeContentName,userService.selectClassTypeByDepartmentCode(userInfo.getDepartment().getCode(),classTypeId).get(0),userInfo.getUser());
+        jsonObject.put("message",adminService.insertTypeContent(typeContent,userInfo.getUser()).getnCode());
+        return jsonObject;
+    }
+
+    @RequestMapping(value = "/updateTypeContent", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject updateTypeContent(@RequestParam("typeContentId") String typeContentId,
+                                     @RequestParam("typeContentName") String typeContentName,HttpSession httpSession){
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("message",adminService.updateTypeContent(typeContentId,typeContentName,userInfo.getUser()).getnCode());
+        return jsonObject;
+    }
+
+    @RequestMapping(value = "/deleteTypeContent", method = RequestMethod.DELETE)
+    @ResponseBody
+    public JSONObject deleteTypeContent(@RequestParam("typeContentId") String typeContentId,
+                                        @RequestParam("description") String description,HttpSession httpSession){
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("message",adminService.deleteTypeContent(typeContentId,description,userInfo.getUser()).getnCode());
         return jsonObject;
     }
 

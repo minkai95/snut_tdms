@@ -109,11 +109,24 @@
             url: "${ctx}/user/getDepartmentDataClass",
             dataType: "json",
             success: function (result) {
-                if(result['dataClass'].length>0){
+                if(result['dataClassHelp'].length>0){
                     var fileType = $("#fileType");
                     fileType.html("");
-                    for (var i = 0; i < result['dataClass'].length; i++) {
-                        fileType.append("<option id='" + result['dataClass'][i]['id'] + "' value='" + result['dataClass'][i]['id'] + "' >" + result['dataClass'][i]['name'] + "</option >");
+                    var sb = $('#submitDataForm');
+                    if(sb.children('div').length>4){
+                        var tar = sb.children('div').length-4;
+                        console.log(sb.children('div').length+"==="+tar);
+                        for(var m=0;m<tar;m++){
+                            sb.children('div').eq(2).remove();
+                        }
+                    }
+                    for (var i = 0; i < result['dataClassHelp'].length; i++) {
+                        fileType.append("<option id='" + result['dataClassHelp'][i]['dataClass']['id'] + "' value='" + result['dataClassHelp'][i]['dataClass']['id'] + "' >" + result['dataClassHelp'][i]['dataClass']['name'] + "</option >");
+                    }
+                    if (result['dataClassHelp'][0]['classTypeList'].length>0){
+                        for(var j=0;j<result['dataClassHelp'][0]['classTypeList'].length;j++){
+                            $('.form-group').eq(1).after("<div class='form-group'><label for='"+result['dataClassHelp'][0]['classTypeList'][j]['id']+"'>"+result['dataClassHelp'][0]['classTypeList'][j]['name']+":</label><input id='"+result['dataClassHelp'][0]['classTypeList'][j]['id']+"' class='form-control'/></div>");
+                        }
                     }
                 }
                 $('#myModal').modal();

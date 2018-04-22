@@ -5,7 +5,8 @@ package com.snut_tdms.util;
  * 被操作类型枚举类
  */
 public enum OperatedType {
-    FILE("文件"), FILE_TYPE("文件类型"), USER("用户"), DEPARTMENT("院系"), SYSTEM_NOTICE("公告"), CLASS_TYPE("类目属性");
+    FILE("文件"), FILE_TYPE("文件类型"), USER("用户"), DEPARTMENT("院系"), SYSTEM_NOTICE("公告"),
+    CLASS_TYPE("类目属性"), CLASS_TYPE_CONTENT("类目属性内容");
 
     private String nCode;
 

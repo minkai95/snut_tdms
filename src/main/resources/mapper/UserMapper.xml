@@ -97,6 +97,22 @@
         <result column="operatedType" jdbcType="VARCHAR" javaType="java.lang.String" property="operatedType"/>
         <result column="description" jdbcType="VARCHAR" javaType="java.lang.String" property="description"/>
     </resultMap>
+    <resultMap id="typeContent" type="com.snut_tdms.model.po.TypeContent">
+        <id column="id" jdbcType="VARCHAR" javaType="java.lang.String" property="id"/>
+        <result column="name" jdbcType="VARCHAR" javaType="java.lang.String" property="name"/>
+        <result column="classTypeId" jdbcType="VARCHAR" javaType="java.lang.String" property="classType.id"/>
+        <result column="classTypeName" jdbcType="VARCHAR" javaType="java.lang.String" property="classType.name"/>
+        <result column="departmentCode" jdbcType="VARCHAR" javaType="java.lang.String" property="classType.department.code"/>
+        <result column="departmentName" jdbcType="VARCHAR" javaType="java.lang.String" property="classType.department.name"/>
+        <result column="classTypeUsername" jdbcType="VARCHAR" javaType="java.lang.String" property="classType.user.username"/>
+        <result column="classTypePassword" jdbcType="VARCHAR" javaType="java.lang.String" property="classType.user.password"/>
+        <result column="classTypeIdCard" jdbcType="VARCHAR" javaType="java.lang.String" property="classType.user.idCard"/>
+        <result column="classTypeFirstLogin" jdbcType="VARCHAR" javaType="java.lang.Integer" property="classType.user.firstLogin"/>
+        <result column="typeContentUsername" jdbcType="VARCHAR" javaType="java.lang.String" property="user.username"/>
+        <result column="typeContentPassword" jdbcType="VARCHAR" javaType="java.lang.String" property="user.password"/>
+        <result column="typeContentIdCard" jdbcType="VARCHAR" javaType="java.lang.String" property="user.idCard"/>
+        <result column="typeContentFirstLogin" jdbcType="VARCHAR" javaType="java.lang.Integer" property="user.firstLogin"/>
+    </resultMap>
 
     <insert id="insertLog" parameterType="com.snut_tdms.model.po.Log">
         INSERT INTO log VALUES (
@@ -500,7 +516,7 @@
         </if>
         ORDER BY `time` desc
     </select>
-    <select id="selectClassTypeByDepartmentCode" parameterType="java.lang.String" resultMap="classTypes">
+    <select id="selectClassType" parameterType="java.util.Map" resultMap="classTypes">
         SELECT
         id,
         class_type.`name`,
@@ -513,7 +529,60 @@
         FROM class_type
         LEFT JOIN department ON department.code = class_type.department
         LEFT JOIN `user` ON `user`.username = class_type.`user`
-        WHERE department.code = #{0}
+        WHERE department.code = #{departmentCode}
+        <if test="classTypeId!=null and classTypeId!=''">
+            AND class_type.id = #{classTypeId};
+        </if>
+    </select>
+    <select id="selectTypeContentByPage" parameterType="java.util.Map" resultMap="typeContent">
+        SELECT
+        type_content.id,
+        type_content.`name`,
+        class_type.id as classTypeId,
+        class_type.name as classTypeName,
+        department.code as departmentCode,
+        department.name as departmentName,
+        classTypeUser.username as classTypeUsername,
+        classTypeUser.password as classTypePassword,
+        classTypeUser.id_card as classTypeIdCard,
+        classTypeUser.first_login as classTypeFirstLogin,
+        typeContentUser.username as typeContentUsername,
+        typeContentUser.password as typeContentPassword,
+        typeContentUser.id_card as typeContentIdCard,
+        typeContentUser.first_login as typeContentFirstLogin
+        FROM type_content
+        LEFT JOIN class_type ON class_type.id = type_content.class_type
+        LEFT JOIN department ON department.code = class_type.department
+        LEFT JOIN `user` as classTypeUser ON classTypeUser.username = class_type.user
+        LEFT JOIN `user` as typeContentUser ON typeContentUser.username = type_content.user
+        WHERE department.code = #{departmentCode}
+        <if test="classTypeId!=null and classTypeId!=''">
+            AND type_content.class_type = #{classTypeId}
+        </if>
+        ORDER BY class_type.id
+    </select>
+    <select id="selectTypeContentById" parameterType="java.lang.String" resultMap="typeContent">
+        SELECT
+        type_content.id,
+        type_content.`name`,
+        class_type.id as classTypeId,
+        class_type.name as classTypeName,
+        department.code as departmentCode,
+        department.name as departmentName,
+        classTypeUser.username as classTypeUsername,
+        classTypeUser.password as classTypePassword,
+        classTypeUser.id_card as classTypeIdCard,
+        classTypeUser.first_login as classTypeFirstLogin,
+        typeContentUser.username as typeContentUsername,
+        typeContentUser.password as typeContentPassword,
+        typeContentUser.id_card as typeContentIdCard,
+        typeContentUser.first_login as typeContentFirstLogin
+        FROM type_content
+        LEFT JOIN class_type ON class_type.id = type_content.class_type
+        LEFT JOIN department ON department.code = class_type.department
+        LEFT JOIN `user` as classTypeUser ON classTypeUser.username = class_type.user
+        LEFT JOIN `user` as typeContentUser ON typeContentUser.username = type_content.user
+        WHERE type_content.id=#{0}
     </select>
 
 </mapper>

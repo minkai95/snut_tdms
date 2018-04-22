@@ -65,5 +65,9 @@ public interface UserDao {
 
     List<Log> selectPersonLogsByPage(Map<String,Object> map);
 
-    List<ClassType> selectClassTypeByDepartmentCode(String departmentCode);
+    List<ClassType> selectClassType(Map<String,Object> map);
+
+    List<TypeContent> selectTypeContentByPage(Map<String,Object> map);
+
+    TypeContent selectTypeContentById(String typeContentId);
 }
