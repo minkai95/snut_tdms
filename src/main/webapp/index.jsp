@@ -2,8 +2,12 @@
 <%@ include file="WEB-INF/jsp/include/taglibs.jsp" %>
 <!DOCTYPE html>
 <html>
-<body>
-<h2>Hello World!</h2>
+    <head>
+        <title>登录页面</title>
+        <link rel="icon" href="${ctx}/resources/images/title.ico" type="image/x-icon">
+    </head>
+    <body>
+        <h2>Hello World!</h2>
 
     <label for="username">用户名:</label>
     <input type="text" id="username" name="username"/>

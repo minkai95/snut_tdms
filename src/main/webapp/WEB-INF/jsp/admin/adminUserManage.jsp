@@ -196,6 +196,7 @@
             $(".checkedBtn:checked").each(function(){
                 checkedTrId.push($(this).parents("tr").attr("id"));
             });
+            console.log(checkedTrId);
         });
         // 按钮js
         var btnResult = 0;

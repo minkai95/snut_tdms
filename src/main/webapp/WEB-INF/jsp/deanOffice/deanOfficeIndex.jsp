@@ -4,6 +4,7 @@
 <html>
 <head>
     <title>教务处首页</title>
+    <link rel="icon" href="${ctx}/resources/images/title.ico" type="image/x-icon">
 </head>
 <body>
 <div class="wrapper">
