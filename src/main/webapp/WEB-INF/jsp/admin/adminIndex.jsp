@@ -20,7 +20,7 @@
                     <li id="publicData" class="publicLi"><a href="${ctx}/admin/adminUserManage" target="mainFrame"><i class="icon-group"></i>用户管理</a></li>
                     <li id="personData" class="publicLi"><a href="${ctx}/admin/adminLog" target="mainFrame"><i class="icon-tasks"></i>学院日志</a></li>
                     <li id="dataType">
-                        <a id="typeManage" class="asideAddClass_2" href="javascript:void(0)" target="mainFrame"><i class="icon-list-ul"></i>类目管理</a>
+                        <a id="typeManage" class="asideAddClass_2" href="javascript:void(0)" target="mainFrame" style="position: relative;"><i class="icon-list-ul"></i>类目管理<i class="icon-angle-down iconDown" id="iconDown"></i></a>
                         <div class="publicDataType" id="publicDataType">
                             <ul>
                                 <li class="personLi"><a href="${ctx}/admin/typeManageDeanOffice" target="mainFrame">教务处</a></li>
@@ -63,12 +63,19 @@
 
             /*菜单展开*/
             $("#typeManage").click(function() {
-                $("#publicDataType").slideToggle();
+                if($("#publicDataType").css("display") == "none"){
+                    $("#publicDataType").slideDown();
+                    $("#iconDown").attr("class","icon-angle-up iconDown");
+                } else{
+                    $("#publicDataType").slideUp();
+                    $("#iconDown").attr("class","icon-angle-down iconDown");
+                }
             });
             /*菜单关闭*/
-            $("#typeManage").siblings().children("a").click(function() {
+            $("#typeManage").parent().siblings().children("a").click(function() {
+                $("#iconDown").attr("class","icon-angle-down iconDown");
                 $("#publicDataType").slideUp();
-                $("#publicDataType ul li a").removeClass("asideAddClass")
+                $("#publicDataType ul li a").removeClass("asideAddClass");
             });
 
             $(".personLi").click(function() {

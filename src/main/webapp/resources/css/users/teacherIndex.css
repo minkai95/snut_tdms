@@ -47,7 +47,7 @@ header{
 }
 .leftContent{
     flex: 2;
-    min-width: 180px;
+    min-width: 160px;
     height: 100%;
     position: absolute;
     z-index: 499;
@@ -60,7 +60,7 @@ header{
     min-width: 860px;
     height: 100%;
     position: absolute;
-    padding-left: 180px;
+    padding-left: 160px;
     padding-top: 80px;
     background-color: #ECEFF4;
 }
@@ -70,7 +70,7 @@ header{
     height: 45px;
     line-height: 45px;
     text-decoration: none;
-    text-indent: 15px;
+    text-indent: 12px;
     color: #BABCBC;
     font-size: 16px;
     font-family: "Microsoft Yahei";
@@ -122,4 +122,16 @@ header{
 .loginOut:hover{
     cursor: pointer;
     color: #FFF;
+}
+.personLi a{
+    display: block;
+    height: 35px !important;
+    line-height: 35px !important;
+    font-size: 16px !important;
+}
+.iconDown{
+    font-size: 23px;
+    position: absolute;
+    top: 12px;
+    left: 110px;
 }

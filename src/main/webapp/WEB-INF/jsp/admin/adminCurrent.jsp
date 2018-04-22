@@ -42,7 +42,13 @@
 <script>
     function changeLiStyle(liId) {
         if(liId == "dataType"){
-            $("#publicDataType", window.parent.document).slideToggle();
+            if($("#publicDataType", window.parent.document).css("display") == "none"){
+                $("#iconDown",  window.parent.document).attr("class", "icon-angle-up iconDown");
+                $("#publicDataType", window.parent.document).slideDown();
+            }else{
+                $("#iconDown",  window.parent.document).attr("class", "icon-angle-down iconDown");
+                $("#publicDataType", window.parent.document).slideUp();
+            }
         } else{
             $(".aside li", window.parent.document).siblings().children('a').removeClass("asideAddClass");
             $("#" + liId, window.parent.document).children('a').addClass('asideAddClass');
