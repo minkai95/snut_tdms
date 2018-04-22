@@ -40,8 +40,8 @@
                         <td>${dataClassHelp.userInfo.name}</td>
                         <td>
                             <c:choose>
-                                <c:when test="${dataClassHelp.classTypeList.size()>0 && dataClassHelp.classTypeList.get(0)!=null && dataClassHelp.classTypeList.get(0)!=''}">
-                                    ${dataClassHelp.classTypeList.get(0).name}
+                                <c:when test="${dataClassHelp.classTypeHelpClassList.size()>0 && dataClassHelp.classTypeHelpClassList.get(0)!=null && dataClassHelp.classTypeHelpClassList.get(0)!=''}">
+                                    ${dataClassHelp.classTypeHelpClassList.get(0).classType.name}
                                 </c:when>
                                 <c:otherwise>
                                     暂无属性
@@ -50,8 +50,8 @@
                         </td>
                         <td>
                             <c:choose>
-                                <c:when test="${dataClassHelp.classTypeList.size()>1 && dataClassHelp.classTypeList.get(1)!=null && dataClassHelp.classTypeList.get(1)!=''}">
-                                    ${dataClassHelp.classTypeList.get(1).name}
+                                <c:when test="${dataClassHelp.classTypeHelpClassList.size()>1 && dataClassHelp.classTypeHelpClassList.get(1)!=null && dataClassHelp.classTypeHelpClassList.get(1)!=''}">
+                                    ${dataClassHelp.classTypeHelpClassList.get(1).classType.name}
                                 </c:when>
                                 <c:otherwise>
                                     暂无属性
@@ -60,8 +60,8 @@
                         </td>
                         <td>
                             <c:choose>
-                                <c:when test="${dataClassHelp.classTypeList.size()>2 && dataClassHelp.classTypeList.get(2)!=null && dataClassHelp.classTypeList.get(2)!=''}">
-                                    ${dataClassHelp.classTypeList.get(2).name}
+                                <c:when test="${dataClassHelp.classTypeHelpClassList.size()>2 && dataClassHelp.classTypeHelpClassList.get(2)!=null && dataClassHelp.classTypeHelpClassList.get(2)!=''}">
+                                    ${dataClassHelp.classTypeHelpClassList.get(2).classType.name}
                                 </c:when>
                                 <c:otherwise>
                                     暂无属性

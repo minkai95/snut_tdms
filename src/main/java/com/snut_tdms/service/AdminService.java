@@ -267,7 +267,7 @@ public class AdminService extends UserService{
         Map<String,Object> m = new HashMap<>();
         m.put("id",typeContentId);
         m.put("name",typeContentName);
-        if (selectTypeContentById(typeContentId).getName().equals(typeContentName)){
+        if (selectTypeContentByParam(typeContentId,null).get(0).getName().equals(typeContentName)){
             return StatusCode.UPDATE_NOT;
         }
         if (adminDao.updateTypeContent(m)>0){

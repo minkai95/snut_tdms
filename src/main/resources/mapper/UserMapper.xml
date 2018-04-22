@@ -561,7 +561,7 @@
         </if>
         ORDER BY class_type.id
     </select>
-    <select id="selectTypeContentById" parameterType="java.lang.String" resultMap="typeContent">
+    <select id="selectTypeContentByParam" parameterType="java.util.Map" resultMap="typeContent">
         SELECT
         type_content.id,
         type_content.`name`,
@@ -582,7 +582,13 @@
         LEFT JOIN department ON department.code = class_type.department
         LEFT JOIN `user` as classTypeUser ON classTypeUser.username = class_type.user
         LEFT JOIN `user` as typeContentUser ON typeContentUser.username = type_content.user
-        WHERE type_content.id=#{0}
+        WHERE 1=1
+        <if test="typeContentId!=null and typeContentId!=''">
+            AND type_content.id = #{typeContentId}
+        </if>
+        <if test="classTypeId!=null and classTypeId!=''">
+            AND type_content.class_type = #{classTypeId}
+        </if>
     </select>
 
 </mapper>

@@ -69,5 +69,5 @@ public interface UserDao {
 
     List<TypeContent> selectTypeContentByPage(Map<String,Object> map);
 
-    TypeContent selectTypeContentById(String typeContentId);
+    List<TypeContent> selectTypeContentByParam(Map<String,Object> map);
 }

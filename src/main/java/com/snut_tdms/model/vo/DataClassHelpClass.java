@@ -11,18 +11,34 @@ import java.util.List;
 public class DataClassHelpClass {
 
     private DataClass dataClass;
-    private List<ClassType> classTypeList;
+    private List<ClassTypeHelpClass> classTypeHelpClassList;
     private UserInfo userInfo;//上传者信息
     private UserRole userRole;//上传者角色
 
     public DataClassHelpClass() {
     }
 
-    public DataClassHelpClass(DataClass dataClass, List<ClassType> classTypeList, UserInfo userInfo, UserRole userRole) {
+    public DataClassHelpClass(DataClass dataClass, List<ClassTypeHelpClass> classTypeHelpClassList, UserInfo userInfo, UserRole userRole) {
         this.dataClass = dataClass;
-        this.classTypeList = classTypeList;
+        this.classTypeHelpClassList = classTypeHelpClassList;
         this.userInfo = userInfo;
         this.userRole = userRole;
+    }
+
+    public DataClass getDataClass() {
+        return dataClass;
+    }
+
+    public void setDataClass(DataClass dataClass) {
+        this.dataClass = dataClass;
+    }
+
+    public List<ClassTypeHelpClass> getClassTypeHelpClassList() {
+        return classTypeHelpClassList;
+    }
+
+    public void setClassTypeHelpClassList(List<ClassTypeHelpClass> classTypeHelpClassList) {
+        this.classTypeHelpClassList = classTypeHelpClassList;
     }
 
     public UserInfo getUserInfo() {
@@ -41,27 +57,11 @@ public class DataClassHelpClass {
         this.userRole = userRole;
     }
 
-    public DataClass getDataClass() {
-        return dataClass;
-    }
-
-    public void setDataClass(DataClass dataClass) {
-        this.dataClass = dataClass;
-    }
-
-    public List<ClassType> getClassTypeList() {
-        return classTypeList;
-    }
-
-    public void setClassTypeList(List<ClassType> classTypeList) {
-        this.classTypeList = classTypeList;
-    }
-
     @Override
     public String toString() {
         return "DataClassHelpClass{" +
                 "dataClass=" + dataClass +
-                ", classTypeList=" + classTypeList +
+                ", classTypeHelpClassList=" + classTypeHelpClassList +
                 ", userInfo=" + userInfo +
                 ", userRole=" + userRole +
                 '}';
@@ -75,7 +75,7 @@ public class DataClassHelpClass {
         DataClassHelpClass that = (DataClassHelpClass) o;
 
         if (dataClass != null ? !dataClass.equals(that.dataClass) : that.dataClass != null) return false;
-        if (classTypeList != null ? !classTypeList.equals(that.classTypeList) : that.classTypeList != null)
+        if (classTypeHelpClassList != null ? !classTypeHelpClassList.equals(that.classTypeHelpClassList) : that.classTypeHelpClassList != null)
             return false;
         if (userInfo != null ? !userInfo.equals(that.userInfo) : that.userInfo != null) return false;
         return userRole != null ? userRole.equals(that.userRole) : that.userRole == null;
@@ -84,7 +84,7 @@ public class DataClassHelpClass {
     @Override
     public int hashCode() {
         int result = dataClass != null ? dataClass.hashCode() : 0;
-        result = 31 * result + (classTypeList != null ? classTypeList.hashCode() : 0);
+        result = 31 * result + (classTypeHelpClassList != null ? classTypeHelpClassList.hashCode() : 0);
         result = 31 * result + (userInfo != null ? userInfo.hashCode() : 0);
         result = 31 * result + (userRole != null ? userRole.hashCode() : 0);
         return result;

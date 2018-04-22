@@ -2,10 +2,7 @@ package com.snut_tdms.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.snut_tdms.model.po.*;
-import com.snut_tdms.model.vo.DataClassHelpClass;
-import com.snut_tdms.model.vo.DataHelpClass;
-import com.snut_tdms.model.vo.LogHelpClass;
-import com.snut_tdms.model.vo.Page;
+import com.snut_tdms.model.vo.*;
 import com.snut_tdms.service.UserService;
 import com.snut_tdms.util.FileDownloadUtil;
 import com.snut_tdms.util.LogActionType;
@@ -76,6 +73,19 @@ public class UserController {
         return json;
     }
 
+    @RequestMapping(value = "/logout")
+    public void logout(HttpServletRequest request, HttpServletResponse response, HttpSession httpSession) {
+        httpSession.removeAttribute("userRole");
+        httpSession.removeAttribute("userInfo");
+        httpSession.removeAttribute("role");
+        httpSession.invalidate();
+        try {
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @RequestMapping(value = "/updatePerson",method = RequestMethod.POST)
     @ResponseBody
     public JSONObject updatePerson(@RequestParam("username") String username, @RequestParam("phone") String phone,@RequestParam("email") String email,@RequestParam("newPassword") String newPassword, HttpSession session){
@@ -120,7 +130,12 @@ public class UserController {
         List<DataClass> dataClassList=userService.selectDataClass(userInfo.getDepartment().getCode(),userRole.getRole().getId(),"(1)",null);
         List<DataClassHelpClass> result = new ArrayList<>();
         for (DataClass dataClass: dataClassList) {
-            DataClassHelpClass dataClassHelpClass = new DataClassHelpClass(dataClass,userService.selectClassTypesByDataClassId(dataClass.getId()),userService.selectUserInfoByUsername(dataClass.getUser().getUsername()),userService.selectUserRoleByUsername(dataClass.getUser().getUsername()));
+            List<ClassType> classTypeList = userService.selectClassTypesByDataClassId(dataClass.getId());
+            List<ClassTypeHelpClass> classTypeHelpClassList = new ArrayList<>();
+            for (ClassType classType:classTypeList){
+                classTypeHelpClassList.add(new ClassTypeHelpClass(classType,userService.selectTypeContentByParam(null,classType.getId())));
+            }
+            DataClassHelpClass dataClassHelpClass = new DataClassHelpClass(dataClass,classTypeHelpClassList,userService.selectUserInfoByUsername(dataClass.getUser().getUsername()),userService.selectUserRoleByUsername(dataClass.getUser().getUsername()));
             result.add(dataClassHelpClass);
         }
         json.put("dataClassHelp",result);

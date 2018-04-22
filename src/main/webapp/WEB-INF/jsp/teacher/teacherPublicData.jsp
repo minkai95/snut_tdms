@@ -121,11 +121,18 @@
                         }
                     }
                     for (var i = 0; i < result['dataClassHelp'].length; i++) {
-                        fileType.append("<option id='" + result['dataClassHelp'][i]['dataClass']['id'] + "' value='" + result['dataClassHelp'][i]['dataClass']['id'] + "' >" + result['dataClassHelp'][i]['dataClass']['name'] + "</option >");
+                        fileType.append("<option value='" + result['dataClassHelp'][i]['dataClass']['id'] + "' >" + result['dataClassHelp'][i]['dataClass']['name'] + "</option >");
                     }
-                    if (result['dataClassHelp'][0]['classTypeList'].length>0){
-                        for(var j=0;j<result['dataClassHelp'][0]['classTypeList'].length;j++){
-                            $('.form-group').eq(1).after("<div class='form-group'><label for='"+result['dataClassHelp'][0]['classTypeList'][j]['id']+"'>"+result['dataClassHelp'][0]['classTypeList'][j]['name']+":</label><input id='"+result['dataClassHelp'][0]['classTypeList'][j]['id']+"' class='form-control'/></div>");
+                    if (result['dataClassHelp'][0]['classTypeHelpClassList'].length>0){
+                        for(var j=0;j<result['dataClassHelp'][0]['classTypeHelpClassList'].length;j++){
+                            $('.form-group').eq(1+j).after("<div class='form-group'>" +
+                                "<label for='"+result['dataClassHelp'][0]['classTypeHelpClassList'][j]['classType']['id']+"'>"+result['dataClassHelp'][0]['classTypeHelpClassList'][j]['classType']['name']+":</label>" +
+                                "<select id='"+result['dataClassHelp'][0]['classTypeHelpClassList'][j]['classType']['id']+"' class='form-control'></select>" +
+                                "</div>");
+                            for(var a = 0;a<result['dataClassHelp'][0]['classTypeHelpClassList'][j]['typeContentList'].length;a++){
+                                $('#'+result['dataClassHelp'][0]['classTypeHelpClassList'][j]['classType']['id']+'')
+                                    .append("<option value='" + result['dataClassHelp'][0]['classTypeHelpClassList'][j]['typeContentList'][a]['id'] + "' >" + result['dataClassHelp'][0]['classTypeHelpClassList'][j]['typeContentList'][a]['name'] + "</option >");
+                            }
                         }
                     }
                 }

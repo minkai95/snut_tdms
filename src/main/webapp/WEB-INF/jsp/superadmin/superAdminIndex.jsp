@@ -10,7 +10,7 @@
     <header class="header">
         <div class="headerLeft">高校资料管理系统</div>
         <div class="headerRight">
-            <div class="welcome">你好，超级管理员  <span class="loginOut"><i class="icon-signout"></i>注销</span></div>
+            <div class="welcome">你好，超级管理员  <a href="${ctx}/user/logout" class="loginOut"><i class="icon-signout"></i>注销</a></div>
         </div>
     </header>
     <div class="middle">
@@ -40,21 +40,6 @@
         $("#username").click(function () {
             $(".aside li").siblings().children('a').removeClass("asideAddClass");
             $("#teacherCenter").children('a').addClass("asideAddClass");
-        });
-
-        /*注销*/
-        $(".loginOut").click(function(){
-            $.confirm({
-                title: '提示',
-                content: '是否注销？',
-                buttons: {
-                    确定:function(){
-                    },
-                    取消: function(){
-
-                    }
-                }
-            });
         });
 
     })

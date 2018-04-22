@@ -3,10 +3,7 @@ package com.snut_tdms.service;
 import com.snut_tdms.controller.UserController;
 import com.snut_tdms.dao.UserDao;
 import com.snut_tdms.model.po.*;
-import com.snut_tdms.model.vo.DataClassHelpClass;
-import com.snut_tdms.model.vo.LogHelpClass;
-import com.snut_tdms.model.vo.NoticeHelpClass;
-import com.snut_tdms.model.vo.Page;
+import com.snut_tdms.model.vo.*;
 import com.snut_tdms.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -623,9 +620,9 @@ public class UserService {
         map.put("page", page);
         List<DataClassHelpClass> result = formatDataClass(userDao.selectDataClassByPage(map));
         for (DataClassHelpClass dataClassHelpClass : result) {
-            if (dataClassHelpClass.getClassTypeList().size() > 0 && dataClassHelpClass.getClassTypeList().get(0) != null) {
-                for (int i = 0; i < dataClassHelpClass.getClassTypeList().size(); i++) {
-                    dataClassHelpClass.getClassTypeList().get(i).setName(dataClassHelpClass.getClassTypeList().get(i).getName().substring(4));
+            if (dataClassHelpClass.getClassTypeHelpClassList().size() > 0 && dataClassHelpClass.getClassTypeHelpClassList().get(0) != null) {
+                for (int i = 0; i < dataClassHelpClass.getClassTypeHelpClassList().size(); i++) {
+                    dataClassHelpClass.getClassTypeHelpClassList().get(i).getClassType().setName(dataClassHelpClass.getClassTypeHelpClassList().get(i).getClassType().getName().substring(4));
                 }
             }
         }
@@ -642,9 +639,13 @@ public class UserService {
                     classTypeList.get(i).setName("属性" + (i + 1) + ":" + classTypeList.get(i).getName());
                 }
             }
+            List<ClassTypeHelpClass> classTypeHelpClassList = new ArrayList<>();
+            for (ClassType classType:classTypeList) {
+                classTypeHelpClassList.add(new ClassTypeHelpClass(classType,selectTypeContentByParam(null,classType.getId())));
+            }
             UserInfo userInfo = selectUserInfoByUsername(dataClass.getUser().getUsername());
             UserRole userRole = UserController.updateUserRole(selectUserRoleByUsername(dataClass.getUser().getUsername()));
-            result.add(new DataClassHelpClass(dataClass,classTypeList,userInfo,userRole));
+            result.add(new DataClassHelpClass(dataClass,classTypeHelpClassList,userInfo,userRole));
         }
         return result;
     }
@@ -665,12 +666,15 @@ public class UserService {
     }
 
     /**
-     * 通过ID查询类目属性内容
+     * 通过参数查询类目属性内容
      * @param typeContentId ID
      * @return TypeContent
      */
-    public TypeContent selectTypeContentById(String typeContentId){
-        return userDao.selectTypeContentById(typeContentId);
+    public List<TypeContent> selectTypeContentByParam(String typeContentId,String classTypeId){
+        Map<String,Object> map = new HashMap<>();
+        map.put("typeContentId",typeContentId);
+        map.put("classTypeId",classTypeId);
+        return userDao.selectTypeContentByParam(map);
     }
 
 
