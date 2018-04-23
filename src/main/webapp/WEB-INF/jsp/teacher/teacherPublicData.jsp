@@ -125,13 +125,16 @@
                     }
                     if (result['dataClassHelp'][0]['classTypeHelpClassList'].length>0){
                         for(var j=0;j<result['dataClassHelp'][0]['classTypeHelpClassList'].length;j++){
-                            $('.form-group').eq(1+j).after("<div class='form-group'>" +
-                                "<label for='"+result['dataClassHelp'][0]['classTypeHelpClassList'][j]['classType']['id']+"'>"+result['dataClassHelp'][0]['classTypeHelpClassList'][j]['classType']['name']+":</label>" +
-                                "<select id='"+result['dataClassHelp'][0]['classTypeHelpClassList'][j]['classType']['id']+"' class='form-control'></select>" +
+                            $('.form-group').eq(1+j).after("<div class='form-group appendGroup'>" +
+                                "<label class='appendLabel' for='"+result['dataClassHelp'][0]['classTypeHelpClassList'][j]['classType']['id']+"'>"+result['dataClassHelp'][0]['classTypeHelpClassList'][j]['classType']['name']+":</label>" +
+                                "<select id='"+result['dataClassHelp'][0]['classTypeHelpClassList'][j]['classType']['id']+"' class='form-control appendSelect'></select>" +
                                 "</div>");
                             for(var a = 0;a<result['dataClassHelp'][0]['classTypeHelpClassList'][j]['typeContentList'].length;a++){
                                 $('#'+result['dataClassHelp'][0]['classTypeHelpClassList'][j]['classType']['id']+'')
                                     .append("<option value='" + result['dataClassHelp'][0]['classTypeHelpClassList'][j]['typeContentList'][a]['id'] + "' >" + result['dataClassHelp'][0]['classTypeHelpClassList'][j]['typeContentList'][a]['name'] + "</option >");
+                            }
+                            if (j>0){
+                                sb.children('div').eq(j+2).addClass("appendMargin");
                             }
                         }
                     }
@@ -157,13 +160,16 @@
             dataType: "json",
             success: function (result) {
                 if (result['result'].length>0){
-                    for(var i=0;i<result['result'].length;i++){
-                        $('.form-group').eq(1+i).after("<div class='form-group'>" +
-                            "<label for='"+result['result'][i]['classType']['id']+"'>"+result['result'][i]['classType']['name']+"</label>" +
-                            "<select id='"+result['result'][i]['classType']['id']+"' class='form-control'></select>" +
+                    for(var i=0;i<result['result'].length;i++) {
+                        $('.form-group').eq(1 + i).after("<div class='form-group appendGroup'>" +
+                            "<label for='" + result['result'][i]['classType']['id'] + "'>" + result['result'][i]['classType']['name'] + ":</label>" +
+                            "<select id='" + result['result'][i]['classType']['id'] + "' class='form-control'></select>" +
                             "</div>");
-                        for (var j=0;j<result['result'][i]['typeContentList'].length;j++){
-                            $('#'+result['result'][i]['classType']['id']+'').append("<option value='"+result['result'][i]['typeContentList'][j]['id']+"'>"+result['result'][i]['typeContentList'][j]['name']+"</option>")
+                        for (var j = 0; j < result['result'][i]['typeContentList'].length; j++) {
+                            $('#' + result['result'][i]['classType']['id'] + '').append("<option value='" + result['result'][i]['typeContentList'][j]['id'] + "'>" + result['result'][i]['typeContentList'][j]['name'] + "</option>")
+                        }
+                        if (i>0){
+                            sb.children('div').eq(i+2).addClass("appendMargin");
                         }
                     }
                 }

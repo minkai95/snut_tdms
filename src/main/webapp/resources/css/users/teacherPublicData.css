@@ -95,3 +95,16 @@
     border-radius: 5px;
     display: block;
 }
+.appendLabel{
+
+}
+.appendSelect{
+
+}
+.appendGroup{
+    display: inline-block;
+    width: 176px;
+}
+.appendMargin{
+    margin-left: 20px;
+}
