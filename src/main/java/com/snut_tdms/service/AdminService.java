@@ -210,9 +210,11 @@ public class AdminService extends UserService{
      * @param departmentCode 院系编码
      * @return List
      */
-    public List<LogHelpClass> selectDepartmentLogs(String departmentCode,Page page){
+    public List<LogHelpClass> selectDepartmentLogs(String departmentCode,String action,String operatedType,Page page){
         Map<String,Object> map = new HashMap<>();
         map.put("departmentCode",departmentCode);
+        map.put("action",action);
+        map.put("operatedType",operatedType);
         map.put("page",page);
         return formatLog(adminDao.selectDepartmentLogsByPage(map));
     }

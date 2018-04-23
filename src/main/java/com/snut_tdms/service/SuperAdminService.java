@@ -244,8 +244,11 @@ public class SuperAdminService extends UserService {
      * 查询全校日志记录
      * @return list
      */
-    public List<LogHelpClass> selectAllLogs(Page page){
+    public List<LogHelpClass> selectAllLogs(String departmentCode,String action,String operatedType,Page page){
         Map<String,Object> map = new HashMap<>();
+        map.put("departmentCode",departmentCode);
+        map.put("action",action);
+        map.put("operatedType",operatedType);
         map.put("page",page);
         return formatLog(superAdminDao.selectAllLogsByPage(map));
     }

@@ -10,14 +10,14 @@
         <form id="pageForm" action="${ctx}/user/dataTrace" method="get">
             <p class="publicDataTitle">资料追踪</p>
             <label for="dataClassFilter" class="chooseLabel" style="margin-left: 0;">文件类型:</label>
-            <select id="dataClassFilter" class="form-control chooseSelect">
+            <select id="dataClassFilter" name="dataClassId" class="form-control chooseSelect">
                 <option value="">全部</option>
                 <c:forEach items="${dataClassList}" var="dataClass">
                     <option value="${dataClass.id}" <c:if test="${page.selectParam[0]==dataClass.id}">selected</c:if>>${dataClass.name}</option>
                 </c:forEach>
             </select>
             <label for="actionFilter" class="chooseLabel">操作动作:</label>
-            <select id="actionFilter" class="form-control chooseSelect">
+            <select id="actionFilter" name="action" class="form-control chooseSelect">
                 <option value="">全部</option>
                 <option value="新增" <c:if test="${page.selectParam[1]=='新增'}">selected</c:if>>新增</option>
                 <option value="删除" <c:if test="${page.selectParam[1]=='删除'}">selected</c:if>>删除</option>
@@ -112,8 +112,6 @@
 
     $("#dataClassFilter,#actionFilter").change(function () {
         $("#currentPageInput").val("1");
-        $("#dataClassFilter").attr("name","dataClassId");
-        $("#actionFilter").attr("name","action");
         $("#pageForm").submit();
     });
 

@@ -380,31 +380,12 @@ public class UserService {
      */
     public List<Data> selectDataByParams(String username,String dataClassId,String typeContentStr,Integer dataFlag,Integer dataClassFlag,Page page){
         Map<String,Object> map = new HashMap<>();
+        map = formatMap(map,typeContentStr);
         map.put("username",username);
         map.put("dataClassId",dataClassId);
         map.put("dataFlag",String.valueOf(dataFlag));
         map.put("dataClassFlag",String.valueOf(dataClassFlag));
         map.put("page",page);
-        String[] typeContentArr = null;
-        if (typeContentStr!=null && !"".equals(typeContentStr) && typeContentStr.length()>0){
-            typeContentArr = typeContentStr.split("/");
-        }
-        if (typeContentArr!=null) {
-            switch (typeContentArr.length) {
-                case 1:
-                    map.put("typeContent1", typeContentArr[0]);
-                    break;
-                case 2:
-                    map.put("typeContent1", typeContentArr[0]);
-                    map.put("typeContent2", typeContentArr[1]);
-                    break;
-                case 3:
-                    map.put("typeContent1", typeContentArr[0]);
-                    map.put("typeContent2", typeContentArr[1]);
-                    map.put("typeContent3", typeContentArr[2]);
-                    break;
-            }
-        }
         return userDao.selectDataByParamsByPage(map);
     }
 
@@ -513,10 +494,12 @@ public class UserService {
      * @param roleId 角色ID
      * @return List
      */
-    public List<Data> selectRoleAllPublicData(String departmentCode,String roleId,Page page){
+    public List<Data> selectRoleAllPublicData(String departmentCode,String roleId,String dataClassId,String typeContentStr,Page page){
         Map<String,Object> map = new HashMap<>();
+        map = formatMap(map,typeContentStr);
         map.put("departmentCode",departmentCode);
         map.put("roleId",roleId);
+        map.put("dataClassId",dataClassId);
         map.put("page",page);
         return userDao.selectRoleAllPublicDataByPage(map);
     }
@@ -650,7 +633,7 @@ public class UserService {
     }
 
     // 格式化DataClass
-    private List<DataClassHelpClass> formatDataClass(List<DataClass> dataClassList){
+    public List<DataClassHelpClass> formatDataClass(List<DataClass> dataClassList){
         List<DataClassHelpClass> result = new ArrayList<>();
         for (DataClass dataClass: dataClassList) {
             List<ClassType> classTypeList = selectClassTypesByDataClassId(dataClass.getId());
@@ -661,7 +644,9 @@ public class UserService {
             }
             List<ClassTypeHelpClass> classTypeHelpClassList = new ArrayList<>();
             for (ClassType classType:classTypeList) {
-                classTypeHelpClassList.add(new ClassTypeHelpClass(classType,selectTypeContentByParam(null,classType.getId())));
+                if (classType!=null) {
+                    classTypeHelpClassList.add(new ClassTypeHelpClass(classType, selectTypeContentByParam(null, classType.getId())));
+                }
             }
             UserInfo userInfo = selectUserInfoByUsername(dataClass.getUser().getUsername());
             UserRole userRole = UserController.updateUserRole(selectUserRoleByUsername(dataClass.getUser().getUsername()));
@@ -697,5 +682,28 @@ public class UserService {
         return userDao.selectTypeContentByParam(map);
     }
 
+    public Map<String,Object> formatMap(Map<String,Object> map,String typeContentStr){
+        String[] typeContentArr = null;
+        if (typeContentStr!=null && !"".equals(typeContentStr) && typeContentStr.length()>0){
+            typeContentArr = typeContentStr.split("/");
+        }
+        if (typeContentArr!=null) {
+            switch (typeContentArr.length) {
+                case 1:
+                    map.put("typeContent1", typeContentArr[0]);
+                    break;
+                case 2:
+                    map.put("typeContent1", typeContentArr[0]);
+                    map.put("typeContent2", typeContentArr[1]);
+                    break;
+                case 3:
+                    map.put("typeContent1", typeContentArr[0]);
+                    map.put("typeContent2", typeContentArr[1]);
+                    map.put("typeContent3", typeContentArr[2]);
+                    break;
+            }
+        }
+        return map;
+    }
 
 }

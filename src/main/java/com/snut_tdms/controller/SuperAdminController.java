@@ -49,9 +49,18 @@ public class SuperAdminController {
 
     @RequestMapping(value = "/superAdminLog", method = RequestMethod.GET)
     public String superAdminLog(HttpSession httpSession, Model model,
-                                @RequestParam(value = "currentPage", required = false) String currentPage) {
+                                @RequestParam(value = "currentPage", required = false) String currentPage,
+                                @RequestParam(value = "departmentCode", required = false) String departmentCode,
+                                @RequestParam(value = "action", required = false) String action,
+                                @RequestParam(value = "operatedType", required = false) String operatedType) {
         Page page = SystemUtils.getPage(currentPage);
-        List<LogHelpClass> logHelpClassList = superAdminService.selectAllLogs(page);
+        String[] params = new String[3];
+        params[0]=departmentCode;
+        params[1]=action;
+        params[2]=operatedType;
+        List<LogHelpClass> logHelpClassList = superAdminService.selectAllLogs(departmentCode,action,operatedType,page);
+        page.setSelectParam(params);
+        model.addAttribute("departmentList",userService.selectAllDepartment(null));
         model.addAttribute("logHelpClassList",logHelpClassList);
         model.addAttribute("page", page);
         return "superadmin/log";

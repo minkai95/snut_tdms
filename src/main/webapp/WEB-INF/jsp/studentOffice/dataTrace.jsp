@@ -7,21 +7,24 @@
 </head>
 <body>
     <div class="adminCurrentWrapper">
-        <p class="publicDataTitle">资料追踪</p>
-        <label for="chooseSelect" class="chooseLabel" style="margin-left: 0;">文件类型:</label>
-        <select id="chooseSelect" class="form-control chooseSelect">
-            <option value="全部">全部</option>
-            <option value="试卷">试卷</option>
-            <option value="实验报告">实验报告</option>
-        </select>
-        <label for="chooseSelect2" class="chooseLabel">操作动作:</label>
-        <select id="chooseSelect2" class="form-control chooseSelect">
-            <option value="全部">全部</option>
-            <option value="试卷">试卷</option>
-            <option value="实验报告">实验报告</option>
-        </select>
-        <div class="mainCont">
-            <form id="pageForm" action="${ctx}/user/dataTrace" method="get">
+        <form id="pageForm" action="${ctx}/user/dataTrace" method="get">
+            <p class="publicDataTitle">资料追踪</p>
+            <label for="dataClassFilter" class="chooseLabel" style="margin-left: 0;">文件类型:</label>
+            <select id="dataClassFilter" name="dataClassId" class="form-control chooseSelect">
+                <option value="">全部</option>
+                <c:forEach items="${dataClassList}" var="dataClass">
+                    <option value="${dataClass.id}" <c:if test="${page.selectParam[0]==dataClass.id}">selected</c:if>>${dataClass.name}</option>
+                </c:forEach>
+            </select>
+            <label for="actionFilter" class="chooseLabel">操作动作:</label>
+            <select id="actionFilter" name="action" class="form-control chooseSelect">
+                <option value="">全部</option>
+                <option value="新增" <c:if test="${page.selectParam[1]=='新增'}">selected</c:if>>新增</option>
+                <option value="删除" <c:if test="${page.selectParam[1]=='删除'}">selected</c:if>>删除</option>
+                <option value="恢复" <c:if test="${page.selectParam[1]=='恢复'}">selected</c:if>>恢复</option>
+                <option value="逻辑删除" <c:if test="${page.selectParam[1]=='逻辑删除'}">selected</c:if>>逻辑删除</option>
+            </select>
+            <div class="mainCont">
                 <table class="table table-bordered table-striped">
                     <tr>
                         <th>#</th>
@@ -61,8 +64,8 @@
                     </c:forEach>
                 </table>
                 <%@ include file="/WEB-INF/jsp/include/dataPage.jsp" %>
-            </form>
-        </div>
+            </div>
+        </form>
 
         <!-- Modal -->
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -106,6 +109,12 @@
     </div>
 </body>
 <script>
+
+    $("#dataClassFilter,#actionFilter").change(function () {
+        $("#currentPageInput").val("1");
+        $("#pageForm").submit();
+    });
+
     function openModel(logId) {
         var tr = $('#'+logId+'');
         $('#content').text(tr.children().eq(3).text());

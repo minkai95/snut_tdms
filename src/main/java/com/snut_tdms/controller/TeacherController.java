@@ -75,14 +75,14 @@ public class TeacherController {
             data.setFileName(data.getFileName().substring(data.getFileName().lastIndexOf("_")+1));
             result.add(new DataHelpClass(data,userService.selectUserInfoByUsername(data.getUser().getUsername())));
         }
-        List<DataClassHelpClass> dataClassHelpClassList = new ArrayList<>();
         List<DataClass> dataClassList = userService.selectDataClass(userInfo.getDepartment().getCode(),userRole.getRole().getId(),"(1)",null);
-        for (DataClass dataClass: dataClassList) {
-            List<ClassTypeHelpClass> classTypeHelpClassList = new ArrayList<>();
-            for (ClassType classType: userService.selectClassTypesByDataClassId(dataClass.getId())){
-                classTypeHelpClassList.add(new ClassTypeHelpClass(classType,userService.selectTypeContentByParam(null,classType.getId())));
+        List<DataClassHelpClass> dataClassHelpClassList = userService.formatDataClass(dataClassList);
+        for (DataClassHelpClass dataClassHelpClass:dataClassHelpClassList) {
+            if (dataClassHelpClass.getClassTypeHelpClassList()!=null&&dataClassHelpClass.getClassTypeHelpClassList().size()>0){
+                for (ClassTypeHelpClass classTypeHelpClass:dataClassHelpClass.getClassTypeHelpClassList()) {
+                    classTypeHelpClass.getClassType().setName(classTypeHelpClass.getClassType().getName().substring(4));
+                }
             }
-            dataClassHelpClassList.add(new DataClassHelpClass(dataClass,classTypeHelpClassList,userService.selectUserInfoByUsername(dataClass.getUser().getUsername()),userService.selectUserRoleByUsername(dataClass.getUser().getUsername())));
         }
         String[] typeContentArr = null;
         if (typeContentStr!=null && !"".equals(typeContentStr)) {

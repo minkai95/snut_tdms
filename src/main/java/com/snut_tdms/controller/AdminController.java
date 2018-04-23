@@ -50,7 +50,7 @@ public class AdminController {
         Page page1 = SystemUtils.getPage("");
         Page page2 = SystemUtils.getPage("");
         Page page3 = SystemUtils.getPage("");
-        adminService.selectDepartmentLogs(userInfo.getDepartment().getCode(),page1);
+        adminService.selectDepartmentLogs(userInfo.getDepartment().getCode(),null,null,page1);
         adminService.selectUserByParams(userInfo.getDepartment().getCode(),"(003,004,005)",page2);
         userService.selectSystemNotice(userInfo.getDepartment().getCode(),null,page3);
         Integer logCount = page1.getTotalNumber();
@@ -66,23 +66,40 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/adminUserManage", method = RequestMethod.GET)
-    public String adminUserManage(HttpSession httpSession, Model model,@RequestParam(value = "currentPage", required = false) String currentPage) {
+    public String adminUserManage(HttpSession httpSession, Model model,
+                                  @RequestParam(value = "currentPage", required = false) String currentPage,
+                                  @RequestParam(value = "roleId", required = false) String roleId) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         Page page = SystemUtils.getPage(currentPage);
-        List<UserHelpClass> userHelpClassList = adminService.selectUserByParams(userInfo.getDepartment().getCode(),"(003,004,005)",page);
+        String[] params = new String[1];
+        params[0] = roleId;
+        if (roleId==null||"".equals(roleId)){
+            roleId = "(003,004,005)";
+        }else {
+            roleId = "("+roleId+")";
+        }
+        List<UserHelpClass> userHelpClassList = adminService.selectUserByParams(userInfo.getDepartment().getCode(),roleId,page);
         for (UserHelpClass userHelpClass:userHelpClassList) {
             userHelpClass.setUserRole(UserController.updateUserRole(userHelpClass.getUserRole()));
         }
+        page.setSelectParam(params);
         model.addAttribute("page", page);
         model.addAttribute("userHelpClassList",userHelpClassList);
         return "admin/adminUserManage";
     }
 
     @RequestMapping(value = "/adminLog", method = RequestMethod.GET)
-    public String adminLog(HttpSession httpSession, Model model,@RequestParam(value = "currentPage", required = false) String currentPage) {
+    public String adminLog(HttpSession httpSession, Model model,
+                           @RequestParam(value = "action", required = false) String action,
+                           @RequestParam(value = "operatedType", required = false) String operatedType,
+                           @RequestParam(value = "currentPage", required = false) String currentPage) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         Page page = SystemUtils.getPage(currentPage);
-        List<LogHelpClass> logHelpClassList = adminService.selectDepartmentLogs(userInfo.getDepartment().getCode(),page);
+        String[] params = new String[2];
+        params[0] = action;
+        params[1] = operatedType;
+        List<LogHelpClass> logHelpClassList = adminService.selectDepartmentLogs(userInfo.getDepartment().getCode(),action,operatedType,page);
+        page.setSelectParam(params);
         model.addAttribute("logHelpClassList",logHelpClassList);
         model.addAttribute("page", page);
         return "admin/adminLog";
@@ -148,10 +165,14 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/typeApplyList", method = RequestMethod.GET)
-    public String typeApplyList(HttpSession httpSession, Model model,@RequestParam(value = "currentPage", required = false) String currentPage) {
+    public String typeApplyList(HttpSession httpSession, Model model,
+                                @RequestParam(value = "currentPage", required = false) String currentPage,
+                                @RequestParam(value = "roleId", required = false) String roleId) {
+        String[] params = {roleId};
         Page page = SystemUtils.getPage(currentPage);
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        model.addAttribute("dataClassHelpList",userService.selectDataClassRHelpByPage(userInfo.getDepartment().getCode(),null,"(0,1,3)","('teacher','deanOffice','studentOffice')",page));
+        model.addAttribute("dataClassHelpList",userService.selectDataClassRHelpByPage(userInfo.getDepartment().getCode(),roleId,"(0,1,3)","('teacher','deanOffice','studentOffice')",page));
+        page.setSelectParam(params);
         model.addAttribute("page",page);
         return "admin/typeApplyList";
     }

@@ -86,6 +86,17 @@ public class UserController {
         }
     }
 
+    @RequestMapping(value = "/sessionError")
+    public String sessionError(@RequestParam("errorFlag") String errorFlag) {
+        if ("sessionTimeoutError".equals(errorFlag)) {
+            return "error/sessionTimeoutError";
+        } else if ("roleError".equals(errorFlag)) {
+            return "error/roleError";
+        }else {
+            return "";
+        }
+    }
+
     @RequestMapping(value = "/updatePerson",method = RequestMethod.POST)
     @ResponseBody
     public JSONObject updatePerson(@RequestParam("username") String username, @RequestParam("phone") String phone,@RequestParam("email") String email,@RequestParam("newPassword") String newPassword, HttpSession session){
@@ -302,11 +313,13 @@ public class UserController {
 
     @RequestMapping(value = "/rolePublicData", method = RequestMethod.GET)
     public String rolePublicData(HttpSession httpSession, Model model,@RequestParam("roleId") String roleId,
-                                 @RequestParam(value = "currentPage", required = false) String currentPage) {
+                                 @RequestParam(value = "currentPage", required = false) String currentPage,
+                                 @RequestParam(value = "dataClassId", required = false) String dataClassId,
+                                 @RequestParam(value = "typeContentStr", required = false) String typeContentStr) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         Page page = SystemUtils.getPage(currentPage);
         List<DataHelpClass> dataHelpClassList = new ArrayList<>();
-        List<Data> list = userService.selectRoleAllPublicData(userInfo.getDepartment().getCode(),roleId,page);
+        List<Data> list = userService.selectRoleAllPublicData(userInfo.getDepartment().getCode(),roleId,dataClassId,typeContentStr,page);
         for (Data data: list) {
             DataHelpClass dataHelpClass = new DataHelpClass();
             data.setFileName(data.getFileName().substring(data.getFileName().lastIndexOf("_")+1));
@@ -317,6 +330,31 @@ public class UserController {
             dataHelpClass.setUserInfo(userService.selectUserInfoByUsername(data.getUser().getUsername()));
             dataHelpClassList.add(dataHelpClass);
         }
+        List<DataClass> dataClassList = userService.selectDataClass(userInfo.getDepartment().getCode(),roleId,"(1)",null);
+        List<DataClassHelpClass> dataClassHelpClassList = userService.formatDataClass(dataClassList);
+        for (DataClassHelpClass dataClassHelpClass:dataClassHelpClassList) {
+            if (dataClassHelpClass.getClassTypeHelpClassList()!=null&&dataClassHelpClass.getClassTypeHelpClassList().size()>0){
+                for (ClassTypeHelpClass classTypeHelpClass:dataClassHelpClass.getClassTypeHelpClassList()) {
+                    classTypeHelpClass.getClassType().setName(classTypeHelpClass.getClassType().getName().substring(4));
+                }
+            }
+        }
+        String[] typeContentArr = null;
+        if (typeContentStr!=null && !"".equals(typeContentStr)) {
+            typeContentArr = typeContentStr.split("/");
+        }
+        String[] params = new String[4];
+        params[0]=dataClassId;
+        if (typeContentArr!=null) {
+            for (int i = 0; i < typeContentArr.length; i++) {
+                if (typeContentArr[i] != null && !"".equals(typeContentArr[i])) {
+                    params[i + 1] = typeContentArr[i];
+                }
+            }
+        }
+        page.setSelectParam(params);
+        model.addAttribute("nowDataClassId",dataClassId);
+        model.addAttribute("dataClassHelpList",dataClassHelpClassList);
         model.addAttribute("dataHelpClassList",dataHelpClassList);
         model.addAttribute("page", page);
         switch (roleId){

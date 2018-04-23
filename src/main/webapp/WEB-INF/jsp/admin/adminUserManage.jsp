@@ -7,23 +7,23 @@
 </head>
 <body>
     <div class="teacherCurrentWrapper">
-        <div class="teacherHeader">
-            <p class="publicDataTitle">用户管理</p>
-            <div class="teacherUpload">
-                <p class="uploadTitle">学院用户资料列表</p>
-                <label for="chooseSelect" class="chooseLabel" style="width: 38px;">职务:</label>
-                <select id="chooseSelect" class="form-control chooseSelect">
-                    <option value="全部">全部</option>
-                    <option value="试卷">教师</option>
-                    <option value="实验报告">教务处教师</option>
-                    <option value="实验报告">学办教师</option>f
-                </select>
-                <button id="batchDelete" class="btn btn-danger batchDelete"><i class="icon-trash" style="margin-right: 5px;"></i>批量删除</button>
-                <button class="btn btn-success upload batchDelete" data-toggle="modal" data-target="#myModal"><i class="icon-upload" style="margin-right: 5px;"></i>新增用户</button>
+        <form id="pageForm" action="${ctx}/admin/adminUserManage" method="get">
+            <div class="teacherHeader">
+                <p class="publicDataTitle">用户管理</p>
+                <div class="teacherUpload">
+                    <p class="uploadTitle">学院用户资料列表</p>
+                    <label for="roleId" class="chooseLabel">用户角色:</label>
+                    <select id="roleId" name="roleId" class="form-control chooseSelect">
+                        <option value="">全部</option>
+                        <option value="005" <c:if test="${page.selectParam[0]=='005'}">selected</c:if>>教师</option>
+                        <option value="004" <c:if test="${page.selectParam[0]=='004'}">selected</c:if>>教务处教师</option>
+                        <option value="003" <c:if test="${page.selectParam[0]=='003'}">selected</c:if>>学办教师</option>
+                    </select>
+                    <button id="batchDelete" type="button" class="btn btn-danger batchDelete"><i class="icon-trash" style="margin-right: 5px;"></i>批量删除</button>
+                    <button class="btn btn-success upload batchDelete" type="button" data-toggle="modal" data-target="#myModal"><i class="icon-upload" style="margin-right: 5px;"></i>新增用户</button>
+                </div>
             </div>
-        </div>
-        <div class="teacherPublicDataList">
-            <form id="pageForm" action="${ctx}/admin/adminUserManage" method="get">
+            <div class="teacherPublicDataList">
                 <table class="table table-bordered table-striped">
                     <tr>
                         <th style="text-align: center"><input id="allCheckBtn" class="checkBtn" type="checkbox">#</th>
@@ -53,8 +53,8 @@
                     </c:forEach>
                 </table>
                 <%@ include file="/WEB-INF/jsp/include/dataPage.jsp" %>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 
     <!-- 新增用户Modal -->
@@ -165,6 +165,12 @@
     </div>
 
     <script>
+
+        $("#roleId").change(function () {
+            $("#currentPageInput").val("1");
+            $("#pageForm").submit();
+        });
+
         /* --全选JS-- */
         $("#allCheckBtn").click(function() {
            if($(this).is(':checked') == true){

@@ -7,32 +7,38 @@
 </head>
 <body>
 <div class="teacherCurrentWrapper">
-    <div class="teacherHeader">
-        <p class="publicDataTitle">学办公共资料</p>
-        <div class="teacherUpload">
-            <p class="uploadTitle">已上传公共资料列表</p>
-            <label for="chooseSelect" class="chooseLabel">文件类型:</label>
-            <select id="chooseSelect" class="form-control chooseSelect">
-                <option value="全部">全部</option>
-                <option value="试卷">试卷</option>
-                <option value="实验报告">实验报告</option>
-            </select>
-            <select id="chooseSelect2" class="form-control chooseSelect">
-                <option value="全部">全部</option>
-                <option value="试卷">试卷</option>
-                <option value="实验报告">实验报告</option>
-            </select>
-            <select id="chooseSelect3" class="form-control chooseSelect">
-                <option value="全部">全部</option>
-                <option value="试卷">试卷</option>
-                <option value="实验报告">实验报告</option>
-            </select>
-            <button id="openModel" class="btn btn-success upload batchDelete"><i class="icon-upload" style="margin-right: 5px;"></i>上传公共文件</button>
-            <button id="batchDelete" class="btn btn-danger batchDelete"><i class="icon-trash" style="margin-right: 5px;"></i>批量删除</button>
+    <form id="pageForm" action="${ctx}/user/rolePublicData?roleId=003" method="get">
+        <input id="typeContentStr" style="display:none;" type="text" name="typeContentStr"/>
+        <input style="display:none;" type="text" name="roleId" value="003"/>
+        <div class="teacherHeader">
+            <p class="publicDataTitle">学办公共资料</p>
+            <div class="teacherUpload">
+                <p class="uploadTitle">已上传公共资料列表</p>
+                <label for="dataClassFilter" class="chooseLabel">文件类型:</label>
+                <select id="dataClassFilter" name="dataClassId" class="form-control chooseSelect">
+                    <option value="">全部</option>
+                    <c:forEach items="${dataClassHelpList}" var="dataClassHelp">
+                        <option value="${dataClassHelp.dataClass.id}" <c:if test="${page.selectParam[0]==dataClassHelp.dataClass.id}">selected</c:if>>${dataClassHelp.dataClass.name}</option>
+                    </c:forEach>
+                </select>
+                <c:forEach items="${dataClassHelpList}" var="dataClassHelp">
+                    <c:if test="${dataClassHelp.dataClass.id==nowDataClassId}">
+                        <c:forEach items="${dataClassHelp.classTypeHelpClassList}" var="classTypeHelp" varStatus="classTypeStatus">
+                            <label for="typeContentStrFilter${classTypeStatus.index+1}" class="chooseLabel">${classTypeHelp.classType.name}:</label>
+                            <select id="typeContentStrFilter${classTypeStatus.index+1}" class="form-control chooseSelect">
+                                <option value="">全部</option>
+                                <c:forEach items="${classTypeHelp.typeContentList}" var="typeContent">
+                                    <option value="${typeContent.id}" <c:if test="${page.selectParam[classTypeStatus.index+1]==typeContent.id}">selected</c:if>>${typeContent.name}</option>
+                                </c:forEach>
+                            </select>
+                        </c:forEach>
+                    </c:if>
+                </c:forEach>
+                <button id="openModel" type="button" class="btn btn-success upload batchDelete"><i class="icon-upload" style="margin-right: 5px;"></i>上传公共文件</button>
+                <button id="batchDelete" type="button" class="btn btn-danger batchDelete"><i class="icon-trash" style="margin-right: 5px;"></i>批量删除</button>
+            </div>
         </div>
-    </div>
-    <div class="teacherPublicDataList">
-        <form id="pageForm" action="${ctx}/user/rolePublicData?roleId=003" method="get">
+        <div class="teacherPublicDataList">
             <table class="table table-bordered table-striped">
                 <tr>
                     <th style="text-align: center;"><input id="allCheckBtn" class="checkBtn" type="checkbox">#</th>
@@ -62,8 +68,8 @@
                 </c:forEach>
             </table>
             <%@ include file="/WEB-INF/jsp/include/dataPage.jsp" %>
-        </form>
-    </div>
+        </div>
+    </form>
 </div>
 
 <!-- Modal -->
@@ -103,6 +109,37 @@
 </div>
 </body>
 <script>
+
+    $("#dataClassFilter").change(function () {
+        $("#currentPageInput").val("1");
+        $("#pageForm").submit();
+    });
+
+    $('#typeContentStrFilter1,#typeContentStrFilter2,#typeContentStrFilter3').change(function () {
+        $("#currentPageInput").val("1");
+        var t1 = $('#typeContentStrFilter1').val();
+        var t2 = $('#typeContentStrFilter2').val();
+        var t3 = $('#typeContentStrFilter3').val();
+        var str = [];
+        if ('undefined'==t1){
+            str[0]="";
+        }else {
+            str[0]=t1;
+        }
+        if ('undefined'==t2){
+            str[1]="";
+        }else {
+            str[1]=t2;
+        }
+        if ('undefined'==t3){
+            str[2]="";
+        }else {
+            str[2]=t3;
+        }
+        $('#typeContentStr').val(str.join("/"));
+        $("#pageForm").submit();
+    });
+
     //打开模态框
     $('#openModel').on('click',function () {
         $.ajax({
@@ -110,22 +147,87 @@
             url: "${ctx}/user/getDepartmentDataClass",
             dataType: "json",
             success: function (result) {
-                if(result['dataClass'].length>0){
+                if(result['dataClassHelp'].length>0){
                     var fileType = $("#fileType");
                     fileType.html("");
-                    for (var i = 0; i < result['dataClass'].length; i++) {
-                        fileType.append("<option id='" + result['dataClass'][i]['id'] + "' value='" + result['dataClass'][i]['id'] + "' >" + result['dataClass'][i]['name'] + "</option >");
+                    var sb = $('#submitDataForm');
+                    if(sb.children('div').length>4){
+                        var tar = sb.children('div').length-4;
+                        for(var m=0;m<tar;m++){
+                            sb.children('div').eq(2).remove();
+                        }
+                    }
+                    for (var i = 0; i < result['dataClassHelp'].length; i++) {
+                        fileType.append("<option value='" + result['dataClassHelp'][i]['dataClass']['id'] + "' >" + result['dataClassHelp'][i]['dataClass']['name'] + "</option >");
+                    }
+                    if (result['dataClassHelp'][0]['classTypeHelpClassList'].length>0){
+                        for(var j=0;j<result['dataClassHelp'][0]['classTypeHelpClassList'].length;j++){
+                            $('.form-group').eq(1+j).after("<div class='form-group appendGroup'>" +
+                                "<label class='appendLabel' for='"+result['dataClassHelp'][0]['classTypeHelpClassList'][j]['classType']['id']+"'>"+result['dataClassHelp'][0]['classTypeHelpClassList'][j]['classType']['name']+":</label>" +
+                                "<select id='"+result['dataClassHelp'][0]['classTypeHelpClassList'][j]['classType']['id']+"' class='form-control appendSelect'></select>" +
+                                "</div>");
+                            for(var a = 0;a<result['dataClassHelp'][0]['classTypeHelpClassList'][j]['typeContentList'].length;a++){
+                                $('#'+result['dataClassHelp'][0]['classTypeHelpClassList'][j]['classType']['id']+'')
+                                    .append("<option value='" + result['dataClassHelp'][0]['classTypeHelpClassList'][j]['typeContentList'][a]['id'] + "' >" + result['dataClassHelp'][0]['classTypeHelpClassList'][j]['typeContentList'][a]['name'] + "</option >");
+                            }
+                            if (j>0){
+                                sb.children('div').eq(j+2).addClass("appendMargin");
+                            }
+                        }
                     }
                 }
                 $('#myModal').modal();
             }
         })
     });
+
+    // 模态框内类目属性动态变化
+    $('#fileType').change(function () {
+        var sb = $('#submitDataForm');
+        if(sb.children('div').length>4){
+            var tar = sb.children('div').length-4;
+            for(var m=0;m<tar;m++){
+                sb.children('div').eq(2).remove();
+            }
+        }
+        var dataClassId = $('#fileType').val();
+        $.ajax({
+            type: "GET",
+            url: "${ctx}/user/selectClassTypeByParam?dataClassId="+dataClassId,
+            dataType: "json",
+            success: function (result) {
+                if (result['result'].length>0){
+                    for(var i=0;i<result['result'].length;i++) {
+                        $('.form-group').eq(1 + i).after("<div class='form-group appendGroup'>" +
+                            "<label for='" + result['result'][i]['classType']['id'] + "'>" + result['result'][i]['classType']['name'] + ":</label>" +
+                            "<select id='" + result['result'][i]['classType']['id'] + "' class='form-control'></select>" +
+                            "</div>");
+                        for (var j = 0; j < result['result'][i]['typeContentList'].length; j++) {
+                            $('#' + result['result'][i]['classType']['id'] + '').append("<option value='" + result['result'][i]['typeContentList'][j]['id'] + "'>" + result['result'][i]['typeContentList'][j]['name'] + "</option>")
+                        }
+                        if (i>0){
+                            sb.children('div').eq(i+2).addClass("appendMargin");
+                        }
+                    }
+                }
+            }
+        })
+    });
+
     //上传文件
     $('#submitDataButton').on('click',function () {
+        var sb = $('#submitDataForm');
+        var typeContentArr = [];
+        if(sb.children('div').length>4){
+            var tar = sb.children('div').length-4;
+            for(var m=0;m<tar;m++){
+                typeContentArr.push(sb.children('div').eq(2+m).find('select').val());
+            }
+        }
+        var typeContentStr = typeContentArr.join("/");
         var options = {
             dataType:"json",
-            url:"${ctx}/user/uploadFile?description="+$('#description').val()+"&fileType="+$('#fileType').val(),
+            url:"${ctx}/user/uploadFile?description="+$('#description').val()+"&fileType="+$('#fileType').val()+"&typeContentStr="+typeContentStr,
             resetForm: true,
             success: function (result) {
                 $.confirm({
@@ -139,7 +241,7 @@
                 })
             }
         };
-        $("#submitDataForm").ajaxSubmit(options);
+        sb.ajaxSubmit(options);
     });
     //逻辑删除文件
     function deleteFile(id) {

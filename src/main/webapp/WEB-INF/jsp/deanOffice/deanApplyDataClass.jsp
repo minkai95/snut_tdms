@@ -22,9 +22,9 @@
                 <div class="propertyNameCont">
                     <ul>
                         <c:choose>
-                            <c:when test="${dataClassHelp.classTypeList!=null && dataClassHelp.classTypeList.size()!=0 && dataClassHelp.classTypeList.get(0)!=null}">
-                                <c:forEach items="${dataClassHelp.classTypeList}" var="classType">
-                                    <li>${classType.name}</li>
+                            <c:when test="${dataClassHelp.classTypeHelpClassList!=null && dataClassHelp.classTypeHelpClassList.size()!=0 && dataClassHelp.classTypeHelpClassList.get(0)!=null}">
+                                <c:forEach items="${dataClassHelp.classTypeHelpClassList}" var="classTypeHelp">
+                                    <li>${classTypeHelp.classType.name}</li>
                                 </c:forEach>
                             </c:when>
                             <c:otherwise>
@@ -46,9 +46,9 @@
                     <div class="waitCheckNameCont">
                         <ul>
                             <c:choose>
-                                <c:when test="${dataClassHelp.classTypeList!=null && dataClassHelp.classTypeList.size()!=0 && dataClassHelp.classTypeList.get(0)!=null}">
-                                    <c:forEach items="${dataClassHelp.classTypeList}" var="classType">
-                                        <li>${classType.name}</li>
+                                <c:when test="${dataClassHelp.classTypeHelpClassList!=null && dataClassHelp.classTypeHelpClassList.size()!=0 && dataClassHelp.classTypeHelpClassList.get(0)!=null}">
+                                    <c:forEach items="${dataClassHelp.classTypeHelpClassList}" var="classTypeHelp">
+                                        <li>${classTypeHelp.classType.name}</li>
                                     </c:forEach>
                                 </c:when>
                                 <c:otherwise>

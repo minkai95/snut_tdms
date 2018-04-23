@@ -7,20 +7,21 @@
 </head>
 <body>
 <div class="teacherCurrentWrapper">
-    <div class="teacherHeader">
-        <p class="publicDataTitle">申请列表</p>
-        <div class="teacherUpload">
-            <p class="uploadTitle">类目申请列表</p>
-            <label for="chooseSelect" class="chooseLabel">所属角色:</label>
-            <select id="chooseSelect" class="form-control chooseSelect">
-                <option value="全部">全部</option>
-                <option value="试卷">试卷</option>
-                <option value="实验报告">实验报告</option>
-            </select>
+    <form id="pageForm" action="${ctx}/admin/typeApplyList" method="get">
+        <div class="teacherHeader">
+            <p class="publicDataTitle">申请列表</p>
+            <div class="teacherUpload">
+                <p class="uploadTitle">类目申请列表</p>
+                <label for="roleFilter" class="chooseLabel">所属角色:</label>
+                <select id="roleFilter" name="roleId" class="form-control chooseSelect">
+                    <option value="">全部</option>
+                    <option value="005" <c:if test="${page.selectParam[0]=='005'}">selected</c:if>>教师</option>
+                    <option value="004" <c:if test="${page.selectParam[0]=='004'}">selected</c:if>>教务处教师</option>
+                    <option value="003" <c:if test="${page.selectParam[0]=='003'}">selected</c:if>>学办教师</option>
+                </select>
+            </div>
         </div>
-    </div>
-    <div class="teacherPublicDataList">
-        <form id="pageForm" action="${ctx}/admin/typeApplyList" method="get">
+        <div class="teacherPublicDataList">
             <table class="table table-bordered table-striped">
                 <tr>
                     <th style="text-align: center">#</th>
@@ -90,11 +91,17 @@
                 </c:forEach>
             </table>
             <%@ include file="/WEB-INF/jsp/include/dataPage.jsp" %>
-        </form>
-    </div>
+        </div>
+    </form>
 </div>
 
 <script>
+
+    $("#roleFilter").change(function () {
+        $("#currentPageInput").val("1");
+        $("#pageForm").submit();
+    });
+
     // 同意/拒绝
     function handleDataClass(dataClassId,flag) {
         if (flag==3){

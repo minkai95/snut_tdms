@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ include file="WEB-INF/jsp/include/taglibs.jsp" %>
+<%@ include file="../include/taglibs.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="sessionErrorWrapper">
-        <p class="sessionErrorInfo">由于您长时间未操作，<span id="count">3</span>秒后将为您跳转至<a href="index.jsp">登录页面</a>....</p>
+        <p class="sessionErrorInfo">由于您长时间未操作，<span id="count">3</span>秒后将为您跳转至<a href="../../../index.jsp">登录页面</a>....</p>
     </div>
     <script type="text/javascript">
         var i = 2;
@@ -16,7 +16,7 @@
         timer = setInterval("fun()", 1000);
         function fun() {
             if (i == 0) {
-                top.location.href = "index.jsp";
+                top.location.href = "${ctx}/index.jsp";
                 clearInterval(timer);
             }
             $('#count').text(i);

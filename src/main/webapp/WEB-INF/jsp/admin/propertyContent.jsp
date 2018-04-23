@@ -22,7 +22,7 @@
                 <div class="teacherUpload">
                     <p class="uploadTitle">已有属性内容列表</p>
                     <label for="chooseSelect" class="chooseLabel">属性名称:</label>
-                    <select id="chooseSelect" class="form-control chooseSelect">
+                    <select id="chooseSelect" name="classTypeId" class="form-control chooseSelect">
                         <option value="">全部</option>
                         <c:forEach items="${classTypeList}" var="classType" >
                             <option value="${classType.id}" <c:if test="${page.selectParam[0] == classType.id}">selected</c:if>>${classType.name}</option>
@@ -119,7 +119,6 @@
 
     $("#chooseSelect").change(function () {
         $("#currentPageInput").val("1");
-        $("#chooseSelect").attr("name", "classTypeId");
         $("#pageForm").submit();
     });
 

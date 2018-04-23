@@ -434,7 +434,7 @@
         department.code as dataClassDepartmentCode,
         department.name as dataClassDepartmentName,
         data_class.flag as dataClassFlag,
-        type_contents,
+        type_contents as typeContents,
         user2.username,
         user2.password,
         user2.id_card as idCard,
@@ -451,6 +451,18 @@
         WHERE data_class.name NOT IN ('私人类型') AND `data`.flag=0
         AND (SELECT department FROM user_info WHERE user_info.user = `data`.user) = #{departmentCode}
         AND (SELECT role FROM user_role WHERE user_role.`user`=`data`.`user`) = #{roleId}
+        <if test="dataClassId!=null and dataClassId!=''">
+            AND `data`.data_class = #{dataClassId}
+        </if>
+        <if test="typeContent1!=null and typeContent1!=''">
+            AND SUBSTRING_INDEX(`data`.type_contents,'/',1) = #{typeContent1}
+        </if>
+        <if test="typeContent2!=null and typeContent2!=''">
+            AND SUBSTRING_INDEX(SUBSTRING_INDEX(`data`.type_contents,'/',2),'/',-1) = #{typeContent2}
+        </if>
+        <if test="typeContent3!=null and typeContent3!=''">
+            AND SUBSTRING_INDEX(`data`.type_contents,'/',-1) = #{typeContent3}
+        </if>
         ORDER BY submit_time DESC
     </select>
     <select id="selectClassTypesByDataClassId" parameterType="java.lang.String" resultMap="classTypes">

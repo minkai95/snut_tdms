@@ -83,7 +83,17 @@
           operated_type as operatedType,
           description
           FROM log
-          LEFT JOIN `user` as user1 ON user1.username =operation_user
+          LEFT JOIN `user` as user1 ON user1.username =log.operation_user
+          WHERE 1=1
+          <if test="departmentCode!=null and departmentCode!=''">
+              AND (SELECT department FROM user_info WHERE user_info.user=log.operation_user) = #{departmentCode}
+          </if>
+          <if test="action!=null and action!=''">
+              AND log.action = #{action}
+          </if>
+          <if test="operatedType!=null and operatedType!=''">
+              AND log.operated_type = #{operatedType}
+          </if>
           ORDER BY `time` desc
     </select>
     <select id="selectAllAdminByPage" resultMap="admin">

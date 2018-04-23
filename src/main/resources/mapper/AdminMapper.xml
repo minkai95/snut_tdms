@@ -121,6 +121,12 @@
                 )
             ) = #{departmentCode}
          )
+        <if test="action!=null and action!=''">
+            AND log.action = #{action}
+        </if>
+        <if test="operatedType!=null and operatedType!=''">
+            AND log.operated_type = #{operatedType}
+        </if>
          ORDER BY `time` desc
     </select>
     <select id="selectUserByParamsByPage" parameterType="java.util.Map" resultMap="admin">

@@ -14,7 +14,7 @@
             <div class="teacherUpload">
                 <p class="uploadTitle">已上传公共资料列表</p>
                 <label for="dataClassFilter" class="chooseLabel">文件类型:</label>
-                <select id="dataClassFilter" class="form-control chooseSelect">
+                <select id="dataClassFilter" name="dataClassId" class="form-control chooseSelect">
                     <option value="">全部</option>
                     <c:forEach items="${dataClassHelpList}" var="dataClassHelp">
                         <option value="${dataClassHelp.dataClass.id}" <c:if test="${page.selectParam[0]==dataClassHelp.dataClass.id}">selected</c:if>>${dataClassHelp.dataClass.name}</option>
@@ -108,13 +108,11 @@
 
     $("#dataClassFilter").change(function () {
         $("#currentPageInput").val("1");
-        $("#dataClassFilter").attr("name","dataClassId");
         $("#pageForm").submit();
     });
 
     $('#typeContentStrFilter1,#typeContentStrFilter2,#typeContentStrFilter3').change(function () {
         $("#currentPageInput").val("1");
-        $("#dataClassFilter").attr("name","dataClassId");
         var t1 = $('#typeContentStrFilter1').val();
         var t2 = $('#typeContentStrFilter2').val();
         var t3 = $('#typeContentStrFilter3').val();

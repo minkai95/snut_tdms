@@ -7,24 +7,40 @@
 </head>
 <body>
     <div class="teacherCurrentWrapper">
-        <div class="teacherCurrentWrapper">
-            <div class="teacherHeader">
-                <p class="publicDataTitle">全校日志管理</p>
-                <label for="chooseSelect" class="chooseLabel" style="margin-left: 0;">操作行为:</label>
-                <select id="chooseSelect" class="form-control chooseSelect">
-                    <option value="全部">全部</option>
-                    <option value="试卷">试卷</option>
-                    <option value="实验报告">实验报告</option>
-                </select>
-                <label for="chooseSelect2" class="chooseLabel">操作对象:</label>
-                <select id="chooseSelect2" class="form-control chooseSelect">
-                    <option value="全部">全部</option>
-                    <option value="试卷">试卷</option>
-                    <option value="实验报告">实验报告</option>
-                </select>
-            </div>
-            <div class="teacherPublicDataList">
-                <form id="pageForm" action="${ctx}/superAdmin/superAdminLog" method="get">
+        <form id="pageForm" action="${ctx}/superAdmin/superAdminLog" method="get">
+            <div class="teacherCurrentWrapper">
+                <div class="teacherHeader">
+                    <p class="publicDataTitle">全校日志管理</p>
+                    <label for="departmentFilter" class="chooseLabel" style="margin-left: 0;">院系:</label>
+                    <select id="departmentFilter" class="form-control chooseSelect">
+                        <option value="">全部</option>
+                        <c:forEach items="${departmentList}" var="department">
+                            <option value="${department.code}" <c:if test="${page.selectParam[0]==department.code}">selected</c:if>>${department.name}</option>
+                        </c:forEach>
+                    </select>
+                    <label for="actionFilter" class="chooseLabel">操作行为:</label>
+                    <select id="actionFilter" class="form-control chooseSelect">
+                        <option value="">全部</option>
+                        <option value="登录" <c:if test="${page.selectParam[1]=='登录'}">selected</c:if>>登录</option>
+                        <option value="新增" <c:if test="${page.selectParam[1]=='新增'}">selected</c:if>>新增</option>
+                        <option value="删除" <c:if test="${page.selectParam[1]=='删除'}">selected</c:if>>删除</option>
+                        <option value="更新" <c:if test="${page.selectParam[1]=='更新'}">selected</c:if>>更新</option>
+                        <option value="恢复" <c:if test="${page.selectParam[1]=='恢复'}">selected</c:if>>恢复</option>
+                        <option value="逻辑删除" <c:if test="${page.selectParam[1]=='逻辑删除'}">selected</c:if>>逻辑删除</option>
+                    </select>
+                    <label for="operatedTypeFilter" class="chooseLabel">操作对象:</label>
+                    <select id="operatedTypeFilter" class="form-control chooseSelect">
+                        <option value="">全部</option>
+                        <option value="文件" <c:if test="${page.selectParam[2]=='文件'}">selected</c:if>>文件</option>
+                        <option value="用户" <c:if test="${page.selectParam[2]=='用户'}">selected</c:if>>用户</option>
+                        <option value="院系" <c:if test="${page.selectParam[2]=='院系'}">selected</c:if>>院系</option>
+                        <option value="公告" <c:if test="${page.selectParam[2]=='公告'}">selected</c:if>>公告</option>
+                        <option value="文件类型" <c:if test="${page.selectParam[2]=='文件类型'}">selected</c:if>>文件类型</option>
+                        <option value="类目属性" <c:if test="${page.selectParam[2]=='类目属性'}">selected</c:if>>类目属性</option>
+                        <option value="类目属性内容" <c:if test="${page.selectParam[2]=='类目属性内容'}">selected</c:if>>类目属性内容</option>
+                    </select>
+                </div>
+                <div class="teacherPublicDataList">
                     <table class="table table-bordered table-striped">
                         <tr>
                             <th>#</th>
@@ -100,9 +116,9 @@
                         </c:forEach>
                     </table>
                     <%@ include file="/WEB-INF/jsp/include/dataPage.jsp" %>
-                </form>
+                </div>
             </div>
-        </div>
+        </form>
     </div>
 
     <!-- 查看日志Modal -->
@@ -145,6 +161,15 @@
         </div>
     </div>
     <script>
+
+        $("#departmentFilter,#actionFilter,#operatedTypeFilter").change(function () {
+            $("#currentPageInput").val("1");
+            $("#departmentFilter").attr("name","departmentCode");
+            $("#actionFilter").attr("name","action");
+            $("#operatedTypeFilter").attr("name","operatedType");
+            $("#pageForm").submit();
+        });
+
         // 查看详情
         function checkLogBtn(logId) {
             var tr = $('#'+logId+'');
