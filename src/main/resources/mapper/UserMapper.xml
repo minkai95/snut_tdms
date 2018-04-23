@@ -343,7 +343,7 @@
           department.code as dataClassDepartmentCode,
           department.name as dataClassDepartmentName,
           data_class.flag as dataClassFlag,
-          type_contents,
+          type_contents as typeContents,
           user2.username,
           user2.password,
           user2.id_card as idCard,
@@ -357,7 +357,10 @@
         LEFT JOIN `user` user1 ON data_class.`user` = user1.username
         LEFT JOIN department ON data_class.department = department.code
         LEFT JOIN `user` user2 ON `data`.user = user2.username
-        WHERE user2.username = #{username}
+        WHERE 1=1
+        <if test="username!=null and username!=''">
+            AND user2.username = #{username}
+        </if>
         <if test="dataClassId != null and dataClassId!= ''">
             AND data_class.id = #{dataClassId}
         </if>

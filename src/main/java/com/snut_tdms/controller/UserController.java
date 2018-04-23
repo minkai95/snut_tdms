@@ -149,8 +149,9 @@ public class UserController {
         JSONObject jsonObject = new JSONObject();
         String a = request.getParameter("fileType");
         String b = request.getParameter("description");
-        List<DataClass> list = userService.selectDataClass(userInfo.getDepartment().getCode(),null,"(2)",null);
+        String c = request.getParameter("typeContentStr");
         if (request.getParameter("fileType")==null){
+            List<DataClass> list = userService.selectDataClass(userInfo.getDepartment().getCode(),null,"(2)",null);
             request.setAttribute("fileType",list.get(0).getId());
         }else {
             request.setAttribute("fileType",request.getParameter("fileType"));
@@ -325,6 +326,20 @@ public class UserController {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("classTypeList",userService.selectClassTypeByDepartmentCode(userInfo.getDepartment().getCode(),null));
+        return jsonObject;
+    }
+
+    @RequestMapping(value = "/selectClassTypeByParam", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject selectClassTypeByParam(@RequestParam(value="dataClassId",required = false) String dataClassId,
+                                             @RequestParam(value="typeContentId",required = false) String typeContentId){
+        JSONObject jsonObject = new JSONObject();
+        List<ClassTypeHelpClass> result = new ArrayList<>();
+        List<ClassType> classTypeList = userService.selectClassTypesByDataClassId(dataClassId);
+        for (ClassType classType: classTypeList) {
+            result.add(new ClassTypeHelpClass(classType,userService.selectTypeContentByParam(typeContentId,classType.getId())));
+        }
+        jsonObject.put("result",result);
         return jsonObject;
     }
 

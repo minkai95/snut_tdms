@@ -63,7 +63,7 @@ public class UserService {
         String dataClassId = (String) request.getAttribute("fileType");
         String content = request.getParameter("description");
         data.setContent(content);
-        String departmentCode = userDao.selectUserInfoByUsername(user.getUsername()).getDepartment().getCode();
+        data.setTypeContents(request.getParameter("typeContentStr"));
         DataClass dataClass = selectDataClassById(dataClassId);
         data.setDataClass(dataClass);
         request.setAttribute("departmentCode",selectUserInfoByUsername(user.getUsername()).getDepartment().getCode());

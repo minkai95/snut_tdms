@@ -65,6 +65,7 @@ public class TeacherController {
     public String teacherPublicData(HttpSession httpSession, Model model,
                                     @RequestParam(value = "currentPage", required = false) String currentPage) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        UserRole userRole = (UserRole) httpSession.getAttribute("userRole");
         Page page = SystemUtils.getPage(currentPage);
         List<Data> dataList = userService.selectDataByParams(userInfo.getUser().getUsername(),null,0,1,null,page);
         List<DataHelpClass> result = new ArrayList<>();
@@ -75,6 +76,7 @@ public class TeacherController {
             data.setFileName(data.getFileName().substring(data.getFileName().lastIndexOf("_")+1));
             result.add(new DataHelpClass(data,userService.selectUserInfoByUsername(data.getUser().getUsername())));
         }
+        model.addAttribute("dataClassList",userService.selectDataClass(userInfo.getDepartment().getCode(),userRole.getRole().getId(),"(1)",null));
         model.addAttribute("dataList",result);
         model.addAttribute("page", page);
         return "teacher/teacherPublicData";

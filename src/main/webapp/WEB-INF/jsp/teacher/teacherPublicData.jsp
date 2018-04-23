@@ -11,11 +11,12 @@
         <p class="publicDataTitle">教师公共资料</p>
         <div class="teacherUpload">
             <p class="uploadTitle">已上传公共资料列表</p>
-            <label for="chooseSelect" class="chooseLabel">文件类型:</label>
-            <select id="chooseSelect" class="form-control chooseSelect">
-                <option value="全部">全部</option>
-                <option value="试卷">试卷</option>
-                <option value="实验报告">实验报告</option>
+            <label for="dataClassFilter" class="chooseLabel">文件类型:</label>
+            <select id="dataClassFilter" class="form-control chooseSelect">
+                <option value="">全部</option>
+                <c:forEach items="${dataClassList}" var="dataClass">
+                    <option value="${dataClass.id}">${dataClass.name}</option>
+                </c:forEach>
             </select>
             <select id="chooseSelect2" class="form-control chooseSelect">
                 <option value="全部">全部</option>
@@ -83,7 +84,7 @@
                         </div>
                         <div class="form-group">
                             <label for="fileType">文件类型:</label>
-                            <select id="fileType" name="fileType" class="form-control"></select>
+                            <select id="fileType" class="form-control"></select>
                         </div>
                         <div class="form-group">
                             <label for="chooseFile" class="control-label">选择文件:</label>
@@ -115,7 +116,6 @@
                     var sb = $('#submitDataForm');
                     if(sb.children('div').length>4){
                         var tar = sb.children('div').length-4;
-                        console.log(sb.children('div').length+"==="+tar);
                         for(var m=0;m<tar;m++){
                             sb.children('div').eq(2).remove();
                         }
@@ -140,6 +140,37 @@
             }
         })
     });
+
+    // 模态框内类目属性动态变化
+    $('#fileType').change(function () {
+        var sb = $('#submitDataForm');
+        if(sb.children('div').length>4){
+            var tar = sb.children('div').length-4;
+            for(var m=0;m<tar;m++){
+                sb.children('div').eq(2).remove();
+            }
+        }
+        var dataClassId = $('#fileType').val();
+        $.ajax({
+            type: "GET",
+            url: "${ctx}/user/selectClassTypeByParam?dataClassId="+dataClassId,
+            dataType: "json",
+            success: function (result) {
+                if (result['result'].length>0){
+                    for(var i=0;i<result['result'].length;i++){
+                        $('.form-group').eq(1+i).after("<div class='form-group'>" +
+                            "<label for='"+result['result'][i]['classType']['id']+"'>"+result['result'][i]['classType']['name']+"</label>" +
+                            "<select id='"+result['result'][i]['classType']['id']+"' class='form-control'></select>" +
+                            "</div>");
+                        for (var j=0;j<result['result'][i]['typeContentList'].length;j++){
+                            $('#'+result['result'][i]['classType']['id']+'').append("<option value='"+result['result'][i]['typeContentList'][j]['id']+"'>"+result['result'][i]['typeContentList'][j]['name']+"</option>")
+                        }
+                    }
+                }
+            }
+        })
+    });
+
     //上传文件
     $('#submitDataButton').on('click',function () {
         if($("#fileName").text() == null || $("#fileName").text() == ""){
@@ -149,10 +180,20 @@
             });
             return false;
         }else{
+            var sb = $('#submitDataForm');
+            var typeContentArr = new Array();
+            if(sb.children('div').length>4){
+                var tar = sb.children('div').length-4;
+                for(var m=0;m<tar;m++){
+                    typeContentArr.push(sb.children('div').eq(2+m).find('select').val());
+                }
+            }
+            var typeContentStr = typeContentArr.join("/");
             var options = {
                 dataType:"json",
-                url:"${ctx}/user/uploadFile?description="+$('#description').val()+"&fileType="+$('#fileType').val(),
+                url:"${ctx}/user/uploadFile?description="+$('#description').val()+"&fileType="+$('#fileType').val()+"&typeContentStr="+typeContentStr,
                 resetForm: true,
+                traditional: true,
                 success: function (result) {
                     $.confirm({
                         title: '提示',
@@ -165,7 +206,7 @@
                     });
                 }
             };
-            $("#submitDataForm").ajaxSubmit(options);
+            sb.ajaxSubmit(options);
         }
     });
     //逻辑删除文件
