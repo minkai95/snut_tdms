@@ -378,14 +378,33 @@ public class UserService {
      * @param username 用户名
      * @return List
      */
-    public List<Data> selectDataByParams(String username,String dataClassId,Integer dataFlag,Integer dataClassFlag,String dataId,Page page){
+    public List<Data> selectDataByParams(String username,String dataClassId,String typeContentStr,Integer dataFlag,Integer dataClassFlag,Page page){
         Map<String,Object> map = new HashMap<>();
         map.put("username",username);
         map.put("dataClassId",dataClassId);
         map.put("dataFlag",String.valueOf(dataFlag));
         map.put("dataClassFlag",String.valueOf(dataClassFlag));
-        map.put("dataId",dataId);
         map.put("page",page);
+        String[] typeContentArr = null;
+        if (typeContentStr!=null && !"".equals(typeContentStr) && typeContentStr.length()>0){
+            typeContentArr = typeContentStr.split("/");
+        }
+        if (typeContentArr!=null) {
+            switch (typeContentArr.length) {
+                case 1:
+                    map.put("typeContent1", typeContentArr[0]);
+                    break;
+                case 2:
+                    map.put("typeContent1", typeContentArr[0]);
+                    map.put("typeContent2", typeContentArr[1]);
+                    break;
+                case 3:
+                    map.put("typeContent1", typeContentArr[0]);
+                    map.put("typeContent2", typeContentArr[1]);
+                    map.put("typeContent3", typeContentArr[2]);
+                    break;
+            }
+        }
         return userDao.selectDataByParamsByPage(map);
     }
 
@@ -479,10 +498,11 @@ public class UserService {
      * @param username 用户名
      * @return list
      */
-    public List<Log> selectPersonLogs(String username,String action,Page page){
+    public List<Log> selectPersonLogs(String username,String dataClassId,String action,Page page){
         Map<String,Object> map = new HashMap<>();
         map.put("username",username);
         map.put("action",action);
+        map.put("dataClassId",dataClassId);
         map.put("page",page);
         return userDao.selectPersonLogsByPage(map);
     }

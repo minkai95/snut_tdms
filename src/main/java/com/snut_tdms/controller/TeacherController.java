@@ -1,10 +1,7 @@
 package com.snut_tdms.controller;
 
 import com.snut_tdms.model.po.*;
-import com.snut_tdms.model.vo.DataHelpClass;
-import com.snut_tdms.model.vo.LogHelpClass;
-import com.snut_tdms.model.vo.NoticeHelpClass;
-import com.snut_tdms.model.vo.Page;
+import com.snut_tdms.model.vo.*;
 import com.snut_tdms.service.TeacherService;
 import com.snut_tdms.service.UserService;
 import com.snut_tdms.util.LogActionType;
@@ -63,11 +60,13 @@ public class TeacherController {
 
     @RequestMapping(value = "/teacherPublicData", method = RequestMethod.GET)
     public String teacherPublicData(HttpSession httpSession, Model model,
-                                    @RequestParam(value = "currentPage", required = false) String currentPage) {
+                                    @RequestParam(value = "currentPage", required = false) String currentPage,
+                                    @RequestParam(value = "dataClassId", required = false) String dataClassId,
+                                    @RequestParam(value = "typeContentStr", required = false) String typeContentStr) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         UserRole userRole = (UserRole) httpSession.getAttribute("userRole");
         Page page = SystemUtils.getPage(currentPage);
-        List<Data> dataList = userService.selectDataByParams(userInfo.getUser().getUsername(),null,0,1,null,page);
+        List<Data> dataList = userService.selectDataByParams(userInfo.getUser().getUsername(),dataClassId,typeContentStr,0,1,page);
         List<DataHelpClass> result = new ArrayList<>();
         for (Data data:dataList) {
             if(data.getContent()==null||"".equals(data.getContent())){
@@ -76,7 +75,31 @@ public class TeacherController {
             data.setFileName(data.getFileName().substring(data.getFileName().lastIndexOf("_")+1));
             result.add(new DataHelpClass(data,userService.selectUserInfoByUsername(data.getUser().getUsername())));
         }
-        model.addAttribute("dataClassList",userService.selectDataClass(userInfo.getDepartment().getCode(),userRole.getRole().getId(),"(1)",null));
+        List<DataClassHelpClass> dataClassHelpClassList = new ArrayList<>();
+        List<DataClass> dataClassList = userService.selectDataClass(userInfo.getDepartment().getCode(),userRole.getRole().getId(),"(1)",null);
+        for (DataClass dataClass: dataClassList) {
+            List<ClassTypeHelpClass> classTypeHelpClassList = new ArrayList<>();
+            for (ClassType classType: userService.selectClassTypesByDataClassId(dataClass.getId())){
+                classTypeHelpClassList.add(new ClassTypeHelpClass(classType,userService.selectTypeContentByParam(null,classType.getId())));
+            }
+            dataClassHelpClassList.add(new DataClassHelpClass(dataClass,classTypeHelpClassList,userService.selectUserInfoByUsername(dataClass.getUser().getUsername()),userService.selectUserRoleByUsername(dataClass.getUser().getUsername())));
+        }
+        String[] typeContentArr = null;
+        if (typeContentStr!=null && !"".equals(typeContentStr)) {
+            typeContentArr = typeContentStr.split("/");
+        }
+        String[] params = new String[4];
+        params[0]=dataClassId;
+        if (typeContentArr!=null) {
+            for (int i = 0; i < typeContentArr.length; i++) {
+                if (typeContentArr[i] != null && !"".equals(typeContentArr[i])) {
+                    params[i + 1] = typeContentArr[i];
+                }
+            }
+        }
+        page.setSelectParam(params);
+        model.addAttribute("nowDataClassId",dataClassId);
+        model.addAttribute("dataClassHelpList",dataClassHelpClassList);
         model.addAttribute("dataList",result);
         model.addAttribute("page", page);
         return "teacher/teacherPublicData";

@@ -218,12 +218,21 @@ public class UserController {
 
     @RequestMapping(value = "/dataTrace", method = RequestMethod.GET)
     public String dataTrace(HttpSession httpSession, Model model,
-                            @RequestParam(value = "currentPage", required = false) String currentPage) {
+                            @RequestParam(value = "currentPage", required = false) String currentPage,
+                            @RequestParam(value = "action", required = false) String action,
+                            @RequestParam(value = "dataClassId", required = false) String dataClassId) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         UserRole userRole = (UserRole) httpSession.getAttribute("userRole");
+        String[] params = new String[2];
+        params[0] = dataClassId;
+        params[1] = action;
         Page page = SystemUtils.getPage(currentPage);
-        String action = "('新增','删除','逻辑删除','恢复')";
-        List<Log> logs = userService.selectPersonLogs(userInfo.getUser().getUsername(),action,page);
+        if (action==null||"".equals(action)) {
+            action = "('新增','删除','逻辑删除','恢复')";
+        }else {
+            action = "('"+action+"')";
+        }
+        List<Log> logs = userService.selectPersonLogs(userInfo.getUser().getUsername(),dataClassId,action,page);
         List<LogHelpClass> result = new ArrayList<>();
         for (Log log:logs) {
             if (log.getDescription()==null || "".equals(log.getDescription())){
@@ -246,6 +255,8 @@ public class UserController {
             }
             result.add(logHelpClass);
         }
+        page.setSelectParam(params);
+        model.addAttribute("dataClassList",userService.selectDataClass(userInfo.getDepartment().getCode(),userRole.getRole().getId(),"(1)",null));
         model.addAttribute("page", page);
         model.addAttribute("logHelpList",result);
         switch (userRole.getRole().getName()){
@@ -266,7 +277,7 @@ public class UserController {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         UserRole userRole = (UserRole) httpSession.getAttribute("userRole");
         Page page = SystemUtils.getPage(currentPage);
-        List<Data> dataList = userService.selectDataByParams(userInfo.getUser().getUsername(),null,0,2,null,page);
+        List<Data> dataList = userService.selectDataByParams(userInfo.getUser().getUsername(),null,null,0,2,page);
         List<DataHelpClass> result = new ArrayList<>();
         for (Data data:dataList) {
             data.setFileName(data.getFileName().substring(data.getFileName().lastIndexOf("_")+1));

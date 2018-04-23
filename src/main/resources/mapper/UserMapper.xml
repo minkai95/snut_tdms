@@ -373,6 +373,15 @@
         <if test="dataId != null and dataId!= ''">
             AND `data`.id = #{dataId}
         </if>
+        <if test="typeContent1!=null and typeContent1!=''">
+            AND SUBSTRING_INDEX(`data`.type_contents,'/',1) = #{typeContent1}
+        </if>
+        <if test="typeContent2!=null and typeContent2!=''">
+            AND SUBSTRING_INDEX(SUBSTRING_INDEX(`data`.type_contents,'/',2),'/',-1) = #{typeContent2}
+        </if>
+        <if test="typeContent3!=null and typeContent3!=''">
+            AND SUBSTRING_INDEX(`data`.type_contents,'/',-1) = #{typeContent3}
+        </if>
         ORDER BY submit_time DESC
     </select>
     <select id="selectDataById" parameterType="java.lang.String" resultMap="data">
@@ -513,7 +522,13 @@
         description
         FROM log
         LEFT JOIN `user` as user1 ON user1.username =operation_user
-        WHERE (operation_user = #{username} OR operated_id in(SELECT id FROM `data` WHERE `data`.user = #{username}))
+        WHERE 1=1
+        <if test="username!=null and username!=''">
+            AND (operation_user = #{username} OR operated_id in(SELECT id FROM `data` WHERE `data`.user = #{username}))
+        </if>
+        <if test="dataClassId!=null and dataClassId!=''">
+            AND (SELECT data_class FROM `data` WHERE `data`.id = log.operated_id) = #{dataClassId}
+        </if>
         <if test="action!=null and action!=''">
             AND log.`action` IN ${action}
         </if>

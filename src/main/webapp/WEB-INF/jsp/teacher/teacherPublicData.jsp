@@ -7,33 +7,37 @@
 </head>
 <body>
 <div class="teacherCurrentWrapper">
-    <div class="teacherHeader">
-        <p class="publicDataTitle">教师公共资料</p>
-        <div class="teacherUpload">
-            <p class="uploadTitle">已上传公共资料列表</p>
-            <label for="dataClassFilter" class="chooseLabel">文件类型:</label>
-            <select id="dataClassFilter" class="form-control chooseSelect">
-                <option value="">全部</option>
-                <c:forEach items="${dataClassList}" var="dataClass">
-                    <option value="${dataClass.id}">${dataClass.name}</option>
+    <form id="pageForm" action="${ctx}/teacher/teacherPublicData" method="get">
+        <input id="typeContentStr" style="display:none;" type="text" name="typeContentStr"/>
+        <div class="teacherHeader">
+            <p class="publicDataTitle">教师公共资料</p>
+            <div class="teacherUpload">
+                <p class="uploadTitle">已上传公共资料列表</p>
+                <label for="dataClassFilter" class="chooseLabel">文件类型:</label>
+                <select id="dataClassFilter" class="form-control chooseSelect">
+                    <option value="">全部</option>
+                    <c:forEach items="${dataClassHelpList}" var="dataClassHelp">
+                        <option value="${dataClassHelp.dataClass.id}" <c:if test="${page.selectParam[0]==dataClassHelp.dataClass.id}">selected</c:if>>${dataClassHelp.dataClass.name}</option>
+                    </c:forEach>
+                </select>
+                <c:forEach items="${dataClassHelpList}" var="dataClassHelp">
+                    <c:if test="${dataClassHelp.dataClass.id==nowDataClassId}">
+                        <c:forEach items="${dataClassHelp.classTypeHelpClassList}" var="classTypeHelp" varStatus="classTypeStatus">
+                            <label for="typeContentStrFilter${classTypeStatus.index+1}" class="chooseLabel">${classTypeHelp.classType.name}:</label>
+                            <select id="typeContentStrFilter${classTypeStatus.index+1}" class="form-control chooseSelect">
+                                <option value="">全部</option>
+                                <c:forEach items="${classTypeHelp.typeContentList}" var="typeContent">
+                                    <option value="${typeContent.id}" <c:if test="${page.selectParam[classTypeStatus.index+1]==typeContent.id}">selected</c:if>>${typeContent.name}</option>
+                                </c:forEach>
+                            </select>
+                        </c:forEach>
+                    </c:if>
                 </c:forEach>
-            </select>
-            <select id="chooseSelect2" class="form-control chooseSelect">
-                <option value="全部">全部</option>
-                <option value="试卷">试卷</option>
-                <option value="实验报告">实验报告</option>
-            </select>
-            <select id="chooseSelect3" class="form-control chooseSelect">
-                <option value="全部">全部</option>
-                <option value="试卷">试卷</option>
-                <option value="实验报告">实验报告</option>
-            </select>
-            <button id="openModel" class="btn btn-success upload batchDelete"><i class="icon-upload" style="margin-right: 5px;"></i>上传公共文件</button>
-            <button id="batchDelete" class="btn btn-danger batchDelete"><i class="icon-trash" style="margin-right: 5px;"></i>批量删除</button>
+                <button id="openModel" type="button" class="btn btn-success upload batchDelete"><i class="icon-upload" style="margin-right: 5px;"></i>上传公共文件</button>
+                <button id="batchDelete" type="button" class="btn btn-danger batchDelete"><i class="icon-trash" style="margin-right: 5px;"></i>批量删除</button>
+            </div>
         </div>
-    </div>
-    <div class="teacherPublicDataList">
-        <form id="pageForm" action="${ctx}/teacher/teacherPublicData" method="get">
+        <div class="teacherPublicDataList">
             <table class="table table-bordered table-striped">
                 <tr>
                     <th style="text-align: center;"><input id="allCheckBtn" class="checkBtn" type="checkbox">#</th>
@@ -42,7 +46,6 @@
                     <th>描述</th>
                     <th>上传者</th>
                     <th>上传日期</th>
-                    <th>资料类型</th>
                     <th style="text-align: center">操作</th>
                 </tr>
                 <c:forEach items="${dataList}" var="dataHelp" varStatus="dataStatus">
@@ -53,7 +56,6 @@
                         <td title="${dataHelp.data.content}" style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${dataHelp.data.content}</td>
                         <td>${dataHelp.userInfo.name}</td>
                         <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${dataHelp.data.submitTime}"/></td>
-                        <td>公共资料</td>
                         <td style="width: 210px;  text-align: center;">
                             <button type="button" class="btn btn-info btn-sm"><i class="icon-search"></i>查看</button>
                             <button type="button" class="btn btn-primary btn-sm" onclick="downloadFile('${dataHelp.data.id}')"><i class="icon-download"></i>下载</button>
@@ -63,8 +65,8 @@
                 </c:forEach>
             </table>
             <%@ include file="/WEB-INF/jsp/include/dataPage.jsp" %>
-        </form>
-    </div>
+        </div>
+    </form>
 </div>
 
 <!-- Modal -->
@@ -103,6 +105,39 @@
     </div>
 </div>
 <script>
+
+    $("#dataClassFilter").change(function () {
+        $("#currentPageInput").val("1");
+        $("#dataClassFilter").attr("name","dataClassId");
+        $("#pageForm").submit();
+    });
+
+    $('#typeContentStrFilter1,#typeContentStrFilter2,#typeContentStrFilter3').change(function () {
+        $("#currentPageInput").val("1");
+        $("#dataClassFilter").attr("name","dataClassId");
+        var t1 = $('#typeContentStrFilter1').val();
+        var t2 = $('#typeContentStrFilter2').val();
+        var t3 = $('#typeContentStrFilter3').val();
+        var str = [];
+        if ('undefined'==t1){
+            str[0]="";
+        }else {
+            str[0]=t1;
+        }
+        if ('undefined'==t2){
+            str[1]="";
+        }else {
+            str[1]=t2;
+        }
+        if ('undefined'==t3){
+            str[2]="";
+        }else {
+            str[2]=t3;
+        }
+        $('#typeContentStr').val(str.join("/"));
+        $("#pageForm").submit();
+    });
+
     //打开模态框
     $('#openModel').on('click',function () {
         $.ajax({
@@ -187,7 +222,7 @@
             return false;
         }else{
             var sb = $('#submitDataForm');
-            var typeContentArr = new Array();
+            var typeContentArr = [];
             if(sb.children('div').length>4){
                 var tar = sb.children('div').length-4;
                 for(var m=0;m<tar;m++){
