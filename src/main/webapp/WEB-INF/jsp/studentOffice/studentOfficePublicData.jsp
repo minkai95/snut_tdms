@@ -216,31 +216,39 @@
 
     //上传文件
     $('#submitDataButton').on('click',function () {
-        var sb = $('#submitDataForm');
-        var typeContentArr = [];
-        if(sb.children('div').length>4){
-            var tar = sb.children('div').length-4;
-            for(var m=0;m<tar;m++){
-                typeContentArr.push(sb.children('div').eq(2+m).find('select').val());
+        if($("#fileName").text() == null || $("#fileName").text() == ""){
+            $.alert({
+                title: '提示',
+                content: '文件不能为空！'
+            });
+            return false;
+        }else{
+            var sb = $('#submitDataForm');
+            var typeContentArr = [];
+            if(sb.children('div').length>4){
+                var tar = sb.children('div').length-4;
+                for(var m=0;m<tar;m++){
+                    typeContentArr.push(sb.children('div').eq(2+m).find('select').val());
+                }
+            }
+            var typeContentStr = typeContentArr.join("/");
+            var options = {
+                dataType:"json",
+                url:"${ctx}/user/uploadFile?description="+$('#description').val()+"&fileType="+$('#fileType').val()+"&typeContentStr="+typeContentStr,
+                resetForm: true,
+                success: function (result) {
+                    $.confirm({
+                        title: '提示',
+                        content: result['message'],
+                        buttons: {
+                            确定: function () {
+                                location.reload();
+                            }
+                        }
+                    })
+                }
             }
         }
-        var typeContentStr = typeContentArr.join("/");
-        var options = {
-            dataType:"json",
-            url:"${ctx}/user/uploadFile?description="+$('#description').val()+"&fileType="+$('#fileType').val()+"&typeContentStr="+typeContentStr,
-            resetForm: true,
-            success: function (result) {
-                $.confirm({
-                    title: '提示',
-                    content: result['message'],
-                    buttons: {
-                        确定: function () {
-                            location.reload();
-                        }
-                    }
-                })
-            }
-        };
         sb.ajaxSubmit(options);
     });
     //逻辑删除文件

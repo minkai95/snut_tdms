@@ -4,6 +4,9 @@
 <html>
 <head>
     <title>类目管理——教务处</title>
+    <style>
+        .n-error{top: 5px;left: -130px;}
+    </style>
 </head>
 <body>
     <div class="adminCurrentWrapper">
@@ -40,29 +43,33 @@
     </div>
 
     <!-- 添加类目Modal -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabe">
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">新增类目</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="typePropertyName">类目名称:</label>
-                        <input id="typePropertyName" class="form-control" type="text">
+                <form id="addPropertyForm">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">新增类目</h4>
                     </div>
-                    <div class="form-group">
-                        <label>类目属性:</label>
-                        <button id="addProperty" class="btn btn-success btn-sm" style="margin-left: -30px;">添加属性</button>
-                        <button id="removeProperty" class="btn btn-warning btn-sm">删除属性</button>
-                        <div id="selectProperty" class="form-group"></div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="typePropertyName">类目名称:</label>
+                            <input id="typePropertyName" class="form-control" type="text"
+                                   data-rule="required;typePropertyName;"
+                                   data-rule-typePropertyName="[/^([\u4e00-\u9fa5]){2,12}$/, '请输入2-12位汉字']">
+                        </div>
+                        <div class="form-group">
+                            <label>类目属性:</label>
+                            <a id="addProperty" class="btn btn-success btn-sm" href="javascript: void(0);" style="margin-left: -30px;">添加属性</a>
+                            <a id="removeProperty" class="btn btn-warning btn-sm" href="javascript: void(0);">删除属性</a>
+                            <div id="selectProperty" class="form-group"></div>
+                        </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button id="resetBtn" type="button" class="btn btn-default">取消</button>
-                    <button id="addClassTypeSubmit" type="button" class="btn btn-info">提交</button>
-                </div>
+                    <div class="modal-footer">
+                        <button type="reset" class="btn btn-default">重置</button>
+                        <button type="submit" class="btn btn-info">提交</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -70,7 +77,7 @@
     <script>
 
         // 提交新增类目
-        $('#addClassTypeSubmit').click(function () {
+        $("#addPropertyForm").on('valid.form', function () {
             var name = $('#typePropertyName').val();
             var sp = $('#selectProperty');
             var spLength = sp.find("select").length;

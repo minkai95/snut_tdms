@@ -4,6 +4,10 @@
 <html>
 <head>
     <title>消息公告</title>
+    <style>
+        .n-error{top: 5px;left: -110px;}
+        .n-error:nth-child(2){top: 160px !important;left: -110px;}
+    </style>
 </head>
 <body>
     <div class="adminCurrentWrapper">
@@ -79,24 +83,26 @@
     <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header">
+                <form id="publishNewsForm">
+                    <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel2">详细信息</h4>
                 </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="newsTitle">标题</label>
-                        <input id="newsTitle" class="form-control" type="text">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="newsTitle">标题</label>
+                            <input id="newsTitle" class="form-control" type="text" data-rule="required;newsTitle;">
+                        </div>
+                        <div class="form-group">
+                            <label for="newsContent">内容</label>
+                            <textarea id="newsContent" class="textareaStyle" data-rule="required;newsContent;"></textarea>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="newsContent">内容</label>
-                        <textarea id="newsContent" class="textareaStyle"></textarea>
+                    <div class="modal-footer">
+                        <button type="reset" class="btn btn-default">重置</button>
+                        <button type="submit" class="btn btn-info">发布</button>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" id="resetBtn" class="btn btn-default">重置</button>
-                    <button type="button" onclick="publishNewsSubmit()" class="btn btn-info">发布</button>
-                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -112,13 +118,8 @@
             $('#modalJob').text(tr.children().eq(5).text());
             $('#myModal').modal();
         }
-        // 发布公告重置
-        $("#resetBtn").click(function(){
-            $("#newsTitle").val("");
-            $("#newsContent").val("");
-        });
         // 提交发布公告
-        function publishNewsSubmit() {
+        $("#publishNewsForm").on('valid.form', function () {
             var title = $('#newsTitle').val();
             var content = $('#newsContent').val();
             $.ajax({
@@ -137,7 +138,7 @@
                     })
                 }
             })
-        }
+        });
     </script>
 </body>
 </html>
