@@ -177,7 +177,9 @@ public class UserController {
             List<ClassType> classTypeList = userService.selectClassTypesByDataClassId(dataClass.getId());
             List<ClassTypeHelpClass> classTypeHelpClassList = new ArrayList<>();
             for (ClassType classType:classTypeList){
-                classTypeHelpClassList.add(new ClassTypeHelpClass(classType,userService.selectTypeContentByParam(null,classType.getId())));
+                if(classType!=null) {
+                    classTypeHelpClassList.add(new ClassTypeHelpClass(classType, userService.selectTypeContentByParam(null, classType.getId())));
+                }
             }
             DataClassHelpClass dataClassHelpClass = new DataClassHelpClass(dataClass,classTypeHelpClassList,userService.selectUserInfoByUsername(dataClass.getUser().getUsername()),userService.selectUserRoleByUsername(dataClass.getUser().getUsername()));
             result.add(dataClassHelpClass);
