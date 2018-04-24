@@ -66,7 +66,7 @@
                             <label for="departmentName">院系名称:</label>
                             <input type="text" id="departmentName" class="form-control applyDataName" name="departmentName"
                                    data-rule="required;departmentName;"
-                                   data-rule-departmentName="[/^([\u4e00-\u9fa5]){4,8}$/, '请输入4-8位汉字学院名称']">
+                                   data-rule-departmentName="[/^([\u4e00-\u9fa5]){3,8}$/, '请输入3-8位汉字学院名称']">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -85,7 +85,7 @@
                 <form id="editDepartmentInfoForm">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel2">新增院系</h4>
+                        <h4 class="modal-title" id="myModalLabel2">修改院系信息</h4>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -96,7 +96,7 @@
                             <label for="amendDepartmentName">院系名称:</label>
                             <input type="text" id="amendDepartmentName" class="form-control applyDataName" name="amendDepartmentName" value=""
                                    data-rule="required;amendDepartmentName;"
-                                   data-rule-amendDepartmentName="[/^([\u4e00-\u9fa5]){4,8}$/, '请输入4-8位汉字学院名称']">
+                                   data-rule-amendDepartmentName="[/^([\u4e00-\u9fa5]){3,8}$/, '请输入3-8位汉字学院名称']">
                         </div>
                     </div>
                     <div class="modal-footer">

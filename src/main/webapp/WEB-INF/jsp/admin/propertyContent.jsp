@@ -3,15 +3,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>属性内容</title>
-</head>
-<body>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ include file="../include/taglibs.jsp" %>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>院系管理</title>
+    <title>属性内容管理</title>
+    <style>
+        .n-error{top: 5px;left: -195px;}
+    </style>
 </head>
 <body>
 <div class="teacherCurrentWrapper">
@@ -58,32 +53,36 @@
     </div>
 </div>
 
-<!-- 新增院系Modal -->
+<!-- 新增属性内容Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">新增属性内容</h4>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="addPropertyName">属性名称:</label>
-                    <select id="addPropertyName" class="form-control applyDataName">
-                        <c:forEach items="${classTypeList}" var="classType" >
-                            <option value="${classType.id}">${classType.name}</option>
-                        </c:forEach>
-                    </select>
+            <form id="addPropertyForm">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">新增属性内容</h4>
                 </div>
-                <div class="form-group">
-                    <label for="addPropertyCont">属性内容:</label>
-                    <input type="text" id="addPropertyCont" class="form-control applyDataName">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="addPropertyName">属性名称:</label>
+                        <select id="addPropertyName" class="form-control applyDataName">
+                            <c:forEach items="${classTypeList}" var="classType" >
+                                <option value="${classType.id}">${classType.name}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="addPropertyCont">属性内容:</label>
+                        <input type="text" id="addPropertyCont" class="form-control applyDataName"
+                               data-rule="required;addPropertyCont;"
+                               data-rule-addPropertyCont="[/^([\u4e00-\u9fa5_a-zA-Z0-9]){2,12}$/, '请输入2-14位汉字、字母或数字']">
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" onclick="submitAddTypeContent()">提交</button>
-            </div>
+                <div class="modal-footer">
+                    <button type="reset" class="btn btn-default">重置</button>
+                    <button type="submit" class="btn btn-primary">提交</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -123,7 +122,7 @@
     });
 
     // 提交新增属性内容
-    function submitAddTypeContent() {
+    $("#addPropertyForm").on('valid.form', function () {
         var classTypeId = $('#addPropertyName').val();
         var typeContentName = $('#addPropertyCont').val();
         $.ajax({
@@ -142,7 +141,7 @@
                 });
             }
         })
-    }
+    });
 
     function deleteTypeContent(typeContentId) {
         $.confirm({
@@ -241,8 +240,5 @@
         console.log(checkedTrId);
     });
 </script>
-</body>
-</html>
-
 </body>
 </html>

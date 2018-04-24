@@ -67,7 +67,7 @@
                             <label for="chooseFile" class="control-label">选择文件:</label>
                             <span id="fileName" class="form-control fileName"></span>
                             <span class="btn btn-primary btn-sm chooseFileBtn" onclick="$('#chooseFile').click()">浏览</span>
-                            <input class="form-control chooseFile" id="chooseFile" type="file" name="taskFile" value="" onchange="$('#fileName').text($(this).val().substr($(this).val().lastIndexOf('\\')+1))"/>
+                            <input id="chooseFile" class="form-control chooseFile" type="file" name="taskFile" value="" onchange="$('#fileName').text($(this).val().substr($(this).val().lastIndexOf('\\')+1))"/>
                         </div>
                         <div class="form-group" style="text-align: right; margin: 25px 0 0 0;">
                             <button type="reset" class="btn btn-info btn-primary">取消</button>
@@ -83,22 +83,30 @@
 <script>
     // 上传文件
     $('#submitDataButton').on('click',function () {
-        var options = {
-            dataType:"json",
-            url:"${ctx}/user/uploadFile?description="+$('#description').val(),
-            resetForm: true,
-            success: function (result) {
-                $.confirm({
-                    title: '提示',
-                    content: result['message'],
-                    buttons: {
-                        确定: function () {
-                            location.reload();
+        if($("#fileName").text() == null || $("#fileName").text() == ""){
+            $.alert({
+                title: '提示',
+                content: '文件不能为空！'
+            });
+            return false;
+        }else{
+            var options = {
+                dataType:"json",
+                url:"${ctx}/user/uploadFile?description="+$('#description').val(),
+                resetForm: true,
+                success: function (result) {
+                    $.confirm({
+                        title: '提示',
+                        content: result['message'],
+                        buttons: {
+                            确定: function () {
+                                location.reload();
+                            }
                         }
-                    }
-                })
+                    })
+                }
             }
-        };
+        }
         $("#submitDataForm").ajaxSubmit(options);
     });
     //下载文件

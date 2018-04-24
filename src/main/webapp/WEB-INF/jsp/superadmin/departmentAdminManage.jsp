@@ -75,7 +75,7 @@
                             <label for="addName" style="letter-spacing: 19px;">姓名:</label>
                             <input type="text" id="addName" class="form-control applyDataName" name="departmentName"
                                    data-rule="departmentName;"
-                                   data-rule-departmentName="[/^([\u4e00-\u9fa5]){2,8}$/, '请输入4-8位汉字姓名']">
+                                   data-rule-departmentName="[/^([\u4e00-\u9fa5]){2,8}$/, '请输入2-8位汉字姓名']">
                         </div>
                         <div class="form-group">
                             <label for="addSex" style="letter-spacing: 19px;">性别:</label>
@@ -128,7 +128,7 @@
                             <label for="updateName" style="letter-spacing: 19px;">姓名:</label>
                             <input type="text" id="updateName" class="form-control applyDataName" name="updateName" value=""
                                    data-rule="updateName;"
-                                   data-rule-updateName="[/^([\u4e00-\u9fa5]){2,8}$/, '请输入4-8位汉字姓名']">
+                                   data-rule-updateName="[/^([\u4e00-\u9fa5]){2,8}$/, '请输入2-8位汉字姓名']">
                         </div>
                         <div class="form-group">
                             <label for="updateSex" style="letter-spacing: 19px;">性别:</label>
@@ -173,7 +173,7 @@
     </div>
 
     <script>
-
+        /*新增管理员*/
         $("#addAdminForm").on('valid.form', function () {
             var username = $('#addUsername').val();
             var name = $('#addName').val();

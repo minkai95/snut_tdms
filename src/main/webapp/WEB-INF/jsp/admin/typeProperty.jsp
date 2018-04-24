@@ -4,6 +4,9 @@
 <html>
 <head>
     <title>类目属性</title>
+    <style>
+        .n-error{top: 5px;left: -130px;}
+    </style>
 </head>
 <body>
     <div class="adminCurrentWrapper">
@@ -27,26 +30,30 @@
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabe">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">新增类目属性</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="typePropertyName">属性名称:</label>
-                        <input id="typePropertyName" class="form-control" type="text">
+                <form id="addPropertyForm">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">新增类目属性</h4>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" id="resetBtn" class="btn btn-default">重置</button>
-                    <button type="button" class="btn btn-info" onclick="addClassTypeSubmit()">确定</button>
-                </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="typePropertyName">属性名称:</label>
+                            <input id="typePropertyName" class="form-control" type="text"
+                                   data-rule="required;typePropertyName;"
+                                   data-rule-typePropertyName="[/^([\u4e00-\u9fa5]){2,6}$/, '请输入2-6位汉字']">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="reset" id="resetBtn" class="btn btn-default">重置</button>
+                        <button type="submit" class="btn btn-info">确定</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
     <script>
-        function addClassTypeSubmit() {
+        $("#addPropertyForm").on('valid.form', function () {
             var name = $('#typePropertyName').val();
             $.ajax({
                 url:"${ctx}/admin/addClassType?name="+name,
@@ -64,7 +71,7 @@
                     })
                 }
             })
-        }
+        });
         $(".iconPosition").click(function() {
             $(this).each(function(){
                 var typeClassId = $(this).parent("div").attr("id");
