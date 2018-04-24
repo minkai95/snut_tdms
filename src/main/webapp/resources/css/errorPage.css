@@ -27,3 +27,12 @@
     left: 35%;
     font-size: 16px;
 }
+
+/*404错误页面CSS*/
+.ErrorWrapper{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: url('../images/404Error.png') no-repeat;
+    background-size: cover ;
+    }

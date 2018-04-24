@@ -10,6 +10,7 @@
     </style>
 </head>
 <body>
+    <div class="wrapper">
         <div class="forgetPSWWrapper">
             <p class="forgetPSWTitle">找回密码</p>
             <div class="forgetPSWHeader">
@@ -55,7 +56,7 @@
                 </div>
             </div>
         </div>
-
+    </div>
     <script>
 
 /*        $("#forgetPSWFormOne").on('valid.form', function () {
