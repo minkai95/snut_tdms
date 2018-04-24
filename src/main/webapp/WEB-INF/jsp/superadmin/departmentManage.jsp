@@ -4,6 +4,9 @@
 <html>
 <head>
     <title>院系管理</title>
+    <style>
+        .n-error{top: 5px !important;left: -165px !important;  }
+    </style>
 </head>
 <body>
     <div class="teacherCurrentWrapper">
@@ -47,24 +50,30 @@
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">新增院系</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="departmentId">院系编号:</label>
-                        <input type="text" id="departmentId" class="form-control applyDataName">
+                <form id="addDepartmentForm">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">新增院系</h4>
                     </div>
-                    <div class="form-group">
-                        <label for="departmentName">院系名称:</label>
-                        <input type="text" id="departmentName" class="form-control applyDataName">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="departmentId">院系编号:</label>
+                            <input type="text" id="departmentId" class="form-control applyDataName" name="departmentId"
+                                   data-rule="required;departmentId;"
+                                   data-rule-departmentId="[/^[A-Za-z0-9]{4,16}$/, '请输入4-16数字或字母']">
+                        </div>
+                        <div class="form-group">
+                            <label for="departmentName">院系名称:</label>
+                            <input type="text" id="departmentName" class="form-control applyDataName" name="departmentName"
+                                   data-rule="required;departmentName;"
+                                   data-rule-departmentName="[/^([\u4e00-\u9fa5]){4,8}$/, '请输入4-8位汉字学院名称']">
+                        </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                    <button onclick="addDepartment()" class="btn btn-primary">提交</button>
-                </div>
+                    <div class="modal-footer">
+                        <button type="reset" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="submit" class="btn btn-primary">提交</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -73,24 +82,28 @@
     <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel2">新增院系</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="amendDepartmentId">院系编号:</label>
-                        <span id="amendDepartmentId" class="form-control applyDataName"></span>
+                <form id="editDepartmentInfoForm">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel2">新增院系</h4>
                     </div>
-                    <div class="form-group">
-                        <label for="amendDepartmentName">院系名称:</label>
-                        <input type="text" id="amendDepartmentName" class="form-control applyDataName" value="">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="amendDepartmentId">院系编号:</label>
+                            <span id="amendDepartmentId" class="form-control applyDataName"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="amendDepartmentName">院系名称:</label>
+                            <input type="text" id="amendDepartmentName" class="form-control applyDataName" name="amendDepartmentName" value=""
+                                   data-rule="required;amendDepartmentName;"
+                                   data-rule-amendDepartmentName="[/^([\u4e00-\u9fa5]){4,8}$/, '请输入4-8位汉字学院名称']">
+                        </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                    <button onclick="updateDepartment()" class="btn btn-primary">提交</button>
-                </div>
+                    <div class="modal-footer">
+                        <button type="reset" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="submit" class="btn btn-primary">提交</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -135,7 +148,9 @@
             $('#departmentName').val("");
             $('#myModal').modal();
         }
-        function addDepartment() {
+
+        /*新增院系*/
+        $("#addDepartmentForm").on('valid.form', function () {
             var departmentId = $('#departmentId').val();
             var departmentName = $('#departmentName').val();
             var department = {
@@ -161,8 +176,10 @@
                     })
                 }
             })
-        }
-        function updateDepartment() {
+        });
+
+        /*修改院系信息*/
+        $("#editDepartmentInfoForm").on('valid.form', function () {
             var departmentId = $('#amendDepartmentId').text();
             var departmentName = $('#amendDepartmentName').val();
             var department = {
@@ -188,7 +205,7 @@
                     })
                 }
             })
-        }
+        });
 
         /* --全选JS-- */
         $("#allCheckBtn").click(function() {

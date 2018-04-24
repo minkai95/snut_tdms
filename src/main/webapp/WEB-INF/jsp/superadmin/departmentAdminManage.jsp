@@ -4,6 +4,9 @@
 <html>
 <head>
     <title>院系管理员管理</title>
+    <style>
+        .n-error{top: 5px !important;left: -150px !important;  }
+    </style>
 </head>
 <body>
     <div class="teacherCurrentWrapper">
@@ -56,43 +59,53 @@
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">新增管理员</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="addUsername" style="letter-spacing: 8px;">用户名:</label>
-                        <input type="text" id="addUsername" class="form-control applyDataName" name="departmentAdminId">
+                <form id="addAdminForm">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">新增管理员</h4>
                     </div>
-                    <div class="form-group">
-                        <label for="addName" style="letter-spacing: 19px;">姓名:</label>
-                        <input type="text" id="addName" class="form-control applyDataName" name="departmentName">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="addUsername" style="letter-spacing: 8px;">用户名:</label>
+                            <input type="text" id="addUsername" class="form-control applyDataName" name="departmentAdminId"
+                                   data-rule="required;departmentAdminId;"
+                                   data-rule-departmentAdminId="[/^[A-Za-z0-9]{6,18}$/, '请输入6-18数字或字母']">
+                        </div>
+                        <div class="form-group">
+                            <label for="addName" style="letter-spacing: 19px;">姓名:</label>
+                            <input type="text" id="addName" class="form-control applyDataName" name="departmentName"
+                                   data-rule="departmentName;"
+                                   data-rule-departmentName="[/^([\u4e00-\u9fa5]){2,8}$/, '请输入4-8位汉字姓名']">
+                        </div>
+                        <div class="form-group">
+                            <label for="addSex" style="letter-spacing: 19px;">性别:</label>
+                            <select name="departmentAdminSex" id="addSex" class="form-control applyDataName">
+                                <option value="男">男</option>
+                                <option value="女">女</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="departmentLocation" style="letter-spacing: 2.5px;">所属院系:</label>
+                            <select name="departmentLocation" id="departmentLocation" class="form-control applyDataName"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="addPhone" style="letter-spacing: 2.5px;">联系方式:</label>
+                            <input type="text" id="addPhone" class="form-control applyDataName" name="departmentAdminPhone"
+                                   data-rule="departmentAdminPhone;"
+                                   data-rule-departmentAdminPhone="[/^1\d{10}$/, '请输入11位手机号码']">
+                        </div>
+                        <div class="form-group">
+                            <label for="addEmail" style="letter-spacing: 19px;">邮箱:</label>
+                            <input type="text" id="addEmail" class="form-control applyDataName" name="departmentAdminEmail"
+                                   data-rule="departmentAdminEmail;"
+                                   data-rule-departmentAdminEmail="[/(^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+)|(^$)/, '请输入正确的邮箱地址']">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="addSex" style="letter-spacing: 19px;">性别:</label>
-                        <select name="departmentAdminSex" id="addSex" class="form-control applyDataName">
-                            <option value="男">男</option>
-                            <option value="女">女</option>
-                        </select>
+                    <div class="modal-footer">
+                        <button type="reset" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="submit" class="btn btn-primary">提交</button>
                     </div>
-                    <div class="form-group">
-                        <label for="departmentLocation" style="letter-spacing: 2.5px;">所属院系:</label>
-                        <select name="departmentLocation" id="departmentLocation" class="form-control applyDataName"></select>
-                    </div>
-                    <div class="form-group">
-                        <label for="addPhone" style="letter-spacing: 2.5px;">联系方式:</label>
-                        <input type="text" id="addPhone" class="form-control applyDataName" name="departmentAdminPhone">
-                    </div>
-                    <div class="form-group">
-                        <label for="addEmail" style="letter-spacing: 19px;">邮箱:</label>
-                        <input type="text" id="addEmail" class="form-control applyDataName" name="departmentAdminEmail">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                    <button onclick="addAdminSubmit()" type="button" class="btn btn-primary">提交</button>
-                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -101,59 +114,67 @@
     <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel2">修改管理员信息</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="updateUsername" style="letter-spacing: 8px;">用户名:</label>
-                        <span id="updateUsername" class="form-control applyDataName"></span>
+                <form id="editAdminInfoForm">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel2">修改管理员信息</h4>
                     </div>
-                    <div class="form-group">
-                        <label for="updateName" style="letter-spacing: 19px;">姓名:</label>
-                        <input type="text" id="updateName" class="form-control applyDataName" value="">
-                    </div>
-                    <div class="form-group">
-                        <label for="updateSex" style="letter-spacing: 19px;">性别:</label>
-                        <select id="updateSex" class="form-control applyDataName">
-                            <option value="男">男</option>
-                            <option value="女">女</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="amendDepartmentLocation" style="letter-spacing: 2.5px;">所属院系:</label>
-                        <select id="amendDepartmentLocation" class="form-control applyDataName"></select>
-                    </div>
-                    <div class="form-group">
-                        <label for="updatePhone" style="letter-spacing: 2.5px;">联系方式:</label>
-                        <input type="text" id="updatePhone" class="form-control applyDataName" value="12345678901">
-                    </div>
-                    <div class="form-group">
-                        <label for="updateEmail" style="letter-spacing: 19px;">邮箱:</label>
-                        <input type="text" id="updateEmail" class="form-control applyDataName" value="123456@163.com">
-                    </div>
-                    <div class="form-group">
-                        <label for="resetPassword" style="letter-spacing: 2.5px;">重置密码:</label>
-                        <div class="switchBtnWrapper switchBtnMove" id="resetPassword">
-                            <div class="switchBtnLeft cont" onmousedown="btnMove()"></div>
-                            <div class="switchBtnMiddle cont" onmousedown="btnMove()"></div>
-                            <div class="switchBtnRight cont" onmousedown="btnMove()"></div>
-                            <div class="switchBtn" id="btn" onmousedown="btnMove()"></div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="updateUsername" style="letter-spacing: 8px;">用户名:</label>
+                            <span id="updateUsername" class="form-control applyDataName"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="updateName" style="letter-spacing: 19px;">姓名:</label>
+                            <input type="text" id="updateName" class="form-control applyDataName" name="updateName" value=""
+                                   data-rule="updateName;"
+                                   data-rule-updateName="[/^([\u4e00-\u9fa5]){2,8}$/, '请输入4-8位汉字姓名']">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateSex" style="letter-spacing: 19px;">性别:</label>
+                            <select id="updateSex" class="form-control applyDataName">
+                                <option value="男">男</option>
+                                <option value="女">女</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="amendDepartmentLocation" style="letter-spacing: 2.5px;">所属院系:</label>
+                            <select id="amendDepartmentLocation" class="form-control applyDataName"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="updatePhone" style="letter-spacing: 2.5px;">联系方式:</label>
+                            <input type="text" id="updatePhone" class="form-control applyDataName" value="12345678901" name="updatePhone"
+                                   data-rule="departmentAdminPhone;"
+                                   data-rule-departmentAdminPhone="[/^1\d{10}$/, '请输入11位手机号码']">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateEmail" style="letter-spacing: 19px;">邮箱:</label>
+                            <input type="text" id="updateEmail" class="form-control applyDataName" value="123456@163.com" name="updateEmail"
+                                   data-rule="departmentAdminEmail;"
+                                   data-rule-departmentAdminEmail="[/(^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+)|(^$)/, '请输入正确的邮箱地址']">
+                        </div>
+                        <div class="form-group">
+                            <label for="resetPassword" style="letter-spacing: 2.5px;">重置密码:</label>
+                            <div class="switchBtnWrapper switchBtnMove" id="resetPassword">
+                                <div class="switchBtnLeft cont" onmousedown="btnMove()"></div>
+                                <div class="switchBtnMiddle cont" onmousedown="btnMove()"></div>
+                                <div class="switchBtnRight cont" onmousedown="btnMove()"></div>
+                                <div class="switchBtn" id="btn" onmousedown="btnMove()"></div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                    <button type="button" onclick="updateAdminSubmit()" class="btn btn-primary">提交</button>
-                </div>
+                    <div class="modal-footer">
+                        <button type="reset" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="submit"  class="btn btn-primary">提交</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
     <script>
 
-        function addAdminSubmit() {
+        $("#addAdminForm").on('valid.form', function () {
             var username = $('#addUsername').val();
             var name = $('#addName').val();
             var sex = $('#addSex').val();
@@ -194,7 +215,7 @@
                     })
                 }
             })
-        }
+        });
 
         // 打开新增管理员的模态框
         function openAddAdminModal() {
@@ -288,7 +309,7 @@
             })
         }
 
-        function updateAdminSubmit() {
+        $("#editAdminInfoForm").on('valid.form', function () {
             var username = $('#updateUsername').text();
             var name = $('#updateName').val();
             var sex = $('#updateSex').val();
@@ -329,7 +350,7 @@
                     })
                 }
             })
-        }
+        });
 
         /* --全选JS-- */
         $("#allCheckBtn").click(function() {
