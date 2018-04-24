@@ -229,12 +229,12 @@ public class UserController {
     public JSONObject deleteFile(@RequestParam("dataId") String dataId,@RequestParam("description") String description, HttpSession httpSession) {
         JSONObject jsonObject = new JSONObject();
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        Data data = userService.selectDataById(dataId);
-        if(data != null && data.getFlag() != 2){
-            jsonObject.put("message",userService.deleteFile(data,description,userInfo.getUser()).getnCode());
-        } else {
-            jsonObject.put("message", StatusCode.DELETE_ERROR_NOT_FILE.getnCode());
+        List<Data> dataList = new ArrayList<>();
+        String[] strArr = dataId.split(",");
+        for (String s:strArr) {
+            dataList.add(userService.selectDataById(s));
         }
+        jsonObject.put("message",userService.deleteFile(dataList,description,userInfo.getUser()).getnCode());
         return jsonObject;
     }
 
@@ -243,8 +243,8 @@ public class UserController {
     public JSONObject logicalDeleteDataById(@RequestParam("id") String id ,@RequestParam("description") String description , HttpSession httpSession) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         JSONObject jsonObject = new JSONObject();
-        List<String> list = new ArrayList<>();
-        list.add(id);
+        String[] strArr = id.split(",");
+        List<String>  list = Arrays.asList(strArr);
         if (userService.logicalDeleteDataByIds(list,userInfo.getUser(),description)>0) {
             jsonObject.put("message", StatusCode.DELETE_SUCCESS.getnCode());
         }else {

@@ -50,16 +50,16 @@
                 </tr>
                 <c:forEach items="${dataList}" var="dataHelp" varStatus="dataStatus">
                     <tr id="${dataHelp.data.id}">
-                        <td style="text-align: center;"><input class="checkBtn checkedBtn" type="checkbox">${dataStatus.index+1}</td>
+                        <td style="text-align: center;"><input class="checkBtn checkedBtn" type="checkbox">${dataStatus.index+1+(page.currentPage-1)*10}</td>
                         <td title="${dataHelp.data.fileName}" style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${dataHelp.data.fileName}</td>
                         <td>${dataHelp.data.dataClass.name}</td>
                         <td title="${dataHelp.data.content}" style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${dataHelp.data.content}</td>
                         <td>${dataHelp.userInfo.name}</td>
                         <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${dataHelp.data.submitTime}"/></td>
                         <td style="width: 210px;  text-align: center;">
-                            <button type="button" class="btn btn-info btn-sm"><i class="icon-search"></i>查看</button>
-                            <button type="button" class="btn btn-primary btn-sm" onclick="downloadFile('${dataHelp.data.id}')"><i class="icon-download"></i>下载</button>
-                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteFile('${dataHelp.data.id}')"><i class="icon-remove-circle"></i>删除</button>
+                            <button type="button" class="btn btn-info btn-sm"><i class="icon-search"></i> 查看</button>
+                            <button type="button" class="btn btn-primary btn-sm" onclick="downloadFile('${dataHelp.data.id}')"><i class="icon-download"></i> 下载</button>
+                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteFile('${dataHelp.data.id}')"><i class="icon-remove-circle"></i> 删除</button>
                         </td>
                     </tr>
                 </c:forEach>
@@ -254,6 +254,8 @@
             title: '提示',
             content: '您确认删除吗？<input style="margin-top:5px;" class="form-control" type="text" id="deleteReason" placeholder="请输入删除原因(选填)"/>',
             buttons: {
+                关闭: function () {
+                },
                 确认: function () {
                     var description = $('#deleteReason').val();
                     $.ajax({
@@ -272,9 +274,6 @@
                             })
                         }
                     });
-                },
-                关闭: function () {
-                    $('#myModal').modal("hide");
                 }
             }
         })
@@ -345,7 +344,45 @@
         $(".checkedBtn:checked").each(function(){
             checkedTrId.push($(this).parents("tr").attr("id"));
         });
-        console.log(checkedTrId);
+        var ids = checkedTrId.join(",");
+        if (checkedTrId.length>0){
+            $.confirm({
+                title: '提示',
+                content: '您确认删除'+checkedTrId.length+'条数据吗？<input style="margin-top:5px;" class="form-control" type="text" id="deleteReason" placeholder="请输入删除原因(选填)"/>',
+                buttons: {
+                    关闭: function () {
+                    },
+                    确认: function () {
+                        var description = $('#deleteReason').val();
+                        $.ajax({
+                            type: "POST",
+                            url: "${ctx}/user/logicalDeleteDataById?id="+ids+"&description="+description,
+                            dataType: "json",
+                            success: function (result) {
+                                $.confirm({
+                                    title: '提示',
+                                    content: result['message'],
+                                    buttons: {
+                                        确定: function () {
+                                            location.reload();
+                                        }
+                                    }
+                                })
+                            }
+                        });
+                    }
+                }
+            })
+        }else {
+            $.confirm({
+                title: '提示',
+                content: '请在勾选需要删除的文件!',
+                buttons: {
+                    确定: function () {
+                    }
+                }
+            })
+        }
     });
 </script>
 </body>

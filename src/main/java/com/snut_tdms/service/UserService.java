@@ -130,31 +130,36 @@ public class UserService {
     }
 
     /**
-     * 彻底删除单个文件
-     * @param data 要删除的文件
+     * 彻底删除文件
+     * @param dataList 要删除的文件
      * @param description 删除描述(原因)
      * @return 单个文件删除成功返回true，否则返回false
      */
-    public StatusCode deleteFile(Data data,String description,User operationUser) {
-        File file = new File(data.getSrc()+"\\"+data.getFileName());
-        // 如果文件路径所对应的文件存在，并且是一个文件，则直接删除
+    public StatusCode deleteFile(List<Data> dataList,String description,User operationUser) {
         Map<String,Object> map = new HashMap<>();
-        map.put("action",LogActionType.DELETE.getnCode());
-        map.put("operationUser",operationUser);
-        map.put("operatedId",data.getId());
-        map.put("operatedType",OperatedType.FILE.getnCode());
-        map.put("description",description);
-        List<String> ids = new ArrayList<>();
-        ids.add(data.getId());
-        int count = deleteDataByIds(ids,map);
-        if (file.exists() && file.isFile()) {
-            if (file.delete() && count>0) {
-                return StatusCode.DELETE_SUCCESS;
-            } else {
-                return StatusCode.DELETE_ERROR;
+        int count = 0;
+        int deleteSuf = 0;
+        for (Data data:dataList) {
+            List<String> idList = new ArrayList<>();
+            idList.add(data.getId());
+            map.put("action",LogActionType.DELETE.getnCode());
+            map.put("operationUser",operationUser);
+            map.put("operatedId",data.getId());
+            map.put("operatedType",OperatedType.FILE.getnCode());
+            map.put("description",description);
+            count += deleteDataByIds(idList,map);
+            File file = new File(data.getSrc()+"\\"+data.getFileName());
+            // 如果文件路径所对应的文件存在，并且是一个文件，则直接删除
+            if (file.exists() & file.isFile() & file.delete()) {
+                deleteSuf++;
             }
-        } else {
+        }
+        if (deleteSuf==0){
             return StatusCode.DELETE_ERROR_NOT_FILE;
+        }else if (deleteSuf>0 && count>0){
+            return StatusCode.DELETE_SUCCESS;
+        }else {
+            return StatusCode.DELETE_ERROR;
         }
     }
 
@@ -201,14 +206,13 @@ public class UserService {
         Map<String,Object> map = new HashMap<>();
         StringBuilder sb = new StringBuilder();
         String[] strArr = idList.toArray(new String[idList.size()]);
-        String str = Arrays.toString(strArr);
         sb.append("(");
         int c = 0;
         for (String s:strArr) {
-            sb.append("'").append(s).append("'");
             if(c++>0){
                 sb.append(",");
             }
+            sb.append("'").append(s).append("'");
         }
         sb.append(")");
         Map<String,Object> m = new HashMap<>();

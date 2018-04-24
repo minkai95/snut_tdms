@@ -86,7 +86,25 @@
           LEFT JOIN `user` as user1 ON user1.username =log.operation_user
           WHERE 1=1
           <if test="departmentCode!=null and departmentCode!=''">
-              AND (SELECT department FROM user_info WHERE user_info.user=log.operation_user) = #{departmentCode}
+              AND (
+                  (
+                      SELECT department
+                      FROM user_info
+                      LEFT JOIN `user` ON `user`.username = user_info.`user`
+                      WHERE user_info.`user` = log.operation_user
+                  ) = #{departmentCode}
+                  OR (
+                      SELECT department
+                      FROM user_info
+                      LEFT JOIN `user` ON `user`.username = user_info.`user`
+                      WHERE user_info.`user`=(
+                          SELECT `user`
+                          FROM `data`
+                          WHERE `data`.id=log.operated_id
+                      )
+                  ) = #{departmentCode}
+                  OR log.operated_id = #{departmentCode}
+              )
           </if>
           <if test="action!=null and action!=''">
               AND log.action = #{action}

@@ -115,7 +115,7 @@ public class SuperAdminService extends UserService {
      * @param user 超级管理员
      * @return map
      */
-    public String deleteDepartmentListByCodes(List<String> departmentCodeList,User user){
+    public String deleteDepartmentListByCodes(List<String> departmentCodeList,User user,String description){
         List<String> reDepartmentCodeList = new ArrayList<>();
         List<String> codeList = new ArrayList<>();
         for (Department department: selectAllDepartment(null)){
@@ -140,6 +140,7 @@ public class SuperAdminService extends UserService {
             logParams.put("content", "超级管理员删除了一条院系数据!");
             logParams.put("action", LogActionType.DELETE.getnCode());
             logParams.put("operationUser", user);
+            logParams.put("description", description);
             logParams.put("operatedType", OperatedType.DEPARTMENT.getnCode());
             for (String s:reDepartmentCodeList) {
                 logParams.put("operatedId",s);

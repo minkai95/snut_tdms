@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.jar.JarEntry;
@@ -109,15 +110,16 @@ public class SuperAdminController {
 
     @RequestMapping(value = "/deleteDepartment", method = RequestMethod.DELETE)
     @ResponseBody
-    public JSONObject deleteDepartment(HttpSession httpSession,@RequestParam("code") String code){
+    public JSONObject deleteDepartment(HttpSession httpSession,@RequestParam("code") String code,
+                                       @RequestParam(value = "description",required = false)String description){
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         JSONObject jsonObject = new JSONObject();
-        if (userService.selectDepartmentByCode(code)==null){
+        String[] strArr = code.split(",");
+        List<String> departmentCodeList = Arrays.asList(strArr);
+        if (userService.selectDepartmentByCode(strArr[0])==null){
             jsonObject.put("message", StatusCode.DELETE_NOT_CODE.getnCode());
         }else {
-            List<String> departmentCodeList = new ArrayList<>();
-            departmentCodeList.add(code);
-            jsonObject.put("message",superAdminService.deleteDepartmentListByCodes(departmentCodeList,userInfo.getUser()));
+            jsonObject.put("message",superAdminService.deleteDepartmentListByCodes(departmentCodeList,userInfo.getUser(),description));
         }
         return jsonObject;
     }
@@ -127,11 +129,11 @@ public class SuperAdminController {
     public JSONObject deleteAdmin(HttpSession httpSession,@RequestParam("username") String username,@RequestParam("description") String description){
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         JSONObject jsonObject = new JSONObject();
-        if (userService.selectUserInfoByUsername(username)==null){
+        String[] strArr = username.split(",");
+        List<String> usernameList = Arrays.asList(strArr);
+        if (userService.selectUserInfoByUsername(strArr[0])==null){
             jsonObject.put("message", StatusCode.DELETE_USERNAME_ERROR.getnCode());
         }else {
-            List<String> usernameList = new ArrayList<>();
-            usernameList.add(username);
             jsonObject.put("message",superAdminService.deleteAdminByUsernameList(usernameList,userInfo.getUser(),description));
         }
         return jsonObject;
