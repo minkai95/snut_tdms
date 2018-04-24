@@ -42,7 +42,7 @@
                     </tr>
                     <c:forEach items="${typeContentList}" var="typeContent" varStatus="typeContentStatus">
                         <tr id="${typeContent.id}">
-                            <td style="text-align: center; width: 5%;"><input class="checkBtn checkedBtn" type="checkbox"/>1</td>
+                            <td style="text-align: center; width: 5%;"><input class="checkBtn checkedBtn" type="checkbox"/>${typeContentStatus.index+1+(page.currentPage-1)*10}</td>
                             <td>${typeContent.classType.name}</td>
                             <td>${typeContent.name}</td>
                             <td style="width: 250px;  text-align: center;">
@@ -171,7 +171,7 @@
                     })
                 }
             }
-        });
+        })
     }
 
     // 提交更新属性内容
@@ -238,7 +238,45 @@
         $(".checkedBtn:checked").each(function(){
             checkedTrId.push($(this).parents("tr").attr("id"));
         });
-        console.log(checkedTrId);
+        var typeContentId = checkedTrId.join(",");
+        if (checkedTrId.length>0){
+            $.confirm({
+                title: '提示',
+                content: '确认删除'+checkedTrId.length+'条属性内容吗？<input style="margin-top:5px;" class="form-control" type="text" id="deleteReason" placeholder="请输入删除原因(选填)"/>',
+                buttons: {
+                    取消: function () {
+                    },
+                    确定: function () {
+                        var description = $('#deleteReason').val();
+                        $.ajax({
+                            url:"${ctx}/admin/deleteTypeContent?typeContentId="+typeContentId+"&description="+description,
+                            type:"DELETE",
+                            dataType:"json",
+                            success: function (result) {
+                                $.confirm({
+                                    title: '提示',
+                                    content: result['message'],
+                                    buttons: {
+                                        确定: function () {
+                                            location.reload();
+                                        }
+                                    }
+                                });
+                            }
+                        })
+                    }
+                }
+            })
+        }else {
+            $.confirm({
+                title: '提示',
+                content: '请在勾选需要删除的属性内容!',
+                buttons: {
+                    确定: function () {
+                    }
+                }
+            })
+        }
     });
 </script>
 </body>

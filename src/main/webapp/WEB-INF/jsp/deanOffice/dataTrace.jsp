@@ -38,7 +38,7 @@
                 </tr>
                 <c:forEach items="${logHelpList}" var="logHelp" varStatus="logStatus">
                     <tr id="${logHelp.log.id}">
-                        <td style="text-align: center">${logStatus.index+1}</td>
+                        <td style="text-align: center">${logStatus.index+1+(page.currentPage-1)*10}</td>
                         <td title="${logHelp.operatedData.fileName}" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${logHelp.operatedData.fileName}<c:if test="${logHelp.operatedData.fileName==null}">已被删除</c:if></td>
                         <td>${logHelp.operatedData.dataClass.name}<c:if test="${logHelp.operatedData.dataClass.name==null}">已被删除</c:if></td>
                         <td title="${logHelp.log.content}" style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${logHelp.log.content}</td>

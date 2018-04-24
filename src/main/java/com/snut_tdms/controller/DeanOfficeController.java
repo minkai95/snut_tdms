@@ -73,7 +73,7 @@ public class DeanOfficeController {
                                  @RequestParam(value = "currentPage", required = false) String currentPage) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         Page page = SystemUtils.getPage(currentPage);
-        model.addAttribute("noticeHelpList",userService.selectSystemNotice(userInfo.getDepartment().getCode(),null,page));
+        model.addAttribute("noticeHelpList",userService.selectSystemNotice(userInfo.getDepartment().getCode(),null,null,page));
         model.addAttribute("page", page);
         return "deanOffice/deanOfficeNews";
     }

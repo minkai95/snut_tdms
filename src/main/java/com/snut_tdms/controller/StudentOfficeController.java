@@ -72,7 +72,7 @@ public class StudentOfficeController {
                                     @RequestParam(value = "currentPage", required = false) String currentPage) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         Page page = SystemUtils.getPage(currentPage);
-        model.addAttribute("noticeHelpList",userService.selectSystemNotice(userInfo.getDepartment().getCode(),"002",page));
+        model.addAttribute("noticeHelpList",userService.selectSystemNotice(userInfo.getDepartment().getCode(),"002",null,page));
         model.addAttribute("page", page);
         return "studentOffice/studentOfficeNews";
     }

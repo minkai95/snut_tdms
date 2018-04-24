@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -52,7 +53,7 @@ public class AdminController {
         Page page3 = SystemUtils.getPage("");
         adminService.selectDepartmentLogs(userInfo.getDepartment().getCode(),null,null,page1);
         adminService.selectUserByParams(userInfo.getDepartment().getCode(),"(003,004,005)",page2);
-        userService.selectSystemNotice(userInfo.getDepartment().getCode(),null,page3);
+        userService.selectSystemNotice(userInfo.getDepartment().getCode(),null,null,page3);
         Integer logCount = page1.getTotalNumber();
         Integer userCount = page2.getTotalNumber();
         Integer newsCount = page3.getTotalNumber();
@@ -151,7 +152,7 @@ public class AdminController {
     public String adminNews(HttpSession httpSession, Model model,@RequestParam(value = "currentPage", required = false) String currentPage) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         Page page = SystemUtils.getPage(currentPage);
-        model.addAttribute("noticeHelpList",userService.selectSystemNotice(userInfo.getDepartment().getCode(),null,page));
+        model.addAttribute("noticeHelpList",userService.selectSystemNotice(userInfo.getDepartment().getCode(),null,null,page));
         model.addAttribute("page", page);
         return "admin/adminNews";
     }
@@ -194,11 +195,11 @@ public class AdminController {
     public JSONObject deleteUser(HttpSession httpSession,@RequestParam("username") String username,@RequestParam("description") String description){
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         JSONObject jsonObject = new JSONObject();
-        if (userService.selectUserInfoByUsername(username)==null){
+        String[] strArr = username.split(",");
+        List<String> usernameList = Arrays.asList(strArr);
+        if (userService.selectUserInfoByUsername(strArr[0])==null){
             jsonObject.put("message", StatusCode.DELETE_USERNAME_ERROR.getnCode());
         }else {
-            List<String> usernameList = new ArrayList<>();
-            usernameList.add(username);
             jsonObject.put("message",adminService.deleteUserByUsernameList(usernameList,userInfo.getUser(),description));
         }
         return jsonObject;
@@ -283,7 +284,8 @@ public class AdminController {
                                         @RequestParam("description") String description,HttpSession httpSession){
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("message",adminService.deleteTypeContent(typeContentId,description,userInfo.getUser()).getnCode());
+        String[] strArr = typeContentId.split(",");
+        jsonObject.put("message",adminService.deleteTypeContent(strArr,description,userInfo.getUser()).getnCode());
         return jsonObject;
     }
 
@@ -314,7 +316,15 @@ public class AdminController {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         JSONObject jsonObject = new JSONObject();
         Integer f = Integer.valueOf(flag);
-        jsonObject.put("message",adminService.updateDataClass(dataClassId,f,userInfo.getUser(),description).getnCode());
+        if (f!=3) {
+            jsonObject.put("message", adminService.updateDataClass(dataClassId, f, userInfo.getUser(), description).getnCode());
+        }else {
+            if (StatusCode.UPDATE_SUCCESS.getnCode().equals(adminService.updateDataClass(dataClassId, f, userInfo.getUser(), description).getnCode())){
+                jsonObject.put("message",StatusCode.DELETE_SUCCESS.getnCode());
+            }else {
+                jsonObject.put("message",StatusCode.DELETE_ERROR.getnCode());
+            }
+        }
         return jsonObject;
     }
 

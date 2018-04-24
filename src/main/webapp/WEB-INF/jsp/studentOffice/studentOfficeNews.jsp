@@ -21,7 +21,7 @@
                     </tr>
                     <c:forEach items="${noticeHelpList}" var="noticeHelp" varStatus="noticeStatus">
                         <tr id="${noticeHelp.systemNotice.id}">
-                            <td>${noticeStatus.index+1}</td>
+                            <td>${noticeStatus.index+1+(page.currentPage-1)*10}</td>
                             <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${noticeHelp.systemNotice.name}</td>
                             <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${noticeHelp.systemNotice.content}</td>
                             <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${noticeHelp.systemNotice.date}"/></td>

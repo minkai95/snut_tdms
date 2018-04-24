@@ -30,7 +30,7 @@
                 </tr>
                 <c:forEach items="${dataList}" var="dataHelp" varStatus="dataStatus">
                     <tr id="${dataHelp.data.id}">
-                        <td style="text-align: center;"><input class="checkBtn checkedBtn" type="checkbox">${dataStatus.index+1}</td>
+                        <td style="text-align: center;"><input class="checkBtn checkedBtn" type="checkbox">${dataStatus.index+1+(page.currentPage-1)*10}</td>
                         <td title="${dataHelp.data.fileName}" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${dataHelp.data.fileName}</td>
                         <td>${dataHelp.data.dataClass.name}</td>
                         <td title="${dataHelp.data.content}" style="text-overflow:ellipsis;white-space: normal;max-width: 280px; overflow: hidden;">${dataHelp.data.content}</td>
@@ -200,7 +200,45 @@
         $(".checkedBtn:checked").each(function(){
             checkedTrId.push($(this).parents("tr").attr("id"));
         });
-        console.log(checkedTrId);
+        var ids = checkedTrId.join(",");
+        if (checkedTrId.length>0){
+            $.confirm({
+                title: '提示',
+                content: '您确认删除'+checkedTrId.length+'条数据吗？(删除后不可恢复)<input style="margin-top:5px;" class="form-control" type="text" id="deleteReason" placeholder="请输入删除原因(选填)"/>',
+                buttons: {
+                    关闭: function () {
+                    },
+                    确认: function () {
+                        var description = $('#deleteReason').val();
+                        $.ajax({
+                            type: "DELETE",
+                            url: "${ctx}/user/deleteFile?dataId="+ids+"&description="+description,
+                            dataType: "json",
+                            success: function (result) {
+                                $.confirm({
+                                    title: '提示',
+                                    content: result['message'],
+                                    buttons: {
+                                        确定: function () {
+                                            location.reload();
+                                        }
+                                    }
+                                })
+                            }
+                        });
+                    }
+                }
+            })
+        }else {
+            $.confirm({
+                title: '提示',
+                content: '请在勾选需要删除的文件!',
+                buttons: {
+                    确定: function () {
+                    }
+                }
+            })
+        }
     });
 </script>
 </html>

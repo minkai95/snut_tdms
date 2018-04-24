@@ -324,20 +324,24 @@ public class AdminService extends UserService{
 
     /**
      * 删除类目属性内容
-     * @param typeContentId 类目属性内容ID
+     * @param typeContentIds 类目属性内容ID列表
      * @param operationUser 管理员
      * @return StatusCode
      */
-    public StatusCode deleteTypeContent(String typeContentId,String description,User operationUser){
-        if (adminDao.deleteTypeContentById(typeContentId)>0){
-            Map<String,Object> map = new HashMap<>();
-            map.put("content","管理员删除了一条类目属性内容!");
-            map.put("action",LogActionType.DELETE.getnCode());
-            map.put("operatedId",typeContentId);
-            map.put("operatedType",OperatedType.CLASS_TYPE_CONTENT.getnCode());
-            map.put("operationUser",operationUser);
-            map.put("description",description);
+    public StatusCode deleteTypeContent(String[] typeContentIds,String description,User operationUser){
+        Map<String,Object> map = new HashMap<>();
+        map.put("content","管理员删除了一条类目属性内容!");
+        map.put("action",LogActionType.DELETE.getnCode());
+        map.put("operatedType",OperatedType.CLASS_TYPE_CONTENT.getnCode());
+        map.put("operationUser",operationUser);
+        map.put("description",description);
+        int count = 0;
+        for (String s:typeContentIds) {
+            map.put("operatedId",s);
             insertLog(map);
+            count += adminDao.deleteTypeContentById(s);
+        }
+        if (count>0){
             return StatusCode.DELETE_SUCCESS;
         }else {
             return StatusCode.DELETE_ERROR;

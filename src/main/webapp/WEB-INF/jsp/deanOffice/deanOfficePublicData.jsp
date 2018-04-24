@@ -51,7 +51,7 @@
                 </tr>
                 <c:forEach items="${dataHelpClassList}" var="dataHelp" varStatus="dataHelpStatus">
                     <tr id="${dataHelp.data.id}">
-                        <td style="text-align: center;"><input class="checkBtn checkedBtn" type="checkbox">${dataHelpStatus.index+1}</td>
+                        <td style="text-align: center;"><input class="checkBtn checkedBtn" type="checkbox">${dataHelpStatus.index+1+(page.currentPage-1)*10}</td>
                         <td title="${dataHelp.data.fileName}" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${dataHelp.data.fileName}</td>
                         <td>${dataHelp.data.dataClass.name}</td>
                         <td title="${dataHelp.data.content}" style="max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${dataHelp.data.content}</td>
@@ -247,6 +247,8 @@
             title: '提示',
             content: '您确认删除吗？<input style="margin-top:5px;" class="form-control" type="text" id="deleteReason" placeholder="请输入删除原因(选填)"/>',
             buttons: {
+                关闭: function () {
+                },
                 确认: function () {
                     var description = $('#deleteReason').val();
                     $.ajax({
@@ -265,9 +267,6 @@
                             })
                         }
                     });
-                },
-                关闭: function () {
-                    $('#myModal').modal("hide");
                 }
             }
         })
@@ -336,7 +335,45 @@
         $(".checkedBtn:checked").each(function(){
             checkedTrId.push($(this).parents("tr").attr("id"));
         });
-        console.log(checkedTrId);
+        var ids = checkedTrId.join(",");
+        if (checkedTrId.length>0){
+            $.confirm({
+                title: '提示',
+                content: '您确认删除'+checkedTrId.length+'条数据吗？<input style="margin-top:5px;" class="form-control" type="text" id="deleteReason" placeholder="请输入删除原因(选填)"/>',
+                buttons: {
+                    关闭: function () {
+                    },
+                    确认: function () {
+                        var description = $('#deleteReason').val();
+                        $.ajax({
+                            type: "POST",
+                            url: "${ctx}/user/logicalDeleteDataById?id="+ids+"&description="+description,
+                            dataType: "json",
+                            success: function (result) {
+                                $.confirm({
+                                    title: '提示',
+                                    content: result['message'],
+                                    buttons: {
+                                        确定: function () {
+                                            location.reload();
+                                        }
+                                    }
+                                })
+                            }
+                        });
+                    }
+                }
+            })
+        }else {
+            $.confirm({
+                title: '提示',
+                content: '请在勾选需要删除的文件!',
+                buttons: {
+                    确定: function () {
+                    }
+                }
+            })
+        }
     });
 </script>
 </html>

@@ -37,7 +37,7 @@
                     </tr>
                     <c:forEach items="${userHelpClassList}" var="userHelp" varStatus="userStatus">
                         <tr id="${userHelp.userInfo.user.username}">
-                            <td style="text-align: center"><input class="checkBtn checkedBtn" type="checkbox">1</td>
+                            <td style="text-align: center"><input class="checkBtn checkedBtn" type="checkbox">${userStatus.index+1+(page.currentPage-1)*10}</td>
                             <td>${userHelp.userInfo.user.username}</td>
                             <td>${userHelp.userInfo.name}</td>
                             <td>${userHelp.userInfo.sex}</td>
@@ -45,8 +45,8 @@
                             <td>${userHelp.userInfo.phone}</td>
                             <td>${userHelp.userInfo.email}</td>
                             <td style="width: 250px;  text-align: center;">
-                                <button type="button" class="btn btn-info btn-sm" onclick="openUpdateUserModal('${userHelp.userInfo.user.username}')"><i class="icon-pencil"></i>修改</button>
-                                <button type="button" class="btn btn-danger btn-sm" onclick="deleteUser('${userHelp.userInfo.user.username}')"><i class="icon-remove-circle"></i>删除</button>
+                                <button type="button" class="btn btn-info btn-sm" onclick="openUpdateUserModal('${userHelp.userInfo.user.username}')"><i class="icon-pencil"></i> 修改</button>
+                                <button type="button" class="btn btn-danger btn-sm" onclick="deleteUser('${userHelp.userInfo.user.username}')"><i class="icon-remove-circle"></i> 删除</button>
                             </td>
                             <td style="display:none;">${userHelp.userRole.role.id}</td>
                         </tr>
@@ -202,7 +202,45 @@
             $(".checkedBtn:checked").each(function(){
                 checkedTrId.push($(this).parents("tr").attr("id"));
             });
-            console.log(checkedTrId);
+            var username = checkedTrId.join(",");
+            if (checkedTrId.length>0){
+                $.confirm({
+                    title: '提示',
+                    content: '确认删除该用户？<input style="margin-top:5px;" class="form-control" type="text" id="deleteReason" placeholder="请输入删除原因(选填)"/>',
+                    buttons: {
+                        取消: function() {
+                        },
+                        确定: function(){
+                            var description = $('#deleteReason').val();
+                            $.ajax({
+                                type: "DELETE",
+                                url: "${ctx}/admin/deleteUser?username="+username+"&description="+description,
+                                dataType: "json",
+                                success: function (result) {
+                                    $.confirm({
+                                        title: '提示',
+                                        content: result['message'],
+                                        buttons: {
+                                            确定: function () {
+                                                location.reload();
+                                            }
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                    }
+                })
+            }else {
+                $.confirm({
+                    title: '提示',
+                    content: '请在勾选需要删除的用户!',
+                    buttons: {
+                        确定: function () {
+                        }
+                    }
+                })
+            }
         });
         // 按钮js
         var btnResult = 0;
@@ -234,6 +272,8 @@
                 title: '提示',
                 content: '确认删除该用户？<input style="margin-top:5px;" class="form-control" type="text" id="deleteReason" placeholder="请输入删除原因(选填)"/>',
                 buttons: {
+                    取消: function() {
+                    },
                     确定: function(){
                         var description = $('#deleteReason').val();
                         $.ajax({
@@ -252,8 +292,6 @@
                                 })
                             }
                         })
-                    },
-                    取消: function() {
                     }
                 }
             })

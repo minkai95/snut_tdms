@@ -347,10 +347,11 @@ public class UserService {
      * @param roleId 角色ID
      * @return List
      */
-    public List<NoticeHelpClass> selectSystemNotice(String departmentCode,String roleId,Page page){
+    public List<NoticeHelpClass> selectSystemNotice(String departmentCode,String roleId,String noticeId,Page page){
         Map<String,Object> map = new HashMap<>();
         map.put("departmentCode",departmentCode);
         map.put("roleId",roleId);
+        map.put("noticeId",noticeId);
         map.put("page",page);
         List<NoticeHelpClass> result = new ArrayList<>();
         for (SystemNotice systemNotice: userDao.selectSystemNoticeByPage(map)) {
@@ -539,7 +540,11 @@ public class UserService {
                     }
                     break;
                 case "文件类型":
-                    logHelpClass.setOperatedDataClass(selectDataClassById(log.getOperatedId()));
+                    DataClass dataClass = selectDataClassById(log.getOperatedId());
+                    if (dataClass!=null) {
+                        dataClass.getRole().setName(UserController.updateUserRole(new UserRole(new User(), dataClass.getRole())).getRole().getName());
+                    }
+                    logHelpClass.setOperatedDataClass(dataClass);
                     break;
                 case "用户":
                     logHelpClass.setOperatedUserInfo(selectUserInfoByUsername(log.getOperatedId()));
@@ -547,6 +552,29 @@ public class UserService {
                     break;
                 case "院系":
                     logHelpClass.setOperatedDepartment(selectDepartmentByCode(log.getOperatedId()));
+                    break;
+                case "公告":
+                    logHelpClass.setNoticeHelpClass(selectSystemNotice(null,null,log.getOperatedId(),null).get(0));
+                    break;
+                case "类目属性":
+                    if(selectClassTypeByDepartmentCode(null,log.getOperatedId()).size()>0) {
+                        ClassType classType = selectClassTypeByDepartmentCode(null, log.getOperatedId()).get(0);
+                        logHelpClass.setClassType(classType);
+                        if (classType != null) {
+                            logHelpClass.setOperatedUserInfo(selectUserInfoByUsername(classType.getUser().getUsername()));
+                            logHelpClass.setOperatedUserRole(UserController.updateUserRole(selectUserRoleByUsername(classType.getUser().getUsername())));
+                        }
+                    }
+                    break;
+                case "类目属性内容":
+                    if(selectTypeContentByParam(log.getOperatedId(),null).size()>0) {
+                        TypeContent typeContent = selectTypeContentByParam(log.getOperatedId(),null).get(0);
+                        logHelpClass.setTypeContent(typeContent);
+                        if (typeContent != null) {
+                            logHelpClass.setOperatedUserInfo(selectUserInfoByUsername(typeContent.getUser().getUsername()));
+                            logHelpClass.setOperatedUserRole(UserController.updateUserRole(selectUserRoleByUsername(typeContent.getUser().getUsername())));
+                        }
+                    }
                     break;
             }
             logHelpClass.setLog(log);

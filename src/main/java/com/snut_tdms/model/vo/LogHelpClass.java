@@ -21,22 +21,11 @@ public class LogHelpClass {
     private UserInfo operatedDataUserInfo;
     private UserRole operatedDataUserRole;
     private DataClass operatedDataClass;
+    private NoticeHelpClass noticeHelpClass;
+    private ClassType classType;
+    private TypeContent typeContent;
 
     public LogHelpClass() {
-    }
-
-    public LogHelpClass(Log log, UserInfo operationUserInfo, UserRole operationUserRole, String operatedType, UserInfo operatedUserInfo, UserRole operatedUserRole, Department operatedDepartment, Data operatedData, UserInfo operatedDataUserInfo, UserRole operatedDataUserRole, DataClass operatedDataClass) {
-        this.log = log;
-        this.operationUserInfo = operationUserInfo;
-        this.operationUserRole = operationUserRole;
-        this.operatedType = operatedType;
-        this.operatedUserInfo = operatedUserInfo;
-        this.operatedUserRole = operatedUserRole;
-        this.operatedDepartment = operatedDepartment;
-        this.operatedData = operatedData;
-        this.operatedDataUserInfo = operatedDataUserInfo;
-        this.operatedDataUserRole = operatedDataUserRole;
-        this.operatedDataClass = operatedDataClass;
     }
 
     public Log getLog() {
@@ -127,6 +116,30 @@ public class LogHelpClass {
         this.operatedDataUserRole = operatedDataUserRole;
     }
 
+    public NoticeHelpClass getNoticeHelpClass() {
+        return noticeHelpClass;
+    }
+
+    public void setNoticeHelpClass(NoticeHelpClass noticeHelpClass) {
+        this.noticeHelpClass = noticeHelpClass;
+    }
+
+    public ClassType getClassType() {
+        return classType;
+    }
+
+    public void setClassType(ClassType classType) {
+        this.classType = classType;
+    }
+
+    public TypeContent getTypeContent() {
+        return typeContent;
+    }
+
+    public void setTypeContent(TypeContent typeContent) {
+        this.typeContent = typeContent;
+    }
+
     @Override
     public String toString() {
         return "LogHelpClass{" +
@@ -141,6 +154,7 @@ public class LogHelpClass {
                 ", operatedDataUserInfo=" + operatedDataUserInfo +
                 ", operatedDataUserRole=" + operatedDataUserRole +
                 ", operatedDataClass=" + operatedDataClass +
+                ", noticeHelpClass=" + noticeHelpClass +
                 '}';
     }
 
@@ -168,7 +182,9 @@ public class LogHelpClass {
             return false;
         if (operatedDataUserRole != null ? !operatedDataUserRole.equals(that.operatedDataUserRole) : that.operatedDataUserRole != null)
             return false;
-        return operatedDataClass != null ? operatedDataClass.equals(that.operatedDataClass) : that.operatedDataClass == null;
+        if (operatedDataClass != null ? !operatedDataClass.equals(that.operatedDataClass) : that.operatedDataClass != null)
+            return false;
+        return noticeHelpClass != null ? noticeHelpClass.equals(that.noticeHelpClass) : that.noticeHelpClass == null;
     }
 
     @Override
@@ -184,6 +200,7 @@ public class LogHelpClass {
         result = 31 * result + (operatedDataUserInfo != null ? operatedDataUserInfo.hashCode() : 0);
         result = 31 * result + (operatedDataUserRole != null ? operatedDataUserRole.hashCode() : 0);
         result = 31 * result + (operatedDataClass != null ? operatedDataClass.hashCode() : 0);
+        result = 31 * result + (noticeHelpClass != null ? noticeHelpClass.hashCode() : 0);
         return result;
     }
 }

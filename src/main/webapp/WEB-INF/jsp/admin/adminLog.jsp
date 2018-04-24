@@ -46,7 +46,7 @@
                     </tr>
                     <c:forEach items="${logHelpClassList}" var="logHelp" varStatus="logHelpStatus">
                         <tr id="${logHelp.log.id}">
-                            <td>1</td>
+                            <td>${logHelpStatus.index+1+(page.currentPage-1)*10}</td>
                             <td title="${logHelp.log.content}" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${logHelp.log.content}</td>
                             <td>${logHelp.log.action}</td>
                             <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${logHelp.log.time}"/></td>
@@ -75,16 +75,18 @@
                             </td>
                             <c:if test="${logHelp.operatedType == '用户'}">
                                 <td style="display: none">
-                                    <span>${logHelp.operatedUserInfo.name}<c:if test="${logHelp.operatedUserInfo.name==null}">暂无</c:if></span>
-                                    <span>${logHelp.operatedUserRole.role.name}<c:if test="${logHelp.operatedUserRole.role.name==null}">暂无</c:if></span>
-                                    <span>${logHelp.operatedUserInfo.phone}<c:if test="${logHelp.operatedUserInfo.phone==null}">暂无</c:if></span>
-                                    <span>${logHelp.operatedUserInfo.email}<c:if test="${logHelp.operatedUserInfo.email==null}">暂无</c:if></span>
+                                    <span>${logHelp.log.operatedId}<c:if test="${logHelp.log.operatedId==null}">已被删除</c:if></span>
+                                    <span>${logHelp.operatedUserInfo.name}<c:if test="${logHelp.operatedUserInfo.name==null}">已被删除</c:if></span>
+                                    <span>${logHelp.operatedUserRole.role.name}<c:if test="${logHelp.operatedUserRole.role.name==null}">已被删除</c:if></span>
+                                    <span>${logHelp.operatedUserInfo.phone}<c:if test="${logHelp.operatedUserInfo.phone==null}">已被删除</c:if></span>
+                                    <span>${logHelp.operatedUserInfo.email}<c:if test="${logHelp.operatedUserInfo.email==null}">已被删除</c:if></span>
                                 </td>
                             </c:if>
                             <c:if test="${logHelp.operatedType == '文件'}">
                                 <td style="display:none;">
                                     <span>${logHelp.operatedData.fileName}<c:if test="${logHelp.operatedData.fileName==null}">已被删除</c:if></span>
                                     <span>${logHelp.operatedData.dataClass.name}<c:if test="${logHelp.operatedData.dataClass.name==null}">已被删除</c:if></span>
+                                    <span>${logHelp.operatedDataUserInfo.user.username}<c:if test="${logHelp.operatedDataUserInfo.user.username==null}">暂无</c:if></span>
                                     <span>${logHelp.operatedDataUserInfo.name}<c:if test="${logHelp.operatedDataUserInfo.name==null}">暂无</c:if></span>
                                     <span>${logHelp.operatedDataUserRole.role.name}<c:if test="${logHelp.operatedDataUserRole.role.name==null}">暂无</c:if></span>
                                     <span>${logHelp.operatedDataUserInfo.phone}<c:if test="${logHelp.operatedDataUserInfo.phone==null}">暂无</c:if></span>
@@ -93,15 +95,58 @@
                             </c:if>
                             <c:if test="${logHelp.operatedType == '院系'}">
                                 <td style="display:none">
-                                    <span>${logHelp.operatedDepartment.code}</span>
-                                    <span>${logHelp.operatedDepartment.name}</span>
+                                    <span>${logHelp.operatedDepartment.code}<c:if test="${logHelp.operatedDepartment.code==null}">${logHelp.log.operatedId}</c:if></span>
+                                    <span>${logHelp.operatedDepartment.name}<c:if test="${logHelp.operatedDepartment.name==null}">已被删除</c:if></span>
                                 </td>
                             </c:if>
                             <c:if test="${logHelp.operatedType == '文件类型'}">
                                 <td style="display:none">
-                                    <span>${logHelp.operatedDataClass.name}</span>
-                                    <span>${logHelp.operatedDataClass.department.name}</span>
-                                    <span>${logHelp.operatedDataClass.role.name}</span>
+                                    <span>${logHelp.operatedDataClass.name}<c:if test="${logHelp.operatedDataClass.name==null}">已被删除</c:if></span>
+                                    <span>${logHelp.operatedDataClass.department.name}<c:if test="${logHelp.operatedDataClass.department.name==null}">已被删除</c:if></span>
+                                    <span>${logHelp.operatedDataClass.role.name}<c:if test="${logHelp.operatedDataClass.role.name==null}">已被删除</c:if></span>
+                                </td>
+                            </c:if>
+                            <c:if test="${logHelp.operatedType == '公告'}">
+                                <td style="display:none">
+                                    <span>${logHelp.noticeHelpClass.systemNotice.name}<c:if test="${logHelp.noticeHelpClass.systemNotice.name==null}">已被删除</c:if></span>
+                                    <span>${logHelp.noticeHelpClass.userInfo.user.username}<c:if test="${logHelp.noticeHelpClass.userInfo.user.username==null}">已被删除</c:if></span>
+                                    <span>${logHelp.noticeHelpClass.userInfo.name}<c:if test="${logHelp.noticeHelpClass.userInfo.name==null}">已被删除</c:if></span>
+                                    <span>${logHelp.noticeHelpClass.userRole.role.name}<c:if test="${logHelp.noticeHelpClass.userRole.role.name==null}">已被删除</c:if></span>
+                                    <span>${logHelp.noticeHelpClass.userInfo.phone}<c:if test="${logHelp.noticeHelpClass.userInfo.phone==null}">已被删除</c:if></span>
+                                    <span>${logHelp.noticeHelpClass.userInfo.email}<c:if test="${logHelp.noticeHelpClass.userInfo.email==null}">已被删除</c:if></span>
+                                </td>
+                            </c:if>
+                            <c:if test="${logHelp.operatedType == '类目属性'}">
+                                <td style="display:none">
+                                    <span>${logHelp.classType.name}<c:if test="${logHelp.classType.name==null}">已被删除</c:if></span>
+                                    <span>${logHelp.classType.department.name}<c:if test="${logHelp.classType.department.name==null}">已被删除</c:if></span>
+                                    <span>${logHelp.operationUserInfo.user.username}<c:if test="${logHelp.operationUserInfo.user.username==null}">已被删除</c:if></span>
+                                    <span>${logHelp.operationUserInfo.name}<c:if test="${logHelp.operationUserInfo.name==null}">已被删除</c:if></span>
+                                    <span>${logHelp.operatedUserRole.role.name}<c:if test="${logHelp.operatedUserRole.role.name==null}">已被删除</c:if></span>
+                                    <span>${logHelp.operationUserInfo.phone}<c:if test="${logHelp.operationUserInfo.phone==null}">已被删除</c:if></span>
+                                    <span>${logHelp.operationUserInfo.email}<c:if test="${logHelp.operationUserInfo.email==null}">已被删除</c:if></span>
+                                </td>
+                            </c:if>
+                            <c:if test="${logHelp.operatedType == '类目属性'}">
+                                <td style="display:none">
+                                    <span>${logHelp.classType.name}<c:if test="${logHelp.classType.name==null}">已被删除</c:if></span>
+                                    <span>${logHelp.classType.department.name}<c:if test="${logHelp.classType.department.name==null}">已被删除</c:if></span>
+                                    <span>${logHelp.operationUserInfo.user.username}<c:if test="${logHelp.operationUserInfo.user.username==null}">已被删除</c:if></span>
+                                    <span>${logHelp.operationUserInfo.name}<c:if test="${logHelp.operationUserInfo.name==null}">已被删除</c:if></span>
+                                    <span>${logHelp.operatedUserRole.role.name}<c:if test="${logHelp.operatedUserRole.role.name==null}">已被删除</c:if></span>
+                                    <span>${logHelp.operationUserInfo.phone}<c:if test="${logHelp.operationUserInfo.phone==null}">已被删除</c:if></span>
+                                    <span>${logHelp.operationUserInfo.email}<c:if test="${logHelp.operationUserInfo.email==null}">已被删除</c:if></span>
+                                </td>
+                            </c:if>
+                            <c:if test="${logHelp.operatedType == '类目属性内容'}">
+                                <td style="display:none">
+                                    <span>${logHelp.typeContent.name}<c:if test="${logHelp.typeContent.name==null}">已被删除</c:if></span>
+                                    <span>${logHelp.typeContent.classType.name}<c:if test="${logHelp.typeContent.classType.name==null}">已被删除</c:if></span>
+                                    <span>${logHelp.operationUserInfo.user.username}<c:if test="${logHelp.operationUserInfo.user.username==null}">已被删除</c:if></span>
+                                    <span>${logHelp.operationUserInfo.name}<c:if test="${logHelp.operationUserInfo.name==null}">已被删除</c:if></span>
+                                    <span>${logHelp.operatedUserRole.role.name}<c:if test="${logHelp.operatedUserRole.role.name==null}">已被删除</c:if></span>
+                                    <span>${logHelp.operationUserInfo.phone}<c:if test="${logHelp.operationUserInfo.phone==null}">已被删除</c:if></span>
+                                    <span>${logHelp.operationUserInfo.email}<c:if test="${logHelp.operationUserInfo.email==null}">已被删除</c:if></span>
                                 </td>
                             </c:if>
                         </tr>
@@ -173,18 +218,20 @@
             ul.html("");
             var td = tr.children('td').eq(11);
             if (operatedType=='用户'){
-                ul.append("<li>姓名:"+td.children('span').eq(0).text()+"</li>");
-                ul.append("<li>职务:"+td.children('span').eq(1).text()+"</li>");
-                ul.append("<li>电话:"+td.children('span').eq(2).text()+"</li>");
-                ul.append("<li>邮箱:"+td.children('span').eq(3).text()+"</li>")
+                ul.append("<li>用户名:"+td.children('span').eq(0).text()+"</li>");
+                ul.append("<li>姓名:"+td.children('span').eq(1).text()+"</li>");
+                ul.append("<li>职务:"+td.children('span').eq(2).text()+"</li>");
+                ul.append("<li>电话:"+td.children('span').eq(3).text()+"</li>");
+                ul.append("<li>邮箱:"+td.children('span').eq(4).text()+"</li>")
             }else if (operatedType=='文件'){
                 ul.append("<li>文件名:"+td.children('span').eq(0).text()+"</li>");
                 ul.append("<li>文件类型:"+td.children('span').eq(1).text()+"</li>");
                 ul.append("<p style='font-weight: bold'>上传者:</p>");
-                ul.append("<li>姓名:"+td.children('span').eq(2).text()+"</li>");
-                ul.append("<li>职务:"+td.children('span').eq(3).text()+"</li>");
-                ul.append("<li>电话:"+td.children('span').eq(4).text()+"</li>");
-                ul.append("<li>邮箱:"+td.children('span').eq(5).text()+"</li>")
+                ul.append("<li>用户名:"+td.children('span').eq(2).text()+"</li>");
+                ul.append("<li>姓名:"+td.children('span').eq(3).text()+"</li>");
+                ul.append("<li>职务:"+td.children('span').eq(4).text()+"</li>");
+                ul.append("<li>电话:"+td.children('span').eq(5).text()+"</li>");
+                ul.append("<li>邮箱:"+td.children('span').eq(6).text()+"</li>")
             }else if (operatedType=='院系'){
                 ul.append("<li>院系编码:"+td.children('span').eq(0).text()+"</li>");
                 ul.append("<li>院系名称:"+td.children('span').eq(1).text()+"</li>")
@@ -192,6 +239,32 @@
                 ul.append("<li>类型名称:"+td.children('span').eq(0).text()+"</li>");
                 ul.append("<li>所属院系:"+td.children('span').eq(1).text()+"</li>");
                 ul.append("<li>所属角色:"+td.children('span').eq(2).text()+"</li>")
+            }else if (operatedType=='公告'){
+                ul.append("<li>公告标题:"+td.children('span').eq(0).text()+"</li>");
+                ul.append("<p style='font-weight: bold'>发布者:</p>");
+                ul.append("<li>用户名:"+td.children('span').eq(1).text()+"</li>");
+                ul.append("<li>姓名:"+td.children('span').eq(2).text()+"</li>");
+                ul.append("<li>职务:"+td.children('span').eq(3).text()+"</li>");
+                ul.append("<li>电话:"+td.children('span').eq(4).text()+"</li>");
+                ul.append("<li>邮箱:"+td.children('span').eq(5).text()+"</li>")
+            }else if (operatedType=='类目属性'){
+                ul.append("<li>属性名称:"+td.children('span').eq(0).text()+"</li>");
+                ul.append("<li>所属院系:"+td.children('span').eq(1).text()+"</li>");
+                ul.append("<p style='font-weight: bold'>操作者:</p>");
+                ul.append("<li>用户名:"+td.children('span').eq(2).text()+"</li>");
+                ul.append("<li>姓名:"+td.children('span').eq(3).text()+"</li>");
+                ul.append("<li>职务:"+td.children('span').eq(4).text()+"</li>");
+                ul.append("<li>电话:"+td.children('span').eq(5).text()+"</li>");
+                ul.append("<li>邮箱:"+td.children('span').eq(6).text()+"</li>")
+            }else if (operatedType=='类目属性内容'){
+                ul.append("<li>属性内容名称:"+td.children('span').eq(0).text()+"</li>");
+                ul.append("<li>所属类目属性:"+td.children('span').eq(1).text()+"</li>");
+                ul.append("<p style='font-weight: bold'>操作者:</p>");
+                ul.append("<li>用户名:"+td.children('span').eq(2).text()+"</li>");
+                ul.append("<li>姓名:"+td.children('span').eq(3).text()+"</li>");
+                ul.append("<li>职务:"+td.children('span').eq(4).text()+"</li>");
+                ul.append("<li>电话:"+td.children('span').eq(5).text()+"</li>");
+                ul.append("<li>邮箱:"+td.children('span').eq(6).text()+"</li>")
             }
             $("#myModal").modal();
         }

@@ -237,13 +237,18 @@
          FROM system_notice
          LEFT JOIN `user` as user1 ON user1.username = system_notice.user
          LEFT JOIN role ON role.id = system_notice.role
-         WHERE
-            (SELECT department.code FROM user_info
+         WHERE 1=1
+         <if test="departmentCode != null and departmentCode!= ''">
+            AND (SELECT department.code FROM user_info
             LEFT JOIN department ON department.code = user_info.department
             LEFT JOIN `user` as user2 ON user_info.user = user2.username
             WHERE user2.username = user1.username) = #{departmentCode}
+         </if>
          <if test="roleId != null and roleId!= ''">
             AND role.id = #{roleId}
+         </if>
+         <if test="noticeId != null and noticeId!= ''">
+            AND system_notice.id = #{noticeId}
          </if>
          ORDER BY system_notice.`date` DESC
     </select>
@@ -566,7 +571,10 @@
         FROM class_type
         LEFT JOIN department ON department.code = class_type.department
         LEFT JOIN `user` ON `user`.username = class_type.`user`
-        WHERE department.code = #{departmentCode}
+        WHERE 1=1
+        <if test="departmentCode!=null and departmentCode!=''">
+            AND department.code = #{departmentCode}
+        </if>
         <if test="classTypeId!=null and classTypeId!=''">
             AND class_type.id = #{classTypeId};
         </if>

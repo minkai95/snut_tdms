@@ -35,7 +35,7 @@
                 </tr>
                 <c:forEach items="${dataClassHelpList}" var="dataClassHelp" varStatus="dataClassStatus">
                     <tr id="${dataClassHelp.dataClass.id}">
-                        <td style="text-align: center">1</td>
+                        <td style="text-align: center">${dataClassStatus.index+1+(page.currentPage-1)*10}</td>
                         <td>${dataClassHelp.dataClass.name}</td>
                         <td>${dataClassHelp.userRole.role.name}</td>
                         <td>${dataClassHelp.userInfo.name}</td>
