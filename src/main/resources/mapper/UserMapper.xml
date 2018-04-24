@@ -175,6 +175,13 @@
           role = #{role.id}
         WHERE `user` = #{user.username}
     </update>
+    <update id="updateUser" parameterType="com.snut_tdms.model.po.User">
+        UPDATE `user` SET
+          password = #{password},
+          id_card = #{idCard},
+          first_login = ${firstLogin}
+        WHERE username = #{username}
+    </update>
     <update id="logicalDeleteDataByIds" parameterType="java.util.Map">
         UPDATE `data` SET
           flag = 1,

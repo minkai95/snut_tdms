@@ -27,10 +27,12 @@
             <mvc:exclude-mapping path="/index"/>
             <mvc:exclude-mapping path="/common/**"/>
             <mvc:exclude-mapping path="/user/login"/>
-            <mvc:exclude-mapping path="/user/updateFirstPerson"/>
+            <mvc:exclude-mapping path="/user/firstLoginUpdate"/>
             <mvc:exclude-mapping path="/user/logout"/>
             <mvc:exclude-mapping path="/user/sessionError"/>
-            <mvc:exclude-mapping path="/user/forgetPassWord"/>
+            <mvc:exclude-mapping path="/user/forgetPSW"/>
+            <mvc:exclude-mapping path="/user/forgetPSWNext"/>
+            <mvc:exclude-mapping path="/user/submitForgetPSW"/>
             <mvc:exclude-mapping path="/user/logout"/>
             <mvc:exclude-mapping path="/resources/**"/>
             <!--Session失效拦截-->

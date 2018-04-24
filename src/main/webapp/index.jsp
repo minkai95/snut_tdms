@@ -14,7 +14,7 @@
     <label for="password">密码:</label>
     <input type="password" id="password" name="password"/>
     <input type="button" value="登录" id="login">
-
+    <button id="forgetPSW" type="button">找回密码</button>
     <script>
         $("#login").on('click', function () {
             var username = $("#username").val();
@@ -24,10 +24,31 @@
                 url: "${ctx}/user/login?username=" + username + "&password=" + password,
                 dataType: "json",
                 success: function (result) {
-                    location.href ="${ctx}"+result['urlStr'];
+                    if (result['message']!=null){
+                        $.confirm({
+                            title: '提示',
+                            content: result['message'],
+                            buttons: {
+                                确定: function () {
+                                    if (result['message']=='该用户不存在!'){
+                                        location.reload();
+                                    }else {
+                                        $("#password").val("");
+                                    }
+                                }
+                            }
+                        })
+                    }else {
+                        location.href ="${ctx}"+result['urlStr'];
+                    }
                 }
             })
         });
+
+        $('#forgetPSW').mousedown(function () {
+            location.href ="${ctx}/user/forgetPSW?username="+$('#username').val();
+        });
+
         //防止页面后退
         history.pushState(null, "", document.URL);
         window.addEventListener('popstate', function () {

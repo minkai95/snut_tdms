@@ -45,30 +45,15 @@ public class UserController {
             UserInfo userInfo = userService.selectUserInfoByUsername(username);
             session.setAttribute("userRole",userRole);
             session.setAttribute("userInfo",userInfo);
-            switch (userRole.getRole().getName()){
-                case "superAdmin":
-                    session.setAttribute("role","superAdmin");
-                    json.put("urlStr", "/superAdmin/index");
-                    break;
-                case "admin":
-                    session.setAttribute("role","admin");
-                    json.put("urlStr", "/admin/index");
-                    break;
-                case "studentOffice":
-                    session.setAttribute("role","studentOffice");
-                    json.put("urlStr", "/studentOffice/index");
-                    break;
-                case "deanOffice":
-                    session.setAttribute("role","deanOffice");
-                    json.put("urlStr", "/deanOffice/index");
-                    break;
-                case "teacher":
-                    session.setAttribute("role","teacher");
-                    json.put("urlStr", "/teacher/index");
-                    break;
-                default:
-                    break;
-            }
+            session.setAttribute("role",userRole.getRole().getName());
+            json.put("urlStr", "/"+userRole.getRole().getName()+"/index");
+        }else if (StatusCode.LOGIN_SUCCESS.getnCode().equals(code.getnCode()) && (userRole.getUser().getFirstLogin()==0)){
+            UserInfo userInfo = userService.selectUserInfoByUsername(username);
+            session.setAttribute("userRole",userRole);
+            session.setAttribute("userInfo",userInfo);
+            json.put("urlStr", "/firstLogin.jsp");
+        }else {
+            json.put("message",code.getnCode());
         }
         return json;
     }
@@ -86,6 +71,25 @@ public class UserController {
         }
     }
 
+    @RequestMapping(value = "/firstLoginUpdate", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject firstLoginUpdate(HttpSession httpSession, @RequestBody UserInfo userInfo,@RequestParam("roleId") String roleId) {
+        JSONObject jsonObject = new JSONObject();
+        userInfo.setDepartment(userService.selectDepartmentByCode(userInfo.getDepartment().getCode()));
+        UserRole userRole = new UserRole(userInfo.getUser(),userService.selectRoleById(roleId));
+        String code = userService.updateUserInfo(userInfo,userRole,userInfo.getUser()).getnCode();
+        if (StatusCode.UPDATE_SUCCESS.getnCode().equals(code)){
+            httpSession.setAttribute("userRole",userRole);
+            httpSession.setAttribute("userInfo",userInfo);
+            httpSession.setAttribute("role",userRole.getRole().getName());
+            jsonObject.put("urlStr","/"+userRole.getRole().getName()+"/index");
+        }else {
+            jsonObject.put("urlStr","index.jsp");
+        }
+        jsonObject.put("message",code);
+        return jsonObject;
+    }
+
     @RequestMapping(value = "/sessionError")
     public String sessionError(@RequestParam("errorFlag") String errorFlag) {
         if ("sessionTimeoutError".equals(errorFlag)) {
@@ -95,6 +99,35 @@ public class UserController {
         }else {
             return "";
         }
+    }
+
+    @RequestMapping(value = "/forgetPSW")
+    public String forgetPSW(@RequestParam("username") String username,Model model) {
+        model.addAttribute("username",username);
+        return "../../forgetPassword";
+    }
+
+    @RequestMapping(value = "/forgetPSWNext",method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject forgetPSWNext(@RequestParam("username") String username,@RequestParam("idCard") String idCard){
+        JSONObject json = new JSONObject();
+        UserInfo userInfo = userService.selectUserInfoByUsername(username);
+        if (userInfo!=null && idCard.equals(userInfo.getUser().getIdCard())){
+            json.put("message",StatusCode.VALIDATE_SUCCESS.getnCode());
+        }else {
+            json.put("message",StatusCode.VALIDATE_ERROR.getnCode());
+        }
+        return json;
+    }
+
+    @RequestMapping(value = "/submitForgetPSW",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject submitForgetPSW(@RequestParam("username") String username,@RequestParam("password") String password){
+        JSONObject json = new JSONObject();
+        UserInfo userInfo = userService.selectUserInfoByUsername(username);
+        userInfo.getUser().setPassword(password);
+        json.put("message",userService.updatePassword(userInfo.getUser(),userInfo.getUser()).getnCode());
+        return json;
     }
 
     @RequestMapping(value = "/updatePerson",method = RequestMethod.POST)

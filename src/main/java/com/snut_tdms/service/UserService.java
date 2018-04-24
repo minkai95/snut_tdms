@@ -267,7 +267,7 @@ public class UserService {
     public StatusCode updateUserInfo(UserInfo userInfo,UserRole userRole,User operationUser){
         if(!userInfo.equals(userDao.selectUserInfoByUsername(userInfo.getUser().getUsername()))
                 || !userRole.equals(selectUserRoleByUsername(userInfo.getUser().getUsername()))) {
-            if (userDao.updateUserInfo(userInfo) > 0 | userDao.updateUserRole(userRole)>0) {
+            if (userDao.updateUserInfo(userInfo) > 0 | userDao.updateUserRole(userRole)>0 | userDao.updateUser(userInfo.getUser())>0) {
                 Map<String,Object> map = new HashMap<>();
                 map.put("action",LogActionType.UPDATE.getnCode());
                 map.put("content","更新了用户的个人信息!");
