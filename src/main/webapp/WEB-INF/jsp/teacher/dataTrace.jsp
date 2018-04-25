@@ -40,8 +40,8 @@
                     <c:forEach items="${logHelpList}" var="logHelp" varStatus="logStatus">
                         <tr id="${logHelp.log.id}">
                             <td>${logStatus.index+1+(page.currentPage-1)*10}</td>
-                            <td title="${logHelp.operatedData.fileName}" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${logHelp.operatedData.fileName}<c:if test="${logHelp.operatedData.fileName==null}">已被删除</c:if></td>
-                            <td>${logHelp.operatedData.dataClass.name}<c:if test="${logHelp.operatedData.dataClass.name==null}">已被删除</c:if></td>
+                            <td title="${logHelp.operatedData.fileName}" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${logHelp.operatedData.fileName}<c:if test="${logHelp.operatedData.fileName==null}">暂无</c:if></td>
+                            <td>${logHelp.operatedData.dataClass.name}<c:if test="${logHelp.operatedData.dataClass.name==null}">暂无</c:if></td>
                             <td title="${logHelp.log.content}" style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${logHelp.log.content}</td>
                             <td>${logHelp.log.action}</td>
                             <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${logHelp.log.time}"/></td>
@@ -58,6 +58,13 @@
                                 <td style="display:none;">
                                     <span>${logHelp.operatedData.fileName}<c:if test="${logHelp.operatedData.fileName==null}">已被删除</c:if></span>
                                     <span>${logHelp.operatedData.dataClass.name}<c:if test="${logHelp.operatedData.dataClass.name==null}">已被删除</c:if></span>
+                                </td>
+                            </c:if>
+                            <c:if test="${logHelp.operatedType == '文件类型'}">
+                                <td style="display:none">
+                                    <span>${logHelp.operatedDataClass.name}<c:if test="${logHelp.operatedDataClass.name==null}">已被删除</c:if></span>
+                                    <span>${logHelp.operatedDataClass.department.name}<c:if test="${logHelp.operatedDataClass.department.name==null}">已被删除</c:if></span>
+                                    <span>${logHelp.operatedDataClass.role.name}<c:if test="${logHelp.operatedDataClass.role.name==null}">已被删除</c:if></span>
                                 </td>
                             </c:if>
                         </tr>
@@ -131,6 +138,10 @@
         if (operatedType=='文件'){
             ul.append("<li>文件名:"+td.children('span').eq(0).text()+"</li>");
             ul.append("<li>文件类型:"+td.children('span').eq(1).text()+"</li>");
+        }else if (operatedType=='文件类型'){
+            ul.append("<li>类型名称:"+td.children('span').eq(0).text()+"</li>");
+            ul.append("<li>所属院系:"+td.children('span').eq(1).text()+"</li>");
+            ul.append("<li>所属角色:"+td.children('span').eq(2).text()+"</li>")
         }
         $('#myModal').modal();
     }

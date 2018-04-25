@@ -176,8 +176,9 @@
     });
 
     // 提交申请新增类目
-    $("#addDepartmentForm").on('valid.form', function () {
+    $("#applyTypeForm").on('valid.form', function () {
         var sp = $('#selectProperty');
+        var name = $('#typePropertyName').val();
         var spLength = sp.find("select").length;
         var property1Id = null;
         var property2Id = null;

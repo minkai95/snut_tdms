@@ -286,18 +286,25 @@ public class UserController {
             }
             LogHelpClass logHelpClass = new LogHelpClass();
             logHelpClass.setLog(log);
-            logHelpClass.setOperationUserInfo(userService.selectUserInfoByUsername(log.getOperationUser().getUsername()));
-            UserRole userRole1 = UserController.updateUserRole(userService.selectUserRoleByUsername(log.getOperationUser().getUsername()));
-            logHelpClass.setOperationUserRole(userRole1);
-            Data data = userService.selectDataById(log.getOperatedId());
             logHelpClass.setOperatedType(log.getOperatedType());
-            if (data != null){
-                data.setFileName(data.getFileName().substring(data.getFileName().lastIndexOf("_")+1));
-                if(data.getContent()==null||"".equals(data.getContent())){
-                    data.setContent("暂无");
+            logHelpClass.setOperationUserInfo(userService.selectUserInfoByUsername(log.getOperationUser().getUsername()));
+            logHelpClass.setOperationUserRole(UserController.updateUserRole(userService.selectUserRoleByUsername(log.getOperationUser().getUsername())));
+            if ("文件".equals(log.getOperatedType())) {
+                Data data = userService.selectDataById(log.getOperatedId());
+                if (data != null) {
+                    data.setFileName(data.getFileName().substring(data.getFileName().lastIndexOf("_") + 1));
+                    if (data.getContent() == null || "".equals(data.getContent())) {
+                        data.setContent("暂无");
+                    }
+                    logHelpClass.setOperatedData(data);
+                    logHelpClass.setOperatedDataClass(data.getDataClass());
                 }
-                logHelpClass.setOperatedData(data);
-                logHelpClass.setOperatedDataClass(data.getDataClass());
+            }else if ("文件类型".equals(log.getOperatedType())){
+                DataClass dataClass = userService.selectDataClassById(log.getOperatedId());
+                if (dataClass != null){
+                    dataClass.getRole().setName(UserController.updateUserRole(new UserRole(new User(),dataClass.getRole())).getRole().getName());
+                    logHelpClass.setOperatedDataClass(dataClass);
+                }
             }
             result.add(logHelpClass);
         }
