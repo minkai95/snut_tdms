@@ -184,7 +184,7 @@ public class AdminController {
         JSONObject jsonObject = new JSONObject();
         UserInfo adminUserInfo = (UserInfo) httpSession.getAttribute("userInfo");
         userInfo.setDepartment(adminUserInfo.getDepartment());
-        jsonObject.put("message",adminService.insertUser(userInfo.getUser().getUsername(),userInfo.getDepartment().getCode(),roleId,userInfo.getUser()).getnCode());
+        jsonObject.put("message",adminService.insertUser(userInfo.getUser().getUsername(),userInfo.getDepartment().getCode(),roleId,adminUserInfo.getUser()).getnCode());
         userInfo.setUser(userService.selectUserInfoByUsername(userInfo.getUser().getUsername()).getUser());
         userService.updateUserInfo(userInfo,userService.selectUserRoleByUsername(userInfo.getUser().getUsername()),adminUserInfo.getUser());
         return jsonObject;
