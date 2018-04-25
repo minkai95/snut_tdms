@@ -5,7 +5,8 @@
 <head>
     <title>院系管理员管理</title>
     <style>
-        .n-error{top: 5px !important;left: -150px !important;  }
+        .n-error{top: 5px !important;left: -150px !important;}
+        .addUserModal div label{width: 90px !important;}
     </style>
 </head>
 <body>
@@ -64,7 +65,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title" id="myModalLabel">新增管理员</h4>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body addUserModal">
                         <div class="form-group">
                             <label for="addUsername" style="letter-spacing: 8px;">用户名:</label>
                             <input type="text" id="addUsername" class="form-control applyDataName" name="departmentAdminId"
@@ -119,7 +120,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title" id="myModalLabel2">修改管理员信息</h4>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body addUserModal">
                         <div class="form-group">
                             <label for="updateUsername" style="letter-spacing: 8px;">用户名:</label>
                             <span id="updateUsername" class="form-control applyDataName"></span>

@@ -12,14 +12,14 @@
                 <div class="teacherHeader">
                     <p class="publicDataTitle">全校日志管理</p>
                     <label for="departmentFilter" class="chooseLabel" style="margin-left: 0;">院系:</label>
-                    <select id="departmentFilter" name="departmentCode" class="form-control chooseSelect">
+                    <select id="departmentFilter" name="departmentCode" class="chooseSelectStyle">
                         <option value="">全部</option>
                         <c:forEach items="${departmentList}" var="department">
                             <option value="${department.code}" <c:if test="${page.selectParam[0]==department.code}">selected</c:if>>${department.name}</option>
                         </c:forEach>
                     </select>
                     <label for="actionFilter" class="chooseLabel">操作行为:</label>
-                    <select id="actionFilter" name="action" class="form-control chooseSelect">
+                    <select id="actionFilter" name="action" class="chooseSelectStyle">
                         <option value="">全部</option>
                         <option value="登录" <c:if test="${page.selectParam[1]=='登录'}">selected</c:if>>登录</option>
                         <option value="新增" <c:if test="${page.selectParam[1]=='新增'}">selected</c:if>>新增</option>
@@ -29,7 +29,7 @@
                         <option value="逻辑删除" <c:if test="${page.selectParam[1]=='逻辑删除'}">selected</c:if>>逻辑删除</option>
                     </select>
                     <label for="operatedTypeFilter" class="chooseLabel">操作对象:</label>
-                    <select id="operatedTypeFilter" name="operatedType" class="form-control chooseSelect">
+                    <select id="operatedTypeFilter" name="operatedType" class="chooseSelectStyle">
                         <option value="">全部</option>
                         <option value="文件" <c:if test="${page.selectParam[2]=='文件'}">selected</c:if>>文件</option>
                         <option value="用户" <c:if test="${page.selectParam[2]=='用户'}">selected</c:if>>用户</option>
@@ -153,26 +153,39 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="content">日志内容</label>
-                        <div id="content"></div>
+                        <span id="content" class="spanControl"></span>
                     </div>
                     <div class="form-group">
                         <label for="description">描述</label>
-                        <div id="description"></div>
+                        <span id="description" class="spanControl"></span>
                     </div>
                     <div class="form-group">
                         <label for="handler">操作者</label>
                         <div id="handler">
-                            <ul>
-                                <li>用户名:<span id="handlerUsername"></span></li>
-                                <li>姓名:<span id="handlerName"></span></li>
-                                <li>职务:<span id="handlerJob"></span></li>
-                                <li>电话:<span id="handlerPhone"></span></li>
-                                <li>邮箱:<span id="handlerEmail"></span></li>
-                            </ul>
+                            <table class="table table-bordered">
+                                <tbody>
+                                <tr>
+                                    <th>用户名</th>
+                                    <th>姓名</th>
+                                    <th>职务</th>
+                                    <th>电话</th>
+                                    <th>邮箱</th>
+                                </tr>
+                                <tr>
+                                    <td><span id="handlerUsername"></span></td>
+                                    <td><span id="handlerName"></span></td>
+                                    <td><span id="handlerJob"></span></td>
+                                    <td><span id="handlerPhone"></span></td>
+                                    <td><span id="handlerEmail"></span></td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <label for="handler2">被操作对象:<span id="operatedType"></span></label>
-                        <div id="handler2">
-                            <ul></ul>
+                        <div class="form-group">
+                            <label for="handler2">被操作对象:<span id="operatedType"></span></label>
+                            <div id="handler2">
+                                <%--<ul></ul>--%>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -201,40 +214,82 @@
             $('#handlerUsername').text(tr.children('td').eq(12).text());
             var operatedType = tr.children('td').eq(5).text();
             $('#operatedType').text(operatedType);
-            var ul = $("#handler2").children('ul').eq(0);
+            var ul = $("#handler2");
             ul.html("");
             var td = tr.children('td').eq(11);
             if (operatedType=='用户'){
-                ul.append("<li>用户名:"+td.children('span').eq(0).text()+"</li>");
-                ul.append("<li>姓名:"+td.children('span').eq(1).text()+"</li>");
-                ul.append("<li>职务:"+td.children('span').eq(2).text()+"</li>");
-                ul.append("<li>电话:"+td.children('span').eq(3).text()+"</li>");
-                ul.append("<li>邮箱:"+td.children('span').eq(4).text()+"</li>")
+                ul.append("<table id='handlerTable' class='table table-bordered'></table>");
+                var handlerTable = $("#handlerTable");
+                handlerTable.append("<tr><th>用户名</th><th>姓名</th><th>职务</th><th>电话</th><th>邮箱</th></tr>");
+                handlerTable.append("<tr><td>"+ td.children('span').eq(0).text()+"</td> <td>"+td.children('span').eq(1).text()+"</td> <td>"+td.children('span').eq(2).text()+"</td><td>"+td.children('span').eq(3).text()+"</td><td>"+td.children('span').eq(4).text()+"</td></tr>");
+                handlerTable.children("tr").children("th").each(function(){
+                    $(this).addClass("tableThStyle");
+                });
+                handlerTable.children("tr").children("td").each(function(){
+                    $(this).addClass("tableThStyle");
+                });
             }else if (operatedType=='文件'){
-                ul.append("<li>文件名:"+td.children('span').eq(0).text()+"</li>");
-                ul.append("<li>文件类型:"+td.children('span').eq(1).text()+"</li>");
+                ul.append("<p><span style='font-weight: bold'>文件名：</span>"+ td.children('span').eq(0).text()+ "</p>");
+                ul.append("<p><span style='font-weight: bold'>文件类型：</span>"+ td.children('span').eq(1).text()+ "</p>");
                 ul.append("<p style='font-weight: bold'>上传者:</p>");
-                ul.append("<li>用户名:"+td.children('span').eq(2).text()+"</li>");
-                ul.append("<li>姓名:"+td.children('span').eq(3).text()+"</li>");
-                ul.append("<li>职务:"+td.children('span').eq(4).text()+"</li>");
-                ul.append("<li>电话:"+td.children('span').eq(5).text()+"</li>");
-                ul.append("<li>邮箱:"+td.children('span').eq(6).text()+"</li>")
+                ul.append("<table id='handlerTable' class='table table-bordered'></table>");
+                var handlerTable = $("#handlerTable");
+                handlerTable.append("<tr><th>用户名</th><th>姓名</th><th>职务</th><th>电话</th><th>邮箱</th></tr>");
+                handlerTable.append("<tr><td>"+ td.children('span').eq(2).text()+"</td> <td>"+td.children('span').eq(3).text()+"</td> <td>"+td.children('span').eq(4).text()+"</td><td>"+td.children('span').eq(5).text()+"</td><td>"+td.children('span').eq(6).text()+"</td></tr>");
+                handlerTable.children("tr").children("th").each(function(){
+                    $(this).addClass("tableThStyle");
+                });
+                handlerTable.children("tr").children("td").each(function(){
+                    $(this).addClass("tableThStyle");
+                });
             }else if (operatedType=='院系'){
-                ul.append("<li>院系编码:"+td.children('span').eq(0).text()+"</li>");
-                ul.append("<li>院系名称:"+td.children('span').eq(1).text()+"</li>")
+                ul.append("<table id='handlerTable' class='table table-bordered'></table>");
+                var handlerTable = $("#handlerTable");
+                handlerTable.append("<tr><th>院系编码</th><th>院系名称</th></tr>");
+                handlerTable.append("<tr><td>"+ td.children('span').eq(0).text()+"</td> <td>"+td.children('span').eq(1).text()+"</td> ");
+                handlerTable.children("tr").children("th").each(function(){
+                    $(this).addClass("tableThStyle");
+                });
+                handlerTable.children("tr").children("td").each(function(){
+                    $(this).addClass("tableThStyle");
+                });
             }else if (operatedType=='文件类型'){
-                ul.append("<li>类型名称:"+td.children('span').eq(0).text()+"</li>");
-                ul.append("<li>所属院系:"+td.children('span').eq(1).text()+"</li>");
-                ul.append("<li>所属角色:"+td.children('span').eq(2).text()+"</li>")
+                ul.append("<table id='handlerTable' class='table table-bordered'></table>");
+                var handlerTable = $("#handlerTable");
+                handlerTable.append("<tr><th>类型名称</th><th>所属院系</th><th>所属角色</th></tr>");
+                handlerTable.append("<tr><td>"+ td.children('span').eq(0).text()+"</td> <td>"+td.children('span').eq(1).text()+"</td> <td>"+td.children('span').eq(1).text()+"</td> ");
+                handlerTable.children("tr").children("th").each(function(){
+                    $(this).addClass("tableThStyle");
+                });
+                handlerTable.children("tr").children("td").each(function(){
+                    $(this).addClass("tableThStyle");
+                });
             }else if (operatedType=='公告'){
-                ul.append("<li>公告标题:"+td.children('span').eq(0).text()+"</li>");
-                ul.append("<li>公告内容:"+td.children('span').eq(1).text()+"</li>");
+                ul.append("<p><span style='font-weight: bold'>公共标题：</span>"+ td.children('span').eq(0).text()+ "</p>");
+                ul.append("<p><span style='font-weight: bold'>公共内容：</span></p>");
+                ul.append("<span class='spanControl'>"+ td.children('span').eq(1).text() +"</span>");
             }else if (operatedType=='类目属性'){
-                ul.append("<li>属性名称:"+td.children('span').eq(0).text()+"</li>");
-                ul.append("<li>所属院系:"+td.children('span').eq(1).text()+"</li>");
+                ul.append("<table id='handlerTable' class='table table-bordered'></table>");
+                var handlerTable = $("#handlerTable");
+                handlerTable.append("<tr><th>属性名称</th><th>所属院系</th></tr>");
+                handlerTable.append("<tr><td>"+ td.children('span').eq(0).text()+"</td> <td>"+td.children('span').eq(1).text()+"</td>");
+                handlerTable.children("tr").children("th").each(function(){
+                    $(this).addClass("tableThStyle");
+                });
+                handlerTable.children("tr").children("td").each(function(){
+                    $(this).addClass("tableThStyle");
+                });
             }else if (operatedType=='类目属性内容'){
-                ul.append("<li>属性内容名称:"+td.children('span').eq(0).text()+"</li>");
-                ul.append("<li>所属类目属性:"+td.children('span').eq(1).text()+"</li>");
+                ul.append("<table id='handlerTable' class='table table-bordered'></table>");
+                var handlerTable = $("#handlerTable");
+                handlerTable.append("<tr><th>属性内容名称</th><th>所属类目属性</th></tr>");
+                handlerTable.append("<tr><td>"+ td.children('span').eq(0).text()+"</td> <td>"+td.children('span').eq(1).text()+"</td>");
+                handlerTable.children("tr").children("th").each(function(){
+                    $(this).addClass("tableThStyle");
+                });
+                handlerTable.children("tr").children("td").each(function(){
+                    $(this).addClass("tableThStyle");
+                });
             }
             $("#myModal").modal();
         }

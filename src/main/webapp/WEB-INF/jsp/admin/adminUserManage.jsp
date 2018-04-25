@@ -6,6 +6,7 @@
     <title>用户管理</title>
     <style>
         .n-error{top: 5px !important;left: -150px !important;  }
+        .addUserModal div label{width: 90px !important;}
     </style>
 </head>
 <body>
@@ -16,7 +17,7 @@
                 <div class="teacherUpload">
                     <p class="uploadTitle">学院用户资料列表</p>
                     <label for="roleId" class="chooseLabel">用户角色:</label>
-                    <select id="roleId" name="roleId" class="form-control chooseSelect">
+                    <select id="roleId" name="roleId" class="chooseSelectStyle">
                         <option value="">全部</option>
                         <option value="005" <c:if test="${page.selectParam[0]=='005'}">selected</c:if>>教师</option>
                         <option value="004" <c:if test="${page.selectParam[0]=='004'}">selected</c:if>>教务处教师</option>
@@ -69,7 +70,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title" id="myModalLabel">新增用户</h4>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body addUserModal">
                         <div class="form-group">
                             <label for="addUsername" style="letter-spacing: 8px;">用户名:</label>
                             <input type="text" id="addUsername" class="form-control applyDataName"
@@ -128,7 +129,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title" id="myModalLabel2">修改管理员信息</h4>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body addUserModal">
                         <div class="form-group">
                             <label for="updateUsername" style="letter-spacing: 8px;">用户名:</label>
                             <span id="updateUsername" class="form-control applyDataName">00001</span>

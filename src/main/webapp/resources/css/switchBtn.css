@@ -7,4 +7,4 @@
 .switchBtn{width: 21px !important; height: 21px !important; margin-top: 2px; margin-left: 2px; position: absolute; top: 0; left: 0; background-color: #fff !important; border-radius: 50%;}
 .switchBtn:hover{cursor: pointer;}
 .addStyle{background-color:  #409eff !important;}
-.switchBtnMove{    margin-left: 103px;  margin-top: -27px;}
+.switchBtnMove{margin-left: 93px;  margin-top: -27px;}

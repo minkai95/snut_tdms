@@ -117,11 +117,12 @@ header{
     text-align: center;
 }
 .loginOut{
+    color: #D0ECF0 !important;
     margin-left: 20px;
 }
 .loginOut:hover{
     cursor: pointer;
-    color: #FFF;
+    color: #FFF !important;
 }
 .personLi a{
     display: block;

@@ -33,20 +33,25 @@
                                    data-rule-forgetIdCard="[/^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X|x)$/,'请填写有效的身份证号']">
                         </div>
                         <a href="${ctx}/index.jsp" class="btn btn-warning nextBtn" style="margin-left: 120px">返回登录</a>
-                        <button id="nextBtn" type="button" class="btn btn-info nextBtn">下一步</button>
+                        <button type="submit" id="nextBtn"  class="btn btn-info nextBtn">下一步</button>
                     </form>
                 </div>
                 <div class="stepTwoCont">
-                    <div class="form-group">
-                        <label for="forgetPSWNew" class="newPSWLabel">新密码:</label>
-                        <input type="text" class="form-control" id="forgetPSWNew" placeholder="请输入新密码">
-                    </div>
-                    <div class="form-group">
-                        <label for="forgetPSWAgain">再次输入:</label>
-                        <input type="text" class="form-control" id="forgetPSWAgain" placeholder="请再次输入">
-                    </div>
-                    <a href="${ctx}/index.jsp" class="btn btn-warning nextBtn" style="margin-left: 120px">返回登录</a>
-                    <button id="submitBtn" class="btn btn-info nextBtn" type="submit">提交</button>
+                    <form id="forgetPSWFormTwo" data-validator-option="{timely:2, focusCleanup:true}">
+                        <div class="form-group">
+                            <label for="forgetPSWNew" class="newPSWLabel">新密码:</label>
+                            <input type="password" class="form-control" id="forgetPSWNew" name="forgetPSWNew" placeholder="请输入新密码"
+                                   data-rule="新密码:forgetPSWNew;"
+                                   data-rule-forgetPSWNew="[/^[a-zA-Z0-9]{6,18}$/, '请填写6-18位密码']">
+                        </div>
+                        <div class="form-group">
+                            <label for="forgetPSWAgain">再次输入:</label>
+                            <input type="password" class="form-control" id="forgetPSWAgain" name="forgetPSWAgain" placeholder="请再次输入"
+                                   data-rule="确认密码: match[forgetPSWNew];">
+                        </div>
+                        <a href="${ctx}/index.jsp" class="btn btn-warning nextBtn" style="margin-left: 120px">返回登录</a>
+                        <button type="submit" class="btn btn-info nextBtn">提交</button>
+                    </form>
                 </div>
                 <div class="stepThreeCont">
                     <div class="laughCont">
@@ -58,7 +63,7 @@
         </div>
     </div>
     <script>
-        $("#nextBtn").click(function(){
+        $("#forgetPSWFormOne").on('valid.form', function () {
             $.ajax({
                 type: "GET",
                 url: "${ctx}/user/forgetPSWNext?username=" + $('#username').val() + "&idCard=" + $('#idCard').val(),
@@ -87,7 +92,7 @@
                 }
             })
         });
-        $("#submitBtn").click(function(){
+        $("#forgetPSWFormTwo").on('valid.form', function () {
             $.ajax({
                 type: "POST",
                 url: "${ctx}/user/submitForgetPSW?username=" + $('#username').val() + "&password=" + $('#forgetPSWNew').val(),

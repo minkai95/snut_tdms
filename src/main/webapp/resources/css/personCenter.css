@@ -6,7 +6,7 @@
     box-shadow: 0 0 15px #ccc;
     padding-top: 30px;
 }
-label{
+.formDiv label{
     width: 100px;
 }
 .button-group{

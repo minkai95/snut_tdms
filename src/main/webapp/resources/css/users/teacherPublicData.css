@@ -61,9 +61,25 @@
     line-height: 25px;
     padding: 0 5px;
 }
+.chooseSelectStyle{
+    display: inline-block;
+    height: 27px;
+    padding: 2px 5px;
+    font-size: 14px;
+    line-height: 27px;
+    color: #555;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
 
 .chooseLabel{
-    width: 70px;
+    min-width: 37px;
     font-size: 16px;
     margin-left: 20px;
     font-weight: 100;
@@ -107,4 +123,25 @@
 }
 .appendMargin{
     margin-left: 20px;
+}
+.spanControl{
+    display: block;
+    width: 100%;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+.tableThStyle{
+    text-align: left;
+    border: 1px solid #ddd;
+    padding: 6px;
 }
