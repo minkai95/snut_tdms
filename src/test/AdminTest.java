@@ -30,18 +30,6 @@ public class AdminTest {
 
     @Test
     public void testData() {
-        List<String> list = new ArrayList<>();
-        list.add("5");
-        list.add("6");
-        list.add("7");
-        list.add("8");
-        User operationUser = new User("123","111","11",1);
-        User operatedUser = new User("123","111","11",1);
-        Map<String,Object> map = new HashMap<>();
-        map.put("action","delete");
-        map.put("operationUser",operationUser);
-        map.put("operatedUser",operatedUser);
-        map.put("description","文件不合格而被删除");
     }
 
 }

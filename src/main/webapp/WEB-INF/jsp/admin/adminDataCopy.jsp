@@ -11,8 +11,8 @@
             <p class="publicDataTitle">数据备份</p>
             <div class="teacherUpload">
                 <p class="uploadTitle">已有数据备份列表</p>
-                <button class="btn btn-info upload batchDelete" data-toggle="modal" data-target="#myModal2"><i class="icon-save" style="margin-right: 5px;"></i>手动备份</button>
-                <button id="selfSaveBtn" class="btn btn-success upload batchDelete" data-toggle="modal" data-target="#myModal"><i class="icon-cogs" style="margin-right: 5px;"></i>自动备份</button>
+                <button id="sdbf" type="button" class="btn btn-info upload batchDelete"><i class="icon-save" style="margin-right: 5px;"></i>手动备份</button>
+                <button id="selfSaveBtn" type="button" class="btn btn-success upload batchDelete" data-toggle="modal" data-target="#myModal"><i class="icon-cogs" style="margin-right: 5px;"></i>自动备份</button>
                 <p class="upload batchDelete saveTitle">当前备份时间：每天23:59:00</p>
             </div>
         </div>
@@ -104,6 +104,26 @@
     </div>
 
     <script>
+
+        $('#sdbf').click(function () {
+            $.ajax({
+                url:"${ctx}/admin/backupsDataBase",
+                type:"POST",
+                dataType:"json",
+                success: function (result) {
+                    $.confirm({
+                        title: '提示',
+                        content: result['message'],
+                        buttons: {
+                            确定: function () {
+                                location.reload();
+                            }
+                        }
+                    });
+                }
+            })
+        });
+
         /*循环输出li*/
         var liHourText = 0;
         for(var i = 0; i < 24; i++){

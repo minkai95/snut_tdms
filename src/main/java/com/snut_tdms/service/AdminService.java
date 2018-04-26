@@ -1,17 +1,16 @@
 package com.snut_tdms.service;
 
-import com.snut_tdms.controller.UserController;
 import com.snut_tdms.dao.AdminDao;
 import com.snut_tdms.dao.UserDao;
 import com.snut_tdms.model.po.*;
 import com.snut_tdms.model.vo.*;
-import com.snut_tdms.util.LogActionType;
-import com.snut_tdms.util.OperatedType;
-import com.snut_tdms.util.StatusCode;
+import com.snut_tdms.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.sql.Timestamp;
 import java.util.*;
 
 /**
@@ -348,4 +347,73 @@ public class AdminService extends UserService{
         }
     }
 
+    public boolean backupsDataBase(HttpServletRequest request,String departmentCode, String backupsType){
+        List<Data> dataList = adminDao.selectDataByDepartmentCode(departmentCode);
+        List<String> titles = Arrays.asList(new String[]{"id","content","file_name","src","data_class","type_contents","user","submit_time","delete_time","flag"});
+        List<List<String>> content = new ArrayList<>();
+        for (Data data: dataList) {
+            if (data!=null){
+                List<String> list = new ArrayList<>();
+                list.add(data.getId());
+                list.add(data.getContent());
+                list.add(data.getFileName());
+                list.add(data.getSrc());
+                list.add(data.getDataClass().getId());
+                list.add(data.getTypeContents());
+                list.add(data.getUser().getUsername());
+                if (data.getSubmitTime()!=null) {
+                    list.add(data.getSubmitTime().toString().substring(0,19));
+                }else {
+                    list.add(null);
+                }
+                if (data.getDeleteTime()!=null) {
+                    list.add(data.getDeleteTime().toString().substring(0,19));
+                }else {
+                    list.add(null);
+                }
+                list.add(String.valueOf(data.getFlag()));
+                content.add(list);
+            }
+        }
+        return ExcelUtilPOI.createExcel(request,departmentCode,backupsType,"xls",titles,content);
+    }
+
+    public Integer rollBackBackupsDataBase(HttpServletRequest request,String departmentCode, String backupsType){
+        String savePath = request.getServletContext().getRealPath("\\WEB-INF\\backups");
+        String fileSrc = savePath+"\\"+departmentCode+"\\"+backupsType+".xls";
+        File file = new File(fileSrc);
+        if (file.exists() && file.isFile()){
+            List<List<String>> result = ExcelUtilPOI.readExcel(savePath+"\\"+departmentCode+"\\",backupsType,"xls");
+            List<Data> dataList = new ArrayList<>();
+            for (List<String> list: result){
+                Data data = new Data();
+                data.setId(list.get(0));
+                data.setContent(list.get(1));
+                data.setFileName(list.get(2));
+                data.setSrc(list.get(3));
+                data.setDataClass(selectDataClassById(list.get(4)));
+                data.setTypeContents(list.get(5));
+                data.setUser(selectUserInfoByUsername(list.get(6)).getUser());
+                data.setSubmitTime(Timestamp.valueOf(list.get(7)));
+                if (list.get(8)!=null && !"".equals(list.get(8))) {
+                    data.setDeleteTime(Timestamp.valueOf(list.get(8)));
+                }else {
+                    data.setDeleteTime(null);
+                }
+                data.setFlag(Integer.valueOf(list.get(9)));
+                dataList.add(data);
+            }
+            int count = 0;
+            for (Data data:dataList){
+                if (selectDataById(data.getId())==null){
+                    count += userDao.insertData(data);
+                }else {
+                    count += adminDao.updateDataById(data);
+                }
+            }
+            return count;
+        }else {
+            return 0;
+        }
+    }
 }

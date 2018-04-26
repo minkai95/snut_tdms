@@ -413,7 +413,7 @@
         department.code as dataClassDepartmentCode,
         department.name as dataClassDepartmentName,
         data_class.flag as dataClassFlag,
-        type_contents,
+        type_contents as typeContents,
         user2.username,
         user2.password,
         user2.id_card as idCard,

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -324,6 +325,33 @@ public class AdminController {
             }else {
                 jsonObject.put("message",StatusCode.DELETE_ERROR.getnCode());
             }
+        }
+        return jsonObject;
+    }
+
+    @RequestMapping(value = "/backupsDataBase", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject backupsData(HttpSession httpSession, HttpServletRequest request){
+        JSONObject jsonObject = new JSONObject();
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        if (adminService.backupsDataBase(request,userInfo.getDepartment().getCode(),"sdbf")){
+            jsonObject.put("message","备份成功!");
+        }else {
+            jsonObject.put("message","备份失败!");
+        }
+        return jsonObject;
+    }
+
+    @RequestMapping(value = "/rollBackBackupsDataBase", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject rollBackBackupsDataBase(HttpSession httpSession, HttpServletRequest request){
+        JSONObject jsonObject = new JSONObject();
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        int count = adminService.rollBackBackupsDataBase(request,userInfo.getDepartment().getCode(),"sdbf");
+        if (count>0){
+            jsonObject.put("message","成功恢复"+count+"条文件数据!");
+        }else {
+            jsonObject.put("message","恢复失败!");
         }
         return jsonObject;
     }

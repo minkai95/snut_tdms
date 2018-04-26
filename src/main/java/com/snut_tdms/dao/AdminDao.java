@@ -35,8 +35,11 @@ public interface AdminDao extends UserDao {
 
     int updateTypeContent(Map<String,Object> map);
 
+    int updateDataById(Data data);
+
     List<Log> selectDepartmentLogsByPage(Map<String,Object> map);
 
     List<UserRole> selectUserByParamsByPage(Map<String,Object> map);
 
+    List<Data> selectDataByDepartmentCode(String departmentCode);
 }
