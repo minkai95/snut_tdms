@@ -18,7 +18,7 @@
                     <div class="loginFormWrapper">
                         <form id="loginForm">
                             <i class="icon-user iconUser"></i>
-                            <input id="username" class="form-control username" type="text" name="username" placeholder="用户名">
+                            <input id="username" class="form-control username" type="text" name="username" placeholder="用户名" autofocus>
                             <i class="icon-lock iconPassword"></i>
                             <input id="password" class="form-control password" type="password" name="password" placeholder="密码">
                             <input id="verificationCode" class="form-control verificationCode" type="text" name="verificationCode" placeholder="验证码">
