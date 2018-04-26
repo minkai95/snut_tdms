@@ -6,7 +6,7 @@
     <title>忘记密码</title>
     <link rel="icon" href="${ctx}/resources/images/title.ico" type="image/x-icon">
     <style>
-        .n-error{top: 4px;left: -152px;}
+        .n-error{top: 4px;left: -160px;}
     </style>
 </head>
 <body>
@@ -70,7 +70,7 @@
                 dataType: "json",
                 success: function (result) {
                     if (result['message']=='验证通过!'){
-                        $(".forgetPSWHeader").css("background","url('../resources/images/secondNextBgi.png') no-repeat 266px 0,#e0e0e0");
+                        $(".forgetPSWHeader").css("background","url('../resources/images/setpTwo.png') no-repeat 234px 0,#e0e0e0");
                         $("#stepOneSpan").removeClass("spanNextActive");
                         $('#stepOneSpan').text("身份验证通过");
                         $("#stepOneSpan").append("<i class='icon-ok-circle passIcon'></i>");
@@ -104,7 +104,7 @@
                         $('#stepTwoSpan').text("密码重置成功");
                         $("#stepTwoSpan").append("<i class='icon-ok-circle passIcon'></i>");
                         $("#stepThreeSpan").addClass("spanNextActive");
-                        $(".forgetPSWHeader").css("background","url('../resources/images/threeBgi.png') no-repeat 534px 0,#e0e0e0");
+                        $(".forgetPSWHeader").css("background","url('../resources/images/setpThree.png') no-repeat 234px 0,#e0e0e0");
                         $(".stepTwoCont").css("display","none");
                         $(".stepThreeCont").css("display","block");
                         var i = 2;

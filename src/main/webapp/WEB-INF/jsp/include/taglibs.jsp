@@ -23,6 +23,7 @@
 <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/forgetPsw.css"/>
 <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/firstLogin.css"/>
 <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/errorPage.css"/>
+<link rel="stylesheet" type="text/css" href="${ctx}/resources/css/index.css"/>
 <%-- 引入JS --%>
 <script type="text/javascript" src="${ctx}/resources/js/jquery/jquery-3.1.1.js"></script>
 <script type="text/javascript" src="${ctx}/resources/js/jquery/jquery.form.min.js"></script>
@@ -30,3 +31,6 @@
 <script type="text/javascript" src="${ctx}/resources/js/confirm/jquery-confirm.js"></script>
 <script type="text/javascript" src="${ctx}/resources/js/common.js"></script>
 <script type="text/javascript" src="${ctx}/resources/js/validator/jquery.validator.min.js?local=zh-CN"></script>
+<script type="text/javascript" src="${ctx}/resources/js/gVerify.js"></script>
+<script type="text/javascript" src="${ctx}/resources/js/bootstrap/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript" src="${ctx}/resources/js/bootstrap/bootstrap-datetimepicker.zh-CN.js"></script>

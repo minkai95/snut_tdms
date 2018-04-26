@@ -23,10 +23,6 @@
     display: inline-block;
     width: 70%;
 }
-.firstLoginContent span{
-    display: inline-block;
-    width: 70%;
-}
 .firstLoginContent select{
     display: inline-block;
     width: 70%;
@@ -43,4 +39,12 @@
 }
 .btnCont button:last-child{
     margin-left: 20px;
+}
+.firstUsername{
+    display: inline-block;
+    width: 70%;
+}
+.n-error{
+    top: 6px;
+    left: 0;
 }
