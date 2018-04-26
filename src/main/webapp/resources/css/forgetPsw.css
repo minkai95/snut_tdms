@@ -1,6 +1,7 @@
 .wrapper{
     background: url("../images/bgi.png") no-repeat;
     background-size: cover;
+    overflow: auto;
 }
 .forgetPSWWrapper{
     width: 800px;

@@ -1,4 +1,5 @@
-.switchBtnWrapper{width: 90px; height: 27px; overflow: hidden; position: relative;}
+.switchBtnWrapper{width: 55px; height: 27px; overflow: hidden; position: relative;}
+.switchBtnWrapper:hover{cursor: pointer;}
 .cont{background-color: #dcdfe6;}
 .switchBtnWrapper div{width: 25px; height: 25px; float: left;}
 .switchBtnLeft{border: 1px solid #dcdfe6; border-radius: 50% 0 0 50%; border-right: none; text-align: center; line-height: 25px;}
@@ -7,4 +8,11 @@
 .switchBtn{width: 21px !important; height: 21px !important; margin-top: 2px; margin-left: 2px; position: absolute; top: 0; left: 0; background-color: #fff !important; border-radius: 50%;}
 .switchBtn:hover{cursor: pointer;}
 .addStyle{background-color:  #409eff !important;}
+.addStyle2{background-color:  #449d44 !important;}
 .switchBtnMove{margin-left: 93px;  margin-top: -27px;}
+
+/*smallSwitchBtn样式*/
+.smallSwitchBtnWrapper{width: 45px; height: 20px; overflow: hidden; position: relative;}
+.smallSwitchBtnWrapper:hover{cursor: pointer;}
+.smallSwitchBtnWrapper div{width: 18px; height: 18px; float: left;}
+.smallSwitchBtn{width: 14px !important; height: 14px !important; margin-top: 2px; margin-left: 2px; position: absolute; top: 0; left: 0; background-color: #fff !important; border-radius: 50%;}
