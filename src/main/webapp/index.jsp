@@ -4,7 +4,7 @@
 <html>
     <head>
         <title>登录页面</title>
-        <link rel="icon" href="${ctx}/resources/images/title.ico" type="image/x-icon">
+        <link rel="icon" href="${ctx}/resources/images/facivon.ico" type="image/x-icon">
         <style>
             .n-error{top: 6px; left: -105px;}
         </style>

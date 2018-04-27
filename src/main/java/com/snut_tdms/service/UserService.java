@@ -34,7 +34,10 @@ public class UserService {
         String operatedId = (String) map.get("operatedId");
         String operatedType = (String) map.get("operatedType");
         Timestamp time = new Timestamp(System.currentTimeMillis());
-        User operationUser = userDao.selectUserByUsername(((User) map.get("operationUser")).getUsername()).getUser();
+        User operationUser =null;
+        if (map.get("operationUser")!=null && ((User) map.get("operationUser")).getUsername()!=null) {
+            operationUser = userDao.selectUserByUsername(((User) map.get("operationUser")).getUsername()).getUser();
+        }
         String description = null;
         if(map.containsKey("description")) {
             description = (String) map.get("description");

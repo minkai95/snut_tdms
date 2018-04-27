@@ -39,7 +39,7 @@ public interface AdminDao extends UserDao {
 
     int updateDataById(Data data);
 
-    int updateBackupData(String type);
+    int updateBackupData(Map<String,Object> map);
 
     List<Log> selectDepartmentLogsByPage(Map<String,Object> map);
 

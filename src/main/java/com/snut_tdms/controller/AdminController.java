@@ -159,10 +159,12 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/adminDataCopy", method = RequestMethod.GET)
-    public String adminDataCopy(Model model,@RequestParam(value = "currentPage", required = false) String currentPage
-            ,@RequestParam(value = "type", required = false) String type) {
+    public String adminDataCopy(HttpSession httpSession,Model model,
+                                @RequestParam(value = "currentPage", required = false) String currentPage,
+                                @RequestParam(value = "type", required = false) String type) {
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         Page page = SystemUtils.getPage(currentPage);
-        model.addAttribute("backupList",adminService.selectBackupDataByPage(null,type,page));
+        model.addAttribute("backupList",adminService.selectBackupDataByPage(null,type,userInfo.getDepartment().getCode(),page));
         model.addAttribute("page", page);
         return "admin/adminDataCopy";
     }
@@ -335,9 +337,10 @@ public class AdminController {
     public JSONObject backupsData(HttpSession httpSession, HttpServletRequest request,@RequestParam("backupsType") String backupsType){
         JSONObject jsonObject = new JSONObject();
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        BackupData backupData = new BackupData(SystemUtils.getUUID(),backupsType,userInfo.getUser(),new Timestamp(System.currentTimeMillis()),0);
-        adminService.updateBackupData(backupsType);
-        if (adminService.backupsDataBase(request,userInfo.getDepartment().getCode(),backupsType) && StatusCode.BACKUP_SUCCESS.getnCode().equals(adminService.insertBackupData(backupData,userInfo.getUser()).getnCode())){
+        BackupData backupData = new BackupData(SystemUtils.getUUID(),backupsType,userInfo.getUser(),userInfo.getDepartment(),new Timestamp(System.currentTimeMillis()),0);
+        adminService.updateBackupData(backupsType,userInfo.getDepartment().getCode());
+        if (adminService.backupsDataBase(userInfo.getDepartment().getCode(),backupsType)
+                && StatusCode.BACKUP_SUCCESS.getnCode().equals(adminService.insertBackupData(backupsType,backupData,userInfo.getUser(),userInfo.getDepartment()).getnCode())){
             String savePath = request.getServletContext().getRealPath("\\WEB-INF\\upload\\"+userInfo.getDepartment().getCode());
             String newPath = request.getServletContext().getRealPath("\\WEB-INF\\backups\\"+userInfo.getDepartment().getCode()+"\\file\\"+backupsType);
             int a = adminService.copyFile(savePath,newPath);

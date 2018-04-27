@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -36,10 +37,10 @@ public class AdminService extends UserService{
      * @param operationUser 管理员
      * @return 状态码
      */
-    public StatusCode insertBackupData(BackupData backupData,User operationUser){
+    public StatusCode insertBackupData(String backupsType,BackupData backupData,User operationUser,Department department){
         if (adminDao.insertBackupData(backupData)>0){
             Map<String,Object> m = new HashMap<>();
-            m.put("content","管理员备份了所有文件!");
+            m.put("content",department.getName()+backupsType+"所有文件!");
             m.put("action", LogActionType.INSERT.getnCode());
             m.put("operationUser",operationUser);
             m.put("operatedId",backupData.getId());
@@ -145,8 +146,11 @@ public class AdminService extends UserService{
         }
     }
 
-    public void updateBackupData(String type){
-        adminDao.updateBackupData(type);
+    public void updateBackupData(String type,String departmentCode){
+        Map<String,Object> map = new HashMap<>();
+        map.put("type",type);
+        map.put("departmentCode",departmentCode);
+        adminDao.updateBackupData(map);
     }
 
     /**
@@ -378,22 +382,22 @@ public class AdminService extends UserService{
      * @param page 分页参数
      * @return List
      */
-    public List<BackupData> selectBackupDataByPage(String id,String type,Page page){
+    public List<BackupData> selectBackupDataByPage(String id,String type,String departmentCode,Page page){
         Map<String,Object> map = new HashMap<>();
         map.put("id",id);
         map.put("page",page);
         map.put("type",type);
+        map.put("departmentCode",departmentCode);
         return adminDao.selectBackupDataByPage(map);
     }
 
     /**
      * 备份数据库资料数据
-     * @param request 请求
      * @param departmentCode 院系编码
      * @param backupsType 备份类型
      * @return boolean
      */
-    public boolean backupsDataBase(HttpServletRequest request,String departmentCode, String backupsType){
+    public boolean backupsDataBase(String departmentCode, String backupsType){
         List<Data> dataList = adminDao.selectDataByDepartmentCode(departmentCode);
         List<String> titles = Arrays.asList(new String[]{"id","content","file_name","src","data_class","type_contents","user","submit_time","delete_time","flag"});
         List<List<String>> content = new ArrayList<>();
@@ -421,7 +425,9 @@ public class AdminService extends UserService{
                 content.add(list);
             }
         }
-        return ExcelUtilPOI.createExcel(request,departmentCode,backupsType,"xls",titles,content);
+        String rootPath = AdminService.class.getResource("").getPath();
+        rootPath = rootPath.substring(1,25);
+        return ExcelUtilPOI.createExcel(rootPath,departmentCode,backupsType,"xls",titles,content);
     }
 
     /**
@@ -485,6 +491,25 @@ public class AdminService extends UserService{
             return result;
         }else {
             return 0;
+        }
+    }
+
+    /**
+     * 定时备份全校所有院系的文件数据
+     */
+    public void timingBackup(){
+        String rootPath = AdminService.class.getResource("").getPath();
+        rootPath = rootPath.substring(1,25);
+        List<Department> departmentList = selectAllDepartment(null);
+        for (Department department:departmentList) {
+            BackupData backupData = new BackupData(SystemUtils.getUUID(),"自动备份",new User(),department,new Timestamp(System.currentTimeMillis()),0);
+            updateBackupData("自动备份",department.getCode());
+            if (backupsDataBase(department.getCode(), "自动备份") &&
+                    StatusCode.BACKUP_SUCCESS.getnCode().equals(insertBackupData("自动备份",backupData,new User(),department).getnCode())) {
+                String savePath = rootPath+"\\target\\snut_tdms\\WEB-INF\\upload\\"+department.getCode();
+                String newPath = rootPath+"\\target\\snut_tdms\\WEB-INF\\backups\\"+department.getCode()+ "\\file\\自动备份";
+                copyFile(savePath, newPath);
+            }
         }
     }
 }

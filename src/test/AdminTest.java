@@ -30,6 +30,7 @@ public class AdminTest {
 
     @Test
     public void testData() {
+        adminService.timingBackup();
     }
 
 }

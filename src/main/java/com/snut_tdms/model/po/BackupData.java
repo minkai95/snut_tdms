@@ -11,18 +11,28 @@ public class BackupData {
     private String id;
     private String type;
     private User user;
+    private Department department;
     private Timestamp time;
     private Integer flag;
 
     public BackupData() {
     }
 
-    public BackupData(String id, String type, User user, Timestamp time, Integer flag) {
+    public BackupData(String id, String type, User user, Department department, Timestamp time, Integer flag) {
         this.id = id;
         this.type = type;
         this.user = user;
+        this.department = department;
         this.time = time;
         this.flag = flag;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 
     public String getId() {
@@ -71,6 +81,7 @@ public class BackupData {
                 "id='" + id + '\'' +
                 ", type='" + type + '\'' +
                 ", user=" + user +
+                ", department=" + department +
                 ", time=" + time +
                 ", flag=" + flag +
                 '}';
@@ -86,6 +97,7 @@ public class BackupData {
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (user != null ? !user.equals(that.user) : that.user != null) return false;
+        if (department != null ? !department.equals(that.department) : that.department != null) return false;
         if (time != null ? !time.equals(that.time) : that.time != null) return false;
         return flag != null ? flag.equals(that.flag) : that.flag == null;
     }
@@ -95,6 +107,7 @@ public class BackupData {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (user != null ? user.hashCode() : 0);
+        result = 31 * result + (department != null ? department.hashCode() : 0);
         result = 31 * result + (time != null ? time.hashCode() : 0);
         result = 31 * result + (flag != null ? flag.hashCode() : 0);
         return result;

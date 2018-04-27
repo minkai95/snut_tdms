@@ -4,7 +4,7 @@
 <html>
 <head>
     <title>首次登陆</title>
-    <link rel="icon" href="${ctx}/resources/images/title.ico" type="image/x-icon">
+    <link rel="icon" href="${ctx}/resources/images/facivon.ico" type="image/x-icon">
 </head>
 <body>
     <div class="firstLoginWrapper">

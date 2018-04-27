@@ -55,6 +55,8 @@
         <result column="password" jdbcType="VARCHAR" javaType="java.lang.String" property="user.password"/>
         <result column="idCard" jdbcType="VARCHAR" javaType="java.lang.String" property="user.idCard"/>
         <result column="firstLogin" jdbcType="VARCHAR" javaType="java.lang.Integer" property="user.firstLogin"/>
+        <result column="departmentCode" jdbcType="VARCHAR" javaType="java.lang.String" property="department.code"/>
+        <result column="departmentName" jdbcType="VARCHAR" javaType="java.lang.String" property="department.name"/>
         <result column="time" jdbcType="VARCHAR" javaType="java.sql.Timestamp" property="time"/>
         <result column="flag" jdbcType="VARCHAR" javaType="java.lang.Integer" property="flag"/>
     </resultMap>
@@ -95,7 +97,10 @@
         INSERT INTO backup_data VALUES (
           #{id},
           #{type},
-          #{user.username},
+          <if test="user!=null and user!=''">
+              #{user.username},
+          </if>
+          #{department.code},
           #{time},
           #{flag}
         )
@@ -148,7 +153,7 @@
     <update id="updateBackupData" parameterType="java.lang.String">
         UPDATE backup_data SET
           flag = 1
-        WHERE `type` = #{0}
+        WHERE `type` = #{type} AND backup_data.department = #{departmentCode}
     </update>
 
 
@@ -160,10 +165,13 @@
           `user`.password,
           `user`.id_card as idCard,
           `user`.first_login as firstLogin,
+          department.code,
+          department.name,
           `time`,
           flag
         FROM backup_data
         LEFT JOIN `user` ON `user`.username = backup_data.user
+        LEFT JOIN department ON department.code = backup_data.department
         WHERE 1=1
         <if test="id!=null and id!=''">
             AND id=#{id}
@@ -171,7 +179,10 @@
         <if test="type!=null and type!=''">
             AND `type`=#{type}
         </if>
-        ORDER BY `time` DESC
+        <if test="departmentCode!=null and departmentCode!=''">
+            AND backup_data.department=#{departmentCode}
+        </if>
+        ORDER BY flag ASC,`time` DESC
     </select>
     <select id="selectDepartmentLogsByPage" parameterType="java.util.Map" resultMap="log">
         SELECT
