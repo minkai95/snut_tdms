@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -36,7 +37,10 @@ public class UserController {
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject login(@RequestParam("username") String username, @RequestParam("password") String password, HttpSession session){
+    public JSONObject login(@RequestParam("username") String username,
+                            @RequestParam("password") String password,
+                            @RequestParam("rememberPSW") String rememberPSW,
+                            HttpSession session,HttpServletRequest request,HttpServletResponse response){
         JSONObject json = new JSONObject();
         Map<String,Object> result = userService.userLogin(username,password);
         StatusCode code = (StatusCode)result.get("StatusCode");
@@ -47,6 +51,34 @@ public class UserController {
             session.setAttribute("userInfo",userInfo);
             session.setAttribute("role",userRole.getRole().getName());
             json.put("urlStr", "/"+userRole.getRole().getName()+"/index");
+            if (rememberPSW.equals("1")){
+                Cookie usernameCookie = new Cookie("username".trim(),username.trim());
+                Cookie passwordCookie = new Cookie("password".trim(),password.trim());
+                usernameCookie.setMaxAge(365*24*60*60);// 账号保存一年
+                passwordCookie.setMaxAge(7*24*60*60);  // 密码保存7天
+                usernameCookie.setPath("/");
+                passwordCookie.setPath("/");
+                response.addCookie(usernameCookie);
+                response.addCookie(passwordCookie);
+            }else {
+                Cookie[] cookies = request.getCookies();
+                if (cookies.length>0) {
+                    for (Cookie cookie : cookies) {
+                        if (cookie.getName().equals("username")) {
+                            cookie.setValue(null);
+                            cookie.setMaxAge(0);
+                            cookie.setPath("/");
+                            response.addCookie(cookie);
+                        }
+                        if (cookie.getName().equals("password")) {
+                            cookie.setValue(null);
+                            cookie.setMaxAge(0);
+                            cookie.setPath("/");
+                            response.addCookie(cookie);
+                        }
+                    }
+                }
+            }
         }else if (StatusCode.LOGIN_SUCCESS.getnCode().equals(code.getnCode()) && (userRole.getUser().getFirstLogin()==0)){
             UserInfo userInfo = userService.selectUserInfoByUsername(username);
             session.setAttribute("userRole",userRole);

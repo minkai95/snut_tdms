@@ -95,8 +95,12 @@ public class FileUploadUtil {
                     fileFormat.add("pdf");
                     fileFormat.add("ppt");
                     fileFormat.add("doc");
+                    fileFormat.add("docx");
+                    fileFormat.add("xls");
+                    fileFormat.add("xlsx");
                     fileFormat.add("png");
                     fileFormat.add("jpg");
+                    fileFormat.add("jpeg");
                     if(!fileFormat.contains(fileExtName.toLowerCase())){
                         map.put("message",StatusCode.FILE_FORMAT_ERROR);
                         break;

@@ -18,9 +18,9 @@
                     <div class="loginFormWrapper">
                         <form id="loginForm">
                             <i class="icon-user iconUser"></i>
-                            <input id="username" class="form-control username" type="text" name="username" placeholder="用户名" autofocus>
+                            <input id="username" class="form-control username" type="text" name="username" value="${cookie.username.value}" placeholder="用户名" autofocus>
                             <i class="icon-lock iconPassword"></i>
-                            <input id="password" class="form-control password" type="password" name="password" placeholder="密码">
+                            <input id="password" class="form-control password" type="password" name="password" value="${cookie.password.value}" placeholder="密码">
                             <input id="verificationCode" class="form-control verificationCode" type="text" name="verificationCode" placeholder="验证码">
                             <div id="verificationCodeCont" class="verificationCodeCont"></div>
                             <div class="rememberPassword">
@@ -96,7 +96,7 @@
                     var password = $("#password").val();
                     $.ajax({
                         type: "POST",
-                        url: "${ctx}/user/login?username=" + username + "&password=" + password,
+                        url: "${ctx}/user/login?username=" + username + "&password=" + password+"&rememberPSW="+btnResult,
                         dataType: "json",
                         success: function (result) {
                             if (result['message']!=null){
