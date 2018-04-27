@@ -7,6 +7,8 @@ import com.snut_tdms.model.vo.Page;
 import com.snut_tdms.model.vo.UserHelpClass;
 import com.snut_tdms.service.AdminService;
 import com.snut_tdms.service.UserService;
+import com.snut_tdms.util.LogActionType;
+import com.snut_tdms.util.OperatedType;
 import com.snut_tdms.util.StatusCode;
 import com.snut_tdms.util.SystemUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * 管理员controller层
@@ -159,10 +159,11 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/adminDataCopy", method = RequestMethod.GET)
-    public String adminDataCopy(HttpSession httpSession, Model model) {
-        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        UserRole userRole = (UserRole) httpSession.getAttribute("userRole");
-        model.addAttribute("userInfo",userInfo);
+    public String adminDataCopy(Model model,@RequestParam(value = "currentPage", required = false) String currentPage
+            ,@RequestParam(value = "type", required = false) String type) {
+        Page page = SystemUtils.getPage(currentPage);
+        model.addAttribute("backupList",adminService.selectBackupDataByPage(null,type,page));
+        model.addAttribute("page", page);
         return "admin/adminDataCopy";
     }
 
@@ -329,27 +330,43 @@ public class AdminController {
         return jsonObject;
     }
 
-    @RequestMapping(value = "/backupsDataBase", method = RequestMethod.POST)
+    @RequestMapping(value = "/backupsData", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject backupsData(HttpSession httpSession, HttpServletRequest request){
+    public JSONObject backupsData(HttpSession httpSession, HttpServletRequest request,@RequestParam("backupsType") String backupsType){
         JSONObject jsonObject = new JSONObject();
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        if (adminService.backupsDataBase(request,userInfo.getDepartment().getCode(),"sdbf")){
-            jsonObject.put("message","备份成功!");
+        BackupData backupData = new BackupData(SystemUtils.getUUID(),backupsType,userInfo.getUser(),new Timestamp(System.currentTimeMillis()),0);
+        adminService.updateBackupData(backupsType);
+        if (adminService.backupsDataBase(request,userInfo.getDepartment().getCode(),backupsType) && StatusCode.BACKUP_SUCCESS.getnCode().equals(adminService.insertBackupData(backupData,userInfo.getUser()).getnCode())){
+            String savePath = request.getServletContext().getRealPath("\\WEB-INF\\upload\\"+userInfo.getDepartment().getCode());
+            String newPath = request.getServletContext().getRealPath("\\WEB-INF\\backups\\"+userInfo.getDepartment().getCode()+"\\file\\"+backupsType);
+            int a = adminService.copyFile(savePath,newPath);
+            jsonObject.put("message","成功备份"+a+"份文件!");
         }else {
             jsonObject.put("message","备份失败!");
         }
         return jsonObject;
     }
 
-    @RequestMapping(value = "/rollBackBackupsDataBase", method = RequestMethod.POST)
+    @RequestMapping(value = "/recoverBackupsDataBase", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject rollBackBackupsDataBase(HttpSession httpSession, HttpServletRequest request){
+    public JSONObject recoverBackupsDataBase(HttpSession httpSession, HttpServletRequest request,@RequestParam("backupsType") String backupsType,
+                                             @RequestParam("id") String id){
         JSONObject jsonObject = new JSONObject();
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
-        int count = adminService.rollBackBackupsDataBase(request,userInfo.getDepartment().getCode(),"sdbf");
+        int count = adminService.rollBackBackupsDataBase(request,userInfo.getDepartment().getCode(),backupsType);
         if (count>0){
-            jsonObject.put("message","成功恢复"+count+"条文件数据!");
+            String newPath = request.getServletContext().getRealPath("\\WEB-INF\\upload\\"+userInfo.getDepartment().getCode());
+            String savePath = request.getServletContext().getRealPath("\\WEB-INF\\backups\\"+userInfo.getDepartment().getCode()+"\\file\\"+backupsType+"\\");
+            int a = adminService.copyFile(savePath,newPath);
+            Map<String,Object> map = new HashMap<>();
+            map.put("content","管理员恢复了本院文件数据!");
+            map.put("action", LogActionType.UPDATE.getnCode());
+            map.put("operatedType", OperatedType.FILE_RECOVER.getnCode());
+            map.put("operatedId",id);
+            map.put("operationUser",userInfo.getUser());
+            userService.insertLog(map);
+            jsonObject.put("message","成功恢复"+a+"条文件数据!");
         }else {
             jsonObject.put("message","恢复失败!");
         }

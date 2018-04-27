@@ -17,7 +17,8 @@ public enum StatusCode {
     FILE_HAVE("文件存在!"), FILE_DELETE("您要下载的资源已被删除!"),FILE_DOWNLOAD_SUCCESS("文件下载成功!"),
     APPLY_SUCCESS("申请成功，请等待管理员同意!"),DATA_CLASS_ERROR("提交失败，所提交类目名称已经存在!"),APPLY_ERROR("申请失败！"),
     RECOVER_SUCCESS("恢复成功!"),RECOVER_ERROR("恢复失败!"),
-    PUBLISH_SUCCESS("发布成功!"),PUBLISH_ERROR("发布失败!");
+    PUBLISH_SUCCESS("发布成功!"),PUBLISH_ERROR("发布失败!"),
+    BACKUP_SUCCESS("备份成功!"),BACKUP_ERROR("备份失败!");
     private String nCode;
 
     StatusCode(String nCode) {

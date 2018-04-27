@@ -48,6 +48,17 @@
         <result column="deleteTime" jdbcType="VARCHAR" javaType="java.sql.Timestamp" property="deleteTime"/>
         <result column="flag" jdbcType="VARCHAR" javaType="java.lang.Integer" property="flag"/>
     </resultMap>
+    <resultMap id="backupData" type="com.snut_tdms.model.po.BackupData">
+        <id column="id" jdbcType="VARCHAR" javaType="java.lang.String" property="id"/>
+        <id column="type" jdbcType="VARCHAR" javaType="java.lang.String" property="type"/>
+        <id column="username" jdbcType="VARCHAR" javaType="java.lang.String" property="user.username"/>
+        <result column="password" jdbcType="VARCHAR" javaType="java.lang.String" property="user.password"/>
+        <result column="idCard" jdbcType="VARCHAR" javaType="java.lang.String" property="user.idCard"/>
+        <result column="firstLogin" jdbcType="VARCHAR" javaType="java.lang.Integer" property="user.firstLogin"/>
+        <result column="time" jdbcType="VARCHAR" javaType="java.sql.Timestamp" property="time"/>
+        <result column="flag" jdbcType="VARCHAR" javaType="java.lang.Integer" property="flag"/>
+    </resultMap>
+
 
     <insert id="insertUser" parameterType="java.util.Map">
         INSERT INTO `user`(username) VALUES (#{username});
@@ -78,6 +89,15 @@
           #{name},
           #{classType.id},
           #{user.username}
+        )
+    </insert>
+    <insert id="insertBackupData" parameterType="com.snut_tdms.model.po.BackupData">
+        INSERT INTO backup_data VALUES (
+          #{id},
+          #{type},
+          #{user.username},
+          #{time},
+          #{flag}
         )
     </insert>
 
@@ -125,7 +145,34 @@
           flag = #{flag}
         WHERE id = #{id}
     </update>
+    <update id="updateBackupData" parameterType="java.lang.String">
+        UPDATE backup_data SET
+          flag = 1
+        WHERE `type` = #{0}
+    </update>
 
+
+    <select id="selectBackupDataByPage" parameterType="java.util.Map" resultMap="backupData">
+        SELECT
+          id,
+          `type`,
+          `user`.username,
+          `user`.password,
+          `user`.id_card as idCard,
+          `user`.first_login as firstLogin,
+          `time`,
+          flag
+        FROM backup_data
+        LEFT JOIN `user` ON `user`.username = backup_data.user
+        WHERE 1=1
+        <if test="id!=null and id!=''">
+            AND id=#{id}
+        </if>
+        <if test="type!=null and type!=''">
+            AND `type`=#{type}
+        </if>
+        ORDER BY `time` DESC
+    </select>
     <select id="selectDepartmentLogsByPage" parameterType="java.util.Map" resultMap="log">
         SELECT
           id,
@@ -191,7 +238,6 @@
             AND role.id IN ${roleId}
         </if>
     </select>
-
     <select id="selectDataByDepartmentCode" parameterType="java.lang.String" resultMap="data">
         SELECT
         `data`.id,

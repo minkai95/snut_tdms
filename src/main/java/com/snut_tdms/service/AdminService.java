@@ -31,6 +31,27 @@ public class AdminService extends UserService{
     }
 
     /**
+     * 管理员新增备份数据实体
+     * @param backupData 备份数据实体
+     * @param operationUser 管理员
+     * @return 状态码
+     */
+    public StatusCode insertBackupData(BackupData backupData,User operationUser){
+        if (adminDao.insertBackupData(backupData)>0){
+            Map<String,Object> m = new HashMap<>();
+            m.put("content","管理员备份了所有文件!");
+            m.put("action", LogActionType.INSERT.getnCode());
+            m.put("operationUser",operationUser);
+            m.put("operatedId",backupData.getId());
+            m.put("operatedType", OperatedType.FILE_BACKUP.getnCode());
+            insertLog(m);
+            return StatusCode.BACKUP_SUCCESS;
+        }else {
+            return StatusCode.BACKUP_ERROR;
+        }
+    }
+
+    /**
      * 管理员新增类目属性内容
      * @param typeContent 类目属性
      * @param operationUser 管理员
@@ -122,6 +143,10 @@ public class AdminService extends UserService{
         }else{
             return StatusCode.INSERT_ERROR_USERNAME;
         }
+    }
+
+    public void updateBackupData(String type){
+        adminDao.updateBackupData(type);
     }
 
     /**
@@ -347,6 +372,27 @@ public class AdminService extends UserService{
         }
     }
 
+    /**
+     * 查询备份数据实体
+     * @param id id
+     * @param page 分页参数
+     * @return List
+     */
+    public List<BackupData> selectBackupDataByPage(String id,String type,Page page){
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",id);
+        map.put("page",page);
+        map.put("type",type);
+        return adminDao.selectBackupDataByPage(map);
+    }
+
+    /**
+     * 备份数据库资料数据
+     * @param request 请求
+     * @param departmentCode 院系编码
+     * @param backupsType 备份类型
+     * @return boolean
+     */
     public boolean backupsDataBase(HttpServletRequest request,String departmentCode, String backupsType){
         List<Data> dataList = adminDao.selectDataByDepartmentCode(departmentCode);
         List<String> titles = Arrays.asList(new String[]{"id","content","file_name","src","data_class","type_contents","user","submit_time","delete_time","flag"});
@@ -378,6 +424,13 @@ public class AdminService extends UserService{
         return ExcelUtilPOI.createExcel(request,departmentCode,backupsType,"xls",titles,content);
     }
 
+    /**
+     * 恢复数据库备份记录
+     * @param request 请求
+     * @param departmentCode 院系编码
+     * @param backupsType 备份类型
+     * @return 成功条数
+     */
     public Integer rollBackBackupsDataBase(HttpServletRequest request,String departmentCode, String backupsType){
         String savePath = request.getServletContext().getRealPath("\\WEB-INF\\backups");
         String fileSrc = savePath+"\\"+departmentCode+"\\"+backupsType+".xls";
@@ -412,6 +465,24 @@ public class AdminService extends UserService{
                 }
             }
             return count;
+        }else {
+            return 0;
+        }
+    }
+
+    /**
+     * 复制文件
+     * @param savePath 源路径
+     * @param newPath 新路径
+     * @return 成功条数
+     */
+    public Integer copyFile(String savePath, String newPath){
+        File file = new File(savePath);
+        if (file.exists() && file.isDirectory()){
+            File newFile = new File(newPath);
+            Integer result = CopyFile.copy(file.listFiles(),newFile);
+            CopyFile.c = 0;
+            return result;
         }else {
             return 0;
         }

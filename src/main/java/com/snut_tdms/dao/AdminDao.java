@@ -21,6 +21,8 @@ public interface AdminDao extends UserDao {
 
     int insertTypeContent(TypeContent typeContent);
 
+    int insertBackupData(BackupData backupData);
+
     int deleteUserByUsernameList(List<String> usernameList);
 
     int deleteClassTypeById(String classTypeId);
@@ -37,9 +39,13 @@ public interface AdminDao extends UserDao {
 
     int updateDataById(Data data);
 
+    int updateBackupData(String type);
+
     List<Log> selectDepartmentLogsByPage(Map<String,Object> map);
 
     List<UserRole> selectUserByParamsByPage(Map<String,Object> map);
 
     List<Data> selectDataByDepartmentCode(String departmentCode);
+
+    List<BackupData> selectBackupDataByPage(Map<String,Object> map);
 }
