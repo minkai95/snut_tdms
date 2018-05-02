@@ -18,7 +18,7 @@
                     <div class="loginFormWrapper">
                         <form id="loginForm">
                             <i class="icon-user iconUser"></i>
-                            <input id="username" class="form-control username" type="text" name="username" value="${cookie.username.value}" placeholder="用户名" autofocus>
+                            <input id="username" class="form-control username" type="text" name="username" value="${cookie.username.value}" placeholder="用户名">
                             <i class="icon-lock iconPassword"></i>
                             <input id="password" class="form-control password" type="password" name="password" value="${cookie.password.value}" placeholder="密码">
                             <input id="verificationCode" class="form-control verificationCode" type="text" name="verificationCode" placeholder="验证码">
@@ -41,6 +41,13 @@
         </div>
 
         <script>
+            // 鼠标聚焦
+            $('#loginForm').children("input").each(function () {
+                if($(this).val()==''||$(this).val()==null){
+                    $(this).attr("autofocus",true);
+                }
+            });
+
             // 按钮js
             var btnResult = 0;
             function btnMove() {
@@ -119,17 +126,17 @@
                         }
                     })
                 }
-             });
+             })
+            });
 
-                $('#forgetPSW').mousedown(function () {
-                    location.href ="${ctx}/user/forgetPSW?username="+$('#username').val();
-                });
+            $('#forgetPSW').mousedown(function () {
+                location.href ="${ctx}/user/forgetPSW?username="+$('#username').val();
+            });
 
-                //防止页面后退
+            //防止页面后退
+            history.pushState(null, "", document.URL);
+            window.addEventListener('popstate', function () {
                 history.pushState(null, "", document.URL);
-                window.addEventListener('popstate', function () {
-                    history.pushState(null, "", document.URL);
-                });
             });
     </script>
 </body>

@@ -57,7 +57,7 @@
                         <td>${dataHelp.userInfo.name}</td>
                         <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${dataHelp.data.submitTime}"/></td>
                         <td style="width: 210px;  text-align: center;">
-                            <a href="#" class="btn btn-info btn-sm"><i class="icon-search"></i> 查看</a>
+                            <button type="button" class="btn btn-info btn-sm" onclick="openFile('${dataHelp.data.id}')"><i class="icon-search"></i> 预览</button>
                             <button type="button" class="btn btn-primary btn-sm" onclick="downloadFile('${dataHelp.data.id}')"><i class="icon-download"></i> 下载</button>
                             <button type="button" class="btn btn-danger btn-sm" onclick="deleteFile('${dataHelp.data.id}')"><i class="icon-remove-circle"></i> 删除</button>
                         </td>
@@ -278,6 +278,45 @@
             }
         })
     }
+
+    // 打开文件
+    function openFile(id) {
+        var tr = $('#'+id+'');
+        var filename = tr.children('td').eq(1).text();
+        $.ajax({
+            type: "GET",
+            url: "${ctx}/user/selectFile?saveFilename="+id+"_"+filename,
+            dataType: "json",
+            success: function (result) {
+                if (result['message']=='您要查看的资源已被删除!') {
+                    $.confirm({
+                        title: '提示',
+                        content: result['message'],
+                        buttons: {
+                            确定: function () {
+                                $.ajax({
+                                    type: "DELETE",
+                                    url: "${ctx}/user/deleteFile?dataId="+id+"&description="+"",
+                                    dataType: "json",
+                                    success: function () {
+                                        location.reload();
+                                    }
+                                });
+                            }
+                        }
+                    })
+                }else {
+                    var name = filename.split(".")[1].toLowerCase();
+                    if (name=="png"||name=="jpg"||name=="jpeg"){
+                        window.open("${ctx}/user/openPicture?saveFilename="+id+"_"+filename,"_blank");
+                    }else {
+                        alert("111");
+                    }
+                }
+            }
+        })
+    }
+
     //下载文件
     function downloadFile(id) {
         var tr = $('#'+id+'');
@@ -308,7 +347,7 @@
                     window.location.href = "${ctx}/user/downloadFile?saveFilename="+id+"_"+filename;
                 }
             }
-        });
+        })
     }
 
     /* --全选JS-- */
@@ -376,7 +415,7 @@
         }else {
             $.confirm({
                 title: '提示',
-                content: '请在勾选需要删除的文件!',
+                content: '请勾选需要删除的文件!',
                 buttons: {
                     确定: function () {
                     }

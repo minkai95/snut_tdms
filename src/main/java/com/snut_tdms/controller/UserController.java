@@ -18,7 +18,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.*;
 
 /**
@@ -254,8 +256,47 @@ public class UserController {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         request.setAttribute("filename",saveFilename);
         request.setAttribute("departmentCode",userInfo.getDepartment().getCode());
-        jsonObject.put("message",FileDownloadUtil.selectFile(request).getnCode());
+        jsonObject.put("message",FileDownloadUtil.selectFile(request));
         return jsonObject;
+    }
+
+    @RequestMapping(value = "/openPicture",method = RequestMethod.GET)
+    public void openPicture(HttpSession httpSession,HttpServletRequest request,HttpServletResponse response,
+                                  @RequestParam("saveFilename") String saveFilename){
+        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        request.setAttribute("filename",saveFilename);
+        request.setAttribute("departmentCode",userInfo.getDepartment().getCode());
+        String path = FileDownloadUtil.selectFile(request);
+        String aa = path.substring(41);
+        response.setContentType("text/html; charset=UTF-8");
+        response.setContentType("image/jpg");
+        FileInputStream fis = null;
+        OutputStream os = null;
+        try
+        {
+            fis = new FileInputStream(request.getServletContext().getRealPath(aa+"\\"+saveFilename));
+            os = response.getOutputStream();
+            int count = 0;
+            byte[] buffer = new byte[1024 * 1024];
+            while ((count = fis.read(buffer)) != -1)
+                os.write(buffer, 0, count);
+            os.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (os != null)
+                try {
+                    os.close();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            if (fis != null)
+                try {
+                    fis.close();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+        }
     }
 
     @RequestMapping(value = "/deleteFile",method = RequestMethod.DELETE)

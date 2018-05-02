@@ -14,7 +14,7 @@ import java.net.URLEncoder;
  */
 public class FileDownloadUtil {
 
-    public static StatusCode selectFile(HttpServletRequest request){
+    public static String selectFile(HttpServletRequest request){
         //得到要下载的文件名
         String fileName = (String) request.getAttribute("filename");  //bd3256e4650b42ca4b77a70e435b7fca_阿凡达.doc
         //fileName = new String(fileName.getBytes("UTF-8"),"iso8859-1");
@@ -27,9 +27,9 @@ public class FileDownloadUtil {
         File file = new File(path + "\\" + fileName);
         //如果文件不存在
         if(!file.exists()){
-            return StatusCode.FILE_DELETE;
+            return StatusCode.FILE_DELETE.getnCode();
         }else {
-            return StatusCode.FILE_HAVE;
+            return path;
         }
     }
 
