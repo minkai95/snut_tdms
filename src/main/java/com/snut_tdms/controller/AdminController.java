@@ -343,7 +343,7 @@ public class AdminController {
                 && StatusCode.BACKUP_SUCCESS.getnCode().equals(adminService.insertBackupData(backupsType,backupData,userInfo.getUser(),userInfo.getDepartment()).getnCode())){
             String savePath = request.getServletContext().getRealPath("\\WEB-INF\\upload\\"+userInfo.getDepartment().getCode());
             String newPath = request.getServletContext().getRealPath("\\WEB-INF\\backups\\"+userInfo.getDepartment().getCode()+"\\file\\"+backupsType);
-            int a = adminService.copyFile(savePath,newPath);
+            int a = userService.copyFile(savePath,newPath);
             jsonObject.put("message","成功备份"+a+"份文件!");
         }else {
             jsonObject.put("message","备份失败!");
@@ -361,7 +361,7 @@ public class AdminController {
         if (count>0){
             String newPath = request.getServletContext().getRealPath("\\WEB-INF\\upload\\"+userInfo.getDepartment().getCode());
             String savePath = request.getServletContext().getRealPath("\\WEB-INF\\backups\\"+userInfo.getDepartment().getCode()+"\\file\\"+backupsType+"\\");
-            int a = adminService.copyFile(savePath,newPath);
+            int a = userService.copyFile(savePath,newPath);
             Map<String,Object> map = new HashMap<>();
             map.put("content","管理员恢复了本院文件数据!");
             map.put("action", LogActionType.UPDATE.getnCode());

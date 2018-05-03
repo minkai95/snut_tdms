@@ -22,8 +22,12 @@ public class FileDownloadUtil {
         //上传的文件都是保存在/WEB-INF/upload目录下的子目录当中
         String fileSaveRootPath = request.getServletContext().getRealPath("\\WEB-INF\\upload\\"+departmentCode);
         //通过文件名找出文件的所在目录
-        String path = findFileSavePathByFileName(fileName,fileSaveRootPath);
+        String path = path = findFileSavePathByFileName(fileName,fileSaveRootPath);
         //得到要下载的文件
+        String realType = (String) request.getAttribute("realType");
+        if (realType!=null && !realType.equals(fileName.substring(fileName.lastIndexOf(".")+1))){
+            fileName = fileName.substring(0,fileName.lastIndexOf("."))+"."+realType;
+        }
         File file = new File(path + "\\" + fileName);
         //如果文件不存在
         if(!file.exists()){

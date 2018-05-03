@@ -34,3 +34,4 @@
 <script type="text/javascript" src="${ctx}/resources/js/gVerify.js"></script>
 <script type="text/javascript" src="${ctx}/resources/js/bootstrap/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript" src="${ctx}/resources/js/bootstrap/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript" src="${ctx}/resources/js/spin.min-2.3.2.js"></script>

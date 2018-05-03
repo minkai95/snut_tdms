@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>登录超时</title>
+    <title>资源不存在</title>
     <link rel="icon" href="${ctx}/resources/images/facivon.ico" type="image/x-icon">
 </head>
 <body>

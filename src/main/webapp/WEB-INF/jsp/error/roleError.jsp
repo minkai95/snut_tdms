@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>登录超时</title>
+    <title>无访问权限</title>
     <link rel="icon" href="${ctx}/resources/images/facivon.ico" type="image/x-icon">
 </head>
 <body>

@@ -12,3 +12,16 @@ ul{
 a{
     text-decoration: none;
 }
+
+#mb{
+    display: none;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    *position: absolute;
+    *height: 1380px;
+    background: black;
+    top:0;
+    left: 0;
+    opacity:0.6;
+}

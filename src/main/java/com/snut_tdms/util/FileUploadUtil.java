@@ -94,6 +94,7 @@ public class FileUploadUtil {
                     fileFormat.add("txt");
                     fileFormat.add("pdf");
                     fileFormat.add("ppt");
+                    fileFormat.add("pptx");
                     fileFormat.add("doc");
                     fileFormat.add("docx");
                     fileFormat.add("xls");

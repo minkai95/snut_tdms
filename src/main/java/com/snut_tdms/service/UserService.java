@@ -741,4 +741,22 @@ public class UserService {
         return map;
     }
 
+    /**
+     * 复制文件
+     * @param savePath 源路径
+     * @param newPath 新路径
+     * @return 成功条数
+     */
+    public Integer copyFile(String savePath, String newPath){
+        File file = new File(savePath);
+        if (file.exists() && file.isDirectory()){
+            File newFile = new File(newPath);
+            Integer result = CopyFile.copy(file.listFiles(),newFile);
+            CopyFile.c = 0;
+            return result;
+        }else {
+            return 0;
+        }
+    }
+
 }

@@ -8,6 +8,7 @@ import com.snut_tdms.util.FileDownloadUtil;
 import com.snut_tdms.util.LogActionType;
 import com.snut_tdms.util.StatusCode;
 import com.snut_tdms.util.SystemUtils;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -243,6 +245,7 @@ public class UserController {
     @RequestMapping(value = "/downloadFile", method = RequestMethod.GET)
     public void downloadFile(HttpSession httpSession,HttpServletRequest request, HttpServletResponse response,@RequestParam("saveFilename") String saveFilename) throws IOException {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
+        saveFilename = saveFilename.replace("*","+");
         request.setAttribute("filename",saveFilename);
         request.setAttribute("departmentCode",userInfo.getDepartment().getCode());
         StatusCode code = FileDownloadUtil.download(request,response);
@@ -251,12 +254,72 @@ public class UserController {
 
     @RequestMapping(value = "/selectFile",method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject downloadFile(HttpSession httpSession,HttpServletRequest request,@RequestParam("saveFilename") String saveFilename){
+    public JSONObject downloadFile(HttpSession httpSession,HttpServletRequest request,
+                                   @RequestParam("saveFilename") String saveFilename,
+                                   @RequestParam(value = "realType",required = false) String realType){
         JSONObject jsonObject = new JSONObject();
+        saveFilename = saveFilename.replace("*","+");
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         request.setAttribute("filename",saveFilename);
+        request.setAttribute("realType",realType);
         request.setAttribute("departmentCode",userInfo.getDepartment().getCode());
         jsonObject.put("message",FileDownloadUtil.selectFile(request));
+        return jsonObject;
+    }
+
+    @RequestMapping(value = "/deleteTempFile",method = RequestMethod.DELETE)
+    @ResponseBody
+    public JSONObject deleteTempFile(){
+        JSONObject jsonObject = new JSONObject();
+        String rootPath = UserController.class.getResource("").getPath();
+        rootPath = rootPath.substring(1,25).replace("/","\\");
+        String path = rootPath+"\\src\\main\\webapp\\resources\\tempFile";
+        File file = new File(path);
+        int count=0;
+        if (file.exists() && file.isDirectory()){
+            File[] files = file.listFiles();
+            if (files!=null) {
+                for (File fi : files) {
+                    if (fi.delete()) {
+                        count++;
+                    }
+                }
+            }
+        }
+        jsonObject.put("message",count);
+        return jsonObject;
+    }
+
+    @RequestMapping(value = "/openPDF/{src}",method = RequestMethod.GET)
+    public void displayPDF(HttpServletResponse response, @PathVariable("src") String src) {
+        src = src.replace("~+~","\\")+".pdf";
+        src = src.replace("*","+");
+        try {
+            File file = new File(src);
+            FileInputStream fileInputStream = new FileInputStream(file);
+            response.setHeader("Content-Disposition", "attachment;fileName=test.pdf");
+            response.setContentType("multipart/form-data");
+            OutputStream outputStream = response.getOutputStream();
+            IOUtils.write(IOUtils.toByteArray(fileInputStream), outputStream);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RequestMapping(value = "/officeToPDF",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject officeToPDF(@RequestParam("src") String src){
+        JSONObject jsonObject = new JSONObject();
+        src = src.replace("~~","\\");
+        src = src.replace("*","+");
+        String wordFile = src;
+        String pdfFile = src.substring(0,src.lastIndexOf("."))+".pdf";
+        boolean result = SystemUtils.officeToPDF(wordFile,pdfFile);
+        if (result){
+            jsonObject.put("message",1);
+        }else {
+            jsonObject.put("message",0);
+        }
         return jsonObject;
     }
 

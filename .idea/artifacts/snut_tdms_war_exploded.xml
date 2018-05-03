@@ -40,6 +40,7 @@
           <element id="library" level="project" name="Maven: org.quartz-scheduler:quartz:2.2.3" />
           <element id="library" level="project" name="Maven: c3p0:c3p0:0.9.1.1" />
           <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.7" />
+          <element id="library" level="project" name="Maven: net.sf.jacob-project:jacob:1.14.3" />
         </element>
       </element>
       <element id="directory" name="META-INF">
