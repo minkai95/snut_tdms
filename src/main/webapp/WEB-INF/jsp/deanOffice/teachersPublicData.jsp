@@ -57,9 +57,9 @@
                         <td>${dataHelp.userInfo.name}</td>
                         <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${dataHelp.data.submitTime}"/></td>
                         <td style="width: 210px;  text-align: center;">
-                            <button class="btn btn-info btn-sm"><i class="icon-search"></i>查看</button>
-                            <button type="button" class="btn btn-primary btn-sm" onclick="downloadFile('${dataHelp.data.id}')"><i class="icon-download"></i>下载</button>
-                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteFile('${dataHelp.data.id}')"><i class="icon-remove-circle"></i>删除</button>
+                            <button type="button" class="btn btn-info btn-sm" onclick="openFile('${dataHelp.data.id}')"><i class="icon-search"></i> 预览</button>
+                            <button type="button" class="btn btn-primary btn-sm" onclick="downloadFile('${dataHelp.data.id}')"><i class="icon-download"></i> 下载</button>
+                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteFile('${dataHelp.data.id}')"><i class="icon-remove-circle"></i> 删除</button>
                         </td>
                     </tr>
                 </c:forEach>
@@ -68,8 +68,125 @@
         </div>
     </form>
 </div>
-</body>
+<div class="spin"></div>
+<div id="mb"></div>
 <script>
+    // 打开文件
+    function openFile(id) {
+        var tr = $('#'+id+'');
+        var filename = tr.children('td').eq(1).text();
+        filename = filename.replace(/\+/g,"*");
+        $.ajax({
+            type: "GET",
+            url: "${ctx}/user/selectFile?saveFilename="+id+"_"+filename,
+            dataType: "json",
+            success: function (result) {
+                if (result['message']=='您要下载的资源已被删除!') {
+                    $.confirm({
+                        title: '提示',
+                        content: result['message'],
+                        buttons: {
+                            确定: function () {
+                                $.ajax({
+                                    type: "DELETE",
+                                    url: "${ctx}/user/deleteFile?dataId="+id+"&description="+"",
+                                    dataType: "json",
+                                    success: function () {
+                                        location.reload();
+                                    }
+                                });
+                            }
+                        }
+                    })
+                }else {
+                    var name = filename.split(".")[1].toLowerCase();
+                    var src = result['message'];
+                    if (name=="png"||name=="jpg"||name=="jpeg"){
+                        window.open("${ctx}/user/openPicture?saveFilename="+id+"_"+filename,"_blank");
+                    }else if(name=="pdf"){
+                        src = src+"~+~"+id+"_"+filename;
+                        src = src.replace(/\\/g,"~+~");
+                        window.open("/resources/pdf/generic/web/viewer.html?file=${ctx}/user/openPDF/"+src,"_blank");
+                    }else if (name=="doc"||name=="docx"||name=="txt"||name=="xls"||name=="xlsx"||name=="ppt"||name=="pptx"){
+                        $.ajax({
+                            type: "GET",
+                            url: "${ctx}/user/selectFile?saveFilename="+id+"_"+filename+"&realType=pdf",
+                            dataType: "json",
+                            success: function (result) {
+                                if (result['message'] == '您要下载的资源已被删除!') {
+                                    src = src+"~~"+id+"_"+filename;
+                                    src = src.replace(/\\/g,"~~");
+                                    var ele = ".spin";
+                                    var opts = {
+                                        lines: 13, // 花瓣数目
+                                        length: 20, // 花瓣长度
+                                        width: 10, // 花瓣宽度
+                                        radius: 30, // 花瓣距中心半径
+                                        scale: 1,
+                                        corners: 1, // 花瓣圆滑度 (0-1)
+                                        color: '#000', // 花瓣颜色
+                                        opacity: 0.25,
+                                        rotate: 0, // 花瓣旋转角度
+                                        direction: 1, // 花瓣旋转方向 1: 顺时针, -1: 逆时针
+                                        speed: 1, // 花瓣旋转速度
+                                        trail: 60, // 花瓣旋转时的拖影(百分比)
+                                        zIndex: 2e9, // spinner的z轴 (默认是2000000000)
+                                        className: 'spinner', // spinner css 样式名称
+                                        top: '50%', // spinner 相对父容器Top定位 单位 px
+                                        left: '50%', // spinner 相对父容器Left定位 单位 px
+                                        shadow: false, // 花瓣是否显示阴影
+                                        hwaccel: false, //spinner 是否启用硬件加速及高速旋转
+                                        position: 'absolute'
+                                    };
+                                    $("#mb").css("display","block");
+                                    var spinner = new Spinner(opts);
+                                    $(ele).show();
+                                    var target = $(ele)[0];
+                                    spinner.spin(target);
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "${ctx}/user/officeToPDF?src="+src,
+                                        dataType: "json",
+                                        success: function (result) {
+                                            $("#mb").css("display","none");
+                                            spinner.spin();
+                                            $(ele).hide();
+                                            if (result['message']==1){
+                                                src = src.replace(/~~/g,"~+~");
+                                                window.open("/resources/pdf/generic/web/viewer.html?file=${ctx}/user/openPDF/"+src,"_blank");
+                                            }else {
+                                                $.confirm({
+                                                    title: '提示',
+                                                    content: '预览失败,请尝试下载后查看!',
+                                                    buttons: {
+                                                        确定: function () {
+                                                        }
+                                                    }
+                                                })
+                                            }
+                                        }
+                                    })
+                                }else {
+                                    src = src+"~+~"+id+"_"+filename;
+                                    src = src.replace(/\\/g,"~+~");
+                                    window.open("/resources/pdf/generic/web/viewer.html?file=${ctx}/user/openPDF/"+src,"_blank");
+                                }
+                            }
+                        })
+                    }else {
+                        $.confirm({
+                            title: '提示',
+                            content: '预览失败,请尝试下载后查看!',
+                            buttons: {
+                                确定: function () {
+                                }
+                            }
+                        })
+                    }
+                }
+            }
+        })
+    }
 
     $("#dataClassFilter").change(function () {
         $("#currentPageInput").val("1");
@@ -135,6 +252,7 @@
     function downloadFile(id) {
         var tr = $('#'+id+'');
         var filename = tr.children('td').eq(1).text();
+        filename = filename.replace(/\+/g,"*");
         $.ajax({
             type: "GET",
             url: "${ctx}/user/selectFile?saveFilename="+id+"_"+filename,
@@ -236,5 +354,6 @@
         }
     });
 </script>
+</body>
 </html>
 

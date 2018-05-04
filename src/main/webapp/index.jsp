@@ -61,44 +61,54 @@
                     btnResult = 0;
                 }
             }
+
+            $(document).ready(function () {
+                var username = $('#username').val();
+                var password = $('#password').val();
+                if (username!=null && username!='' && password!=null && password!=''){
+                    $("#btn").animate({left: '22px'}, "fast");
+                    $(".cont").addClass("addStyle2");
+                    btnResult = 1;
+                }
+            });
+
             //提交验证
-            $(function(){
-                var verifyCode = new GVerify("verificationCodeCont");
-                /*$.validator.setTheme('bootstrap', {
-                    validClass: 'has-success',
-                    invalidClass: 'has-error',
-                    bindClassTo: '.form-group',
-                    formClass: 'n-default n-bootstrap',
-                    msgClass: 'n-right'
-                });*/
-                $("#loginForm").validator({
-                   /* theme: 'bootstrap',
-                    timely: '2',*/
-                    fields: {
-                        username: {
-                            rule: "required;",
-                            msg: {
-                                required: "请输入用户名"
-                            }
-                        },
-                        password: {
-                            rule: "required",
-                            msg: {
-                                required: "请输入密码"
-                            }
+            var verifyCode = new GVerify("verificationCodeCont");
+            /*$.validator.setTheme('bootstrap', {
+                validClass: 'has-success',
+                invalidClass: 'has-error',
+                bindClassTo: '.form-group',
+                formClass: 'n-default n-bootstrap',
+                msgClass: 'n-right'
+            });*/
+            $("#loginForm").validator({
+               /* theme: 'bootstrap',
+                timely: '2',*/
+                fields: {
+                    username: {
+                        rule: "required;",
+                        msg: {
+                            required: "请输入用户名"
                         }
                     },
-                    beforeSubmit: function () {
-                        var checkCode = $("#verificationCode");
-                        if (!verifyCode.validate(checkCode.val())) {
-                            /*checkCode.parent().addClass("has-error");*/
-                            checkCode.trigger("showmsg", ["error", "验证码错误"]);
-                            return false;
-                        } else {
-                            return true;
+                    password: {
+                        rule: "required",
+                        msg: {
+                            required: "请输入密码"
                         }
-                    },
-                    valid: function () {
+                    }
+                },
+                beforeSubmit: function () {
+                    var checkCode = $("#verificationCode");
+                    if (!verifyCode.validate(checkCode.val())) {
+                        /*checkCode.parent().addClass("has-error");*/
+                        checkCode.trigger("showmsg", ["error", "验证码错误"]);
+                        return false;
+                    } else {
+                        return true;
+                    }
+                },
+                valid: function () {
                     var username = $("#username").val();
                     var password = $("#password").val();
                     $.ajax({
@@ -126,7 +136,6 @@
                         }
                     })
                 }
-             })
             });
 
             $('#forgetPSW').mousedown(function () {
