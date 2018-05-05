@@ -13,7 +13,7 @@
                 <div class="teacherUpload">
                     <p class="uploadTitle">已有数据备份列表</p>
                     <button id="manualBackup" type="button" class="btn btn-info upload batchDelete"><i class="icon-save" style="margin-right: 5px;"></i>手动备份</button>
-                    <p class="batchDelete saveTitle">自动备份时间：每天23:59:00</p>
+                    <p class="batchDelete saveTitle">自动备份时间：每天23:59</p>
                 </div>
             </div>
             <div class="teacherPublicDataList">
