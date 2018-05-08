@@ -6,7 +6,7 @@
     <title>院系管理员管理</title>
     <style>
         .n-error{top: 5px !important;left: -150px !important;}
-        .addUserModal div label{width: 90px !important;}
+        .addUserModal div label{width: 95px !important;}
     </style>
 </head>
 <body>
