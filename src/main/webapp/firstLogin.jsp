@@ -33,9 +33,16 @@
                 <div class="form-group">
                     <label for="firstUserJob" style="letter-spacing: 14px;">职务:</label>
                     <select id="firstUserJob" class="form-control">
-                        <option value="005" <c:if test="${sessionScope.get('userRole').role.id=='005'}">selected</c:if>>教师</option>
-                        <option value="004" <c:if test="${sessionScope.get('userRole').role.id=='004'}">selected</c:if>>教务处教师</option>
-                        <option value="003" <c:if test="${sessionScope.get('userRole').role.id=='003'}">selected</c:if>>学办教师</option>
+                        <c:choose>
+                            <c:when test="${sessionScope.get('userRole').role.id!='002'}">
+                                <option value="005" <c:if test="${sessionScope.get('userRole').role.id=='005'}">selected</c:if>>教师</option>
+                                <option value="004" <c:if test="${sessionScope.get('userRole').role.id=='004'}">selected</c:if>>教务处教师</option>
+                                <option value="003" <c:if test="${sessionScope.get('userRole').role.id=='003'}">selected</c:if>>学办教师</option>
+                            </c:when>
+                            <c:otherwise>
+                                <option value="002" selected>管理员</option>
+                            </c:otherwise>
+                        </c:choose>
                     </select>
                 </div>
                 <div class="form-group">
@@ -58,13 +65,13 @@
                 </div>
                 <div class="form-group">
                     <label for="firstUserPSW" class="forgetUserPSW">修改密码:</label>
-                    <input class="form-control" id="firstUserPSW" type="text" placeholder="请输入新密码" name="firstUserPSW"
+                    <input class="form-control" id="firstUserPSW" type="password" placeholder="请输入新密码" name="firstUserPSW"
                            data-rule="新密码:firstUserPSW;"
                            data-rule-firstUserPSW="[/^[a-zA-Z0-9]{6,18}$/, '请填写6-18位密码']">
                 </div>
                 <div class="form-group">
                     <label for="firstUserPSWAgain" class="forgetUserEmail">再次输入:</label>
-                    <input class="form-control" id="firstUserPSWAgain" type="text" placeholder="请再次输入" name="firstUserPSWAgain"
+                    <input class="form-control" id="firstUserPSWAgain" type="password" placeholder="请再次输入" name="firstUserPSWAgain"
                            data-rule="确认密码: match[firstUserPSW];">
                 </div>
                 <div class="form-group btnCont">
