@@ -26,3 +26,11 @@ a{
     opacity:0.6;
     z-index: 999999;
 }
+
+.spinText{
+    z-index: 9999999;
+    text-align: center;
+    color: #fff;
+    margin-top: 370px;
+    font-size: 18px;
+}

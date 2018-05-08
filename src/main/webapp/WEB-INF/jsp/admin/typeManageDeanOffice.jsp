@@ -60,7 +60,7 @@
                         </div>
                         <div class="form-group">
                             <label>类目属性:</label>
-                            <a id="addProperty" class="btn btn-success btn-sm" href="javascript: void(0);" style="margin-left: -30px;">添加属性</a>
+                            <a id="addProperty" class="btn btn-success btn-sm" href="javascript: void(0);" style="margin-left: 5px;">添加属性</a>
                             <a id="removeProperty" class="btn btn-warning btn-sm" href="javascript: void(0);">删除属性</a>
                             <div id="selectProperty" class="form-group"></div>
                         </div>

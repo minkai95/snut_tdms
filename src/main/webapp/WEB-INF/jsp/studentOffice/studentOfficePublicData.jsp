@@ -108,7 +108,9 @@
     </div>
 </div>
 <div class="spin"></div>
-<div id="mb"></div>
+<div id="mb">
+    <p class="spinText">首次加载时间较长，请耐心等待...</p>
+</div>
 <script>
     // 打开文件
     function openFile(id) {

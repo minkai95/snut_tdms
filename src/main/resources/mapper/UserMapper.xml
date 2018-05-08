@@ -270,7 +270,10 @@
           LEFT JOIN role ON data_class.role = role.id
           LEFT JOIN `user` ON data_class.`user` = `user`.username
           LEFT JOIN department ON data_class.department = department.code
-        WHERE department.code = #{departmentCode}
+        WHERE 1=1
+        <if test="department!=null and department!=''">
+            AND department.code = #{departmentCode}
+        </if>
         <if test="flag != null and flag!= ''">
             AND data_class.flag in ${flag}
         </if>

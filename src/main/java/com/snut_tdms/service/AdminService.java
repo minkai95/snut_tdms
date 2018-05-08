@@ -426,7 +426,17 @@ public class AdminService extends UserService{
             }
         }
         String rootPath = AdminService.class.getResource("").getPath();
-        rootPath = rootPath.substring(1,25);
+        rootPath = rootPath.substring(1,rootPath.length());
+        int cot = 0;
+        for(int i =0;i<rootPath.length();i++){
+            if ('/' == rootPath.toCharArray()[i]){
+                if(++cot==4){
+                    cot = i;
+                    break;
+                }
+            }
+        }
+        rootPath = rootPath.substring(0,cot);
         return ExcelUtilPOI.createExcel(rootPath,departmentCode,backupsType,"xls",titles,content);
     }
 

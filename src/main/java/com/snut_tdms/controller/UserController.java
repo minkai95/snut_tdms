@@ -233,7 +233,7 @@ public class UserController {
         String b = request.getParameter("description");
         String c = request.getParameter("typeContentStr");
         if (request.getParameter("fileType")==null){
-            List<DataClass> list = userService.selectDataClass(userInfo.getDepartment().getCode(),null,"(2)",null);
+            List<DataClass> list = userService.selectDataClass(null,null,"(2)",null);
             request.setAttribute("fileType",list.get(0).getId());
         }else {
             request.setAttribute("fileType",request.getParameter("fileType"));
