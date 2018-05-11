@@ -72,3 +72,19 @@
     color: #696969;
     letter-spacing: 2px;
 }
+.superWelcomeTitle{
+    position: relative;
+    top: 180px;
+    font-size: 36px;
+    text-align: center;
+    letter-spacing: 5px;
+    text-shadow: 2px 0 5px #ccc;
+}
+.superWelcomeEnglish{
+    position: relative;
+    top: 185px;
+    font-size: 26px;
+    text-align: center;
+    color: #696969;
+    letter-spacing: 2px;
+}

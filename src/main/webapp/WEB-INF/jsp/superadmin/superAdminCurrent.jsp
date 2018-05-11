@@ -8,8 +8,8 @@
 <body>
     <div class="teacherCurrentWrapper">
         <div class="currentCont">
-            <p class="welcomeTitle">欢迎使用高校资料管理系统</p>
-            <p class="welcomeEnglish">Welcome Use SNUT_TDMS System</p>
+            <p class="superWelcomeTitle">欢迎使用高校资料管理系统</p>
+            <p class="superWelcomeEnglish">Welcome Use SNUT_TDMS System</p>
         </div>
     </div>
 </body>
