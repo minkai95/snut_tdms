@@ -123,7 +123,7 @@
             var title = $('#newsTitle').val();
             var content = $('#newsContent').val();
             $.ajax({
-                url:"${ctx}/admin/publishNews?title="+title+"&content="+content,
+                url:encodeURI("${ctx}/admin/publishNews?title="+title+"&content="+content),
                 type:"POST",
                 dataType:"json",
                 success: function (result) {

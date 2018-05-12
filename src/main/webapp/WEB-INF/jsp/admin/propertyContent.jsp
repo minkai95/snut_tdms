@@ -126,7 +126,7 @@
         var classTypeId = $('#addPropertyName').val();
         var typeContentName = $('#addPropertyCont').val();
         $.ajax({
-            url:"${ctx}/admin/addTypeContent?classTypeId="+classTypeId+"&typeContentName="+typeContentName,
+            url:encodeURI("${ctx}/admin/addTypeContent?classTypeId="+classTypeId+"&typeContentName="+typeContentName),
             type:"POST",
             dataType:"json",
             success: function (result) {
@@ -153,7 +153,7 @@
                 确定: function () {
                     var description = $('#deleteReason').val();
                     $.ajax({
-                        url:"${ctx}/admin/deleteTypeContent?typeContentId="+typeContentId+"&description="+description,
+                        url:encodeURI("${ctx}/admin/deleteTypeContent?typeContentId="+typeContentId+"&description="+description),
                         type:"DELETE",
                         dataType:"json",
                         success: function (result) {
@@ -178,7 +178,7 @@
         var typeContentId = $('#typeContentId').val();
         var typeContentName = $('#updateTypeContentName').val();
         $.ajax({
-            url:"${ctx}/admin/updateTypeContent?typeContentId="+typeContentId+"&typeContentName="+typeContentName,
+            url:encodeURI("${ctx}/admin/updateTypeContent?typeContentId="+typeContentId+"&typeContentName="+typeContentName),
             type:"POST",
             dataType:"json",
             success: function (result) {
@@ -248,7 +248,7 @@
                     确定: function () {
                         var description = $('#deleteReason').val();
                         $.ajax({
-                            url:"${ctx}/admin/deleteTypeContent?typeContentId="+typeContentId+"&description="+description,
+                            url:encodeURI("${ctx}/admin/deleteTypeContent?typeContentId="+typeContentId+"&description="+description),
                             type:"DELETE",
                             dataType:"json",
                             success: function (result) {

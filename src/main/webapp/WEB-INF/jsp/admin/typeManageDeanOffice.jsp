@@ -90,7 +90,7 @@
                 property3Id = sp.find('select').eq(2).val();
             }
             $.ajax({
-                url:"${ctx}/user/addDataClass?name="+name+"&roleId=004"+"&property1Id="+property1Id+"&property2Id="+property2Id+"&property3Id="+property3Id,
+                url:encodeURI("${ctx}/user/addDataClass?name="+name+"&roleId=004"+"&property1Id="+property1Id+"&property2Id="+property2Id+"&property3Id="+property3Id),
                 type:"POST",
                 dataType:"json",
                 success: function (result) {
@@ -133,7 +133,7 @@
                     确定: function(){
                         var description = $('#deleteReason').val();
                         $.ajax({
-                            url:"${ctx}/admin/updateDataClass?flag=3"+"&dataClassId="+dataClassId+"&description="+description,
+                            url:encodeURI("${ctx}/admin/updateDataClass?flag=3"+"&dataClassId="+dataClassId+"&description="+description),
                             type:"POST",
                             dataType:"json",
                             success: function (result) {

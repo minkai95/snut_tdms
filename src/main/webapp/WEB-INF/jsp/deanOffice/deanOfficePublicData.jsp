@@ -128,7 +128,7 @@
                             确定: function () {
                                 $.ajax({
                                     type: "DELETE",
-                                    url: "${ctx}/user/deleteFile?dataId="+id+"&description="+"",
+                                    url: encodeURI("${ctx}/user/deleteFile?dataId="+id+"&description="+""),
                                     dataType: "json",
                                     success: function () {
                                         location.reload();
@@ -351,7 +351,7 @@
             var typeContentStr = typeContentArr.join("/");
             var options = {
                 dataType:"json",
-                url:"${ctx}/user/uploadFile?description="+$('#description').val()+"&fileType="+$('#fileType').val()+"&typeContentStr="+typeContentStr,
+                url:encodeURI("${ctx}/user/uploadFile?description="+$('#description').val()+"&fileType="+$('#fileType').val()+"&typeContentStr="+typeContentStr),
                 resetForm: true,
                 success: function (result) {
                     $.confirm({
@@ -380,7 +380,7 @@
                     var description = $('#deleteReason').val();
                     $.ajax({
                         type: "POST",
-                        url: "${ctx}/user/logicalDeleteDataById?id="+id+"&description="+description,
+                        url: encodeURI("${ctx}/user/logicalDeleteDataById?id="+id+"&description="+description),
                         dataType: "json",
                         success: function (result) {
                             $.confirm({
@@ -405,7 +405,7 @@
         filename = filename.replace(/\+/g,"*");
         $.ajax({
             type: "GET",
-            url: "${ctx}/user/selectFile?saveFilename="+id+"_"+filename,
+            url: encodeURI("${ctx}/user/selectFile?saveFilename="+id+"_"+filename),
             dataType: "json",
             success: function (result) {
                 if (result['message']=='您要下载的资源已被删除!') {
@@ -416,7 +416,7 @@
                             确定: function () {
                                 $.ajax({
                                     type: "DELETE",
-                                    url: "${ctx}/user/deleteFile?dataId="+id+"&description="+"",
+                                    url: encodeURI("${ctx}/user/deleteFile?dataId="+id+"&description="+""),
                                     dataType: "json",
                                     success: function (result) {
                                         location.reload();
@@ -426,7 +426,7 @@
                         }
                     })
                 }else {
-                    window.location.href = "${ctx}/user/downloadFile?saveFilename="+id+"_"+filename;
+                    window.location.href = encodeURI("${ctx}/user/downloadFile?saveFilename="+id+"_"+filename);
                 }
             }
         });
@@ -475,7 +475,7 @@
                         var description = $('#deleteReason').val();
                         $.ajax({
                             type: "POST",
-                            url: "${ctx}/user/logicalDeleteDataById?id="+ids+"&description="+description,
+                            url: encodeURI("${ctx}/user/logicalDeleteDataById?id="+ids+"&description="+description),
                             dataType: "json",
                             success: function (result) {
                                 $.confirm({

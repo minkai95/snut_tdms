@@ -124,7 +124,7 @@
                     确定: function(){
                         var description = $('#deleteReason').val();
                         $.ajax({
-                            url:"${ctx}/superAdmin/deleteDepartment?code="+code+"&description="+description,
+                            url:encodeURI("${ctx}/superAdmin/deleteDepartment?code="+code+"&description="+description),
                             type:"DELETE",
                             dataType:"json",
                             success: function (result) {
@@ -251,7 +251,7 @@
                         确定: function(){
                             var description = $('#deleteReason').val();
                             $.ajax({
-                                url:"${ctx}/superAdmin/deleteDepartment?code="+codes+"&description="+description,
+                                url:encodeURI("${ctx}/superAdmin/deleteDepartment?code="+codes+"&description="+description),
                                 type:"DELETE",
                                 dataType:"json",
                                 success: function (result) {

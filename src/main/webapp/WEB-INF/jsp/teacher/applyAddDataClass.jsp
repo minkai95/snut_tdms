@@ -189,7 +189,7 @@
             property3Id = sp.find('select').eq(2).val();
         }
         $.ajax({
-            url:"${ctx}/user/addDataClass?name="+name+"&property1Id="+property1Id+"&property2Id="+property2Id+"&property3Id="+property3Id,
+            url:encodeURI("${ctx}/user/addDataClass?name="+name+"&property1Id="+property1Id+"&property2Id="+property2Id+"&property3Id="+property3Id),
             type:"POST",
             dataType:"json",
             success: function (result) {

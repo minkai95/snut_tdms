@@ -291,7 +291,7 @@
                         var description = $('#deleteReason').val();
                         $.ajax({
                             type: "DELETE",
-                            url: "${ctx}/superAdmin/deleteAdmin?username="+username+"&description="+description,
+                            url: encodeURI("${ctx}/superAdmin/deleteAdmin?username="+username+"&description="+description),
                             dataType: "json",
                             success: function (result) {
                                 $.confirm({
@@ -398,7 +398,7 @@
                             var description = $('#deleteReason').val();
                             $.ajax({
                                 type: "DELETE",
-                                url: "${ctx}/superAdmin/deleteAdmin?username="+username+"&description="+description,
+                                url: encodeURI("${ctx}/superAdmin/deleteAdmin?username="+username+"&description="+description),
                                 dataType: "json",
                                 success: function (result) {
                                     $.confirm({

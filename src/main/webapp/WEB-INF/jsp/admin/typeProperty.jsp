@@ -56,7 +56,7 @@
         $("#addPropertyForm").on('valid.form', function () {
             var name = $('#typePropertyName').val();
             $.ajax({
-                url:"${ctx}/admin/addClassType?name="+name,
+                url:encodeURI("${ctx}/admin/addClassType?name="+name),
                 type:"POST",
                 dataType:"json",
                 success: function (result) {
@@ -84,7 +84,7 @@
                             var description = $('#deleteReason').val();
                             $.ajax({
                                 type: "DELETE",
-                                url: "${ctx}/admin/deleteTypeClass?typeClassId="+typeClassId+"&description="+description,
+                                url: encodeURI("${ctx}/admin/deleteTypeClass?typeClassId="+typeClassId+"&description="+description),
                                 dataType: "json",
                                 success: function (result) {
                                     $.confirm({

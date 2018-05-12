@@ -234,7 +234,7 @@
             var typeContentStr = typeContentArr.join("/");
             var options = {
                 dataType:"json",
-                url:"${ctx}/user/uploadFile?description="+$('#description').val()+"&fileType="+$('#fileType').val()+"&typeContentStr="+typeContentStr,
+                url:encodeURI("${ctx}/user/uploadFile?description="+$('#description').val()+"&fileType="+$('#fileType').val()+"&typeContentStr="+typeContentStr),
                 resetForm: true,
                 traditional: true,
                 success: function (result) {
@@ -264,7 +264,7 @@
                     var description = $('#deleteReason').val();
                     $.ajax({
                         type: "POST",
-                        url: "${ctx}/user/logicalDeleteDataById?id="+id+"&description="+description,
+                        url: encodeURI("${ctx}/user/logicalDeleteDataById?id="+id+"&description="+description),
                         dataType: "json",
                         success: function (result) {
                             $.confirm({
@@ -290,7 +290,7 @@
         filename = filename.replace(/\+/g,"*");
         $.ajax({
             type: "GET",
-            url: "${ctx}/user/selectFile?saveFilename="+id+"_"+filename,
+            url: encodeURI("${ctx}/user/selectFile?saveFilename="+id+"_"+filename),
             dataType: "json",
             success: function (result) {
                 if (result['message']=='您要下载的资源已被删除!') {
@@ -301,7 +301,7 @@
                             确定: function () {
                                 $.ajax({
                                     type: "DELETE",
-                                    url: "${ctx}/user/deleteFile?dataId="+id+"&description="+"",
+                                    url: encodeURI("${ctx}/user/deleteFile?dataId="+id+"&description="+""),
                                     dataType: "json",
                                     success: function () {
                                         location.reload();
@@ -314,15 +314,15 @@
                     var name = filename.split(".")[1].toLowerCase();
                     var src = result['message'];
                     if (name=="png"||name=="jpg"||name=="jpeg"){
-                        window.open("${ctx}/user/openPicture?saveFilename="+id+"_"+filename,"_blank");
+                        window.open(encodeURI("${ctx}/user/openPicture?saveFilename="+id+"_"+filename),"_blank");
                     }else if(name=="pdf"){
                         src = src+"~+~"+id+"_"+filename;
                         src = src.replace(/\\/g,"~+~");
-                        window.open("/resources/pdf/generic/web/viewer.html?file=${ctx}/user/openPDF/"+src,"_blank");
+                        window.open(encodeURI("/resources/pdf/generic/web/viewer.html?file=${ctx}/user/openPDF/"+src),"_blank");
                     }else if (name=="doc"||name=="docx"||name=="txt"||name=="xls"||name=="xlsx"||name=="ppt"||name=="pptx"){
                         $.ajax({
                             type: "GET",
-                            url: "${ctx}/user/selectFile?saveFilename="+id+"_"+filename+"&realType=pdf",
+                            url: encodeURI("${ctx}/user/selectFile?saveFilename="+id+"_"+filename+"&realType=pdf"),
                             dataType: "json",
                             success: function (result) {
                                 if (result['message'] == '您要下载的资源已被删除!') {
@@ -357,7 +357,7 @@
                                     spinner.spin(target);
                                     $.ajax({
                                         type: "POST",
-                                        url: "${ctx}/user/officeToPDF?src="+src,
+                                        url: encodeURI("${ctx}/user/officeToPDF?src="+src),
                                         dataType: "json",
                                         success: function (result) {
                                             $("#mb").css("display","none");
@@ -365,7 +365,7 @@
                                             $(ele).hide();
                                             if (result['message']==1){
                                                 src = src.replace(/~~/g,"~+~");
-                                                window.open("/resources/pdf/generic/web/viewer.html?file=${ctx}/user/openPDF/"+src,"_blank");
+                                                window.open(encodeURI("/resources/pdf/generic/web/viewer.html?file=${ctx}/user/openPDF/"+src),"_blank");
                                             }else {
                                                 $.confirm({
                                                     title: '提示',
@@ -381,7 +381,7 @@
                                 }else {
                                     src = src+"~+~"+id+"_"+filename;
                                     src = src.replace(/\\/g,"~+~");
-                                    window.open("/resources/pdf/generic/web/viewer.html?file=${ctx}/user/openPDF/"+src,"_blank");
+                                    window.open(encodeURI("/resources/pdf/generic/web/viewer.html?file=${ctx}/user/openPDF/"+src),"_blank");
                                 }
                             }
                         })
@@ -400,16 +400,6 @@
         })
     }
 
-    function deleteTempFile() {
-        $.ajax({
-            type: "DELETE",
-            url: "${ctx}/user/deleteTempFile",
-            dataType: "json",
-            success: function (result) {
-            }
-        })
-    }
-
     //下载文件
     function downloadFile(id) {
         var tr = $('#'+id+'');
@@ -417,7 +407,7 @@
         filename = filename.replace(/\+/g,"*");
         $.ajax({
             type: "GET",
-            url: "${ctx}/user/selectFile?saveFilename="+id+"_"+filename,
+            url: encodeURI("${ctx}/user/selectFile?saveFilename="+id+"_"+filename),
             dataType: "json",
             success: function (result) {
                 if (result['message']=='您要下载的资源已被删除!') {
@@ -428,7 +418,7 @@
                             确定: function () {
                                 $.ajax({
                                     type: "DELETE",
-                                    url: "${ctx}/user/deleteFile?dataId="+id+"&description="+"",
+                                    url: encodeURI("${ctx}/user/deleteFile?dataId="+id+"&description="+""),
                                     dataType: "json",
                                     success: function () {
                                         location.reload();
@@ -438,7 +428,7 @@
                         }
                     })
                 }else {
-                    window.location.href = "${ctx}/user/downloadFile?saveFilename="+id+"_"+filename;
+                    window.location.href = encodeURI("${ctx}/user/downloadFile?saveFilename="+id+"_"+filename);
                 }
             }
         })
@@ -489,7 +479,7 @@
                         var description = $('#deleteReason').val();
                         $.ajax({
                             type: "POST",
-                            url: "${ctx}/user/logicalDeleteDataById?id="+ids+"&description="+description,
+                            url: encodeURI("${ctx}/user/logicalDeleteDataById?id="+ids+"&description="+description),
                             dataType: "json",
                             success: function (result) {
                                 $.confirm({

@@ -74,16 +74,7 @@
 
             //提交验证
             var verifyCode = new GVerify("verificationCodeCont");
-            /*$.validator.setTheme('bootstrap', {
-                validClass: 'has-success',
-                invalidClass: 'has-error',
-                bindClassTo: '.form-group',
-                formClass: 'n-default n-bootstrap',
-                msgClass: 'n-right'
-            });*/
             $("#loginForm").validator({
-               /* theme: 'bootstrap',
-                timely: '2',*/
                 fields: {
                     username: {
                         rule: "required;",
@@ -101,7 +92,6 @@
                 beforeSubmit: function () {
                     var checkCode = $("#verificationCode");
                     if (!verifyCode.validate(checkCode.val())) {
-                        /*checkCode.parent().addClass("has-error");*/
                         checkCode.trigger("showmsg", ["error", "验证码错误"]);
                         return false;
                     } else {

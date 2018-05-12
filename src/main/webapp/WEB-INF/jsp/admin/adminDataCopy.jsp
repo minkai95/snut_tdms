@@ -72,7 +72,7 @@
                     },
                     确定: function () {
                         $.ajax({
-                            url:"${ctx}/admin/recoverBackupsDataBase?backupsType="+type+"&id="+id,
+                            url:encodeURI("${ctx}/admin/recoverBackupsDataBase?backupsType="+type+"&id="+id),
                             type:"POST",
                             dataType:"json",
                             success: function (result) {
@@ -94,7 +94,7 @@
 
         $('#manualBackup').click(function () {
             $.ajax({
-                url:"${ctx}/admin/backupsData?backupsType=手动备份",
+                url:encodeURI("${ctx}/admin/backupsData?backupsType=手动备份"),
                 type:"POST",
                 dataType:"json",
                 success: function (result) {

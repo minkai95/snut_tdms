@@ -237,7 +237,7 @@
                             var description = $('#deleteReason').val();
                             $.ajax({
                                 type: "DELETE",
-                                url: "${ctx}/admin/deleteUser?username="+username+"&description="+description,
+                                url: encodeURI("${ctx}/admin/deleteUser?username="+username+"&description="+description),
                                 dataType: "json",
                                 success: function (result) {
                                     $.confirm({
@@ -301,7 +301,7 @@
                         var description = $('#deleteReason').val();
                         $.ajax({
                             type: "DELETE",
-                            url: "${ctx}/admin/deleteUser?username="+username+"&description="+description,
+                            url: encodeURI("${ctx}/admin/deleteUser?username="+username+"&description="+description),
                             dataType: "json",
                             success: function (result) {
                                 $.confirm({

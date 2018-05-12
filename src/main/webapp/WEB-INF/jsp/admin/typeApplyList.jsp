@@ -112,7 +112,7 @@
                     确认: function () {
                         var description = $('#deleteReason').val();
                         $.ajax({
-                            url:"${ctx}/admin/updateDataClass?flag="+flag+"&dataClassId="+dataClassId+"&description="+description,
+                            url:encodeURI("${ctx}/admin/updateDataClass?flag="+flag+"&dataClassId="+dataClassId+"&description="+description),
                             type:"POST",
                             dataType:"json",
                             success: function (result) {
