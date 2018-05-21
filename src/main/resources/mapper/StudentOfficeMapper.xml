@@ -5,15 +5,16 @@
     <select id="selectStudentOfficeDataCount" resultType="java.lang.Integer" parameterType="java.util.Map">
         SELECT COUNT(1)
         FROM `data`
-        LEFT JOIN `user` ON `user`.username = `data`.user
+        LEFT JOIN user_info ON user_info.user = `data`.user
         LEFT JOIN data_class ON `data`.data_class = data_class.id
-        WHERE (SELECT department FROM user_info WHERE user_info.user = `user`.username) = #{department}
+        LEFT JOIN user_role ON user_role.`user`=`data`.user
+        WHERE user_info.department = #{department}
         AND `data`.flag = 0
         <if test="username!=null and username!=''">
-            AND `data`.user = #{username} AND data_class.name = '私人类型'
+            AND `data`.user = #{username} AND data_class.flag = 2
         </if>
         <if test="roleId!=null and roleId!=''">
-            AND (SELECT user_role.`user` FROM user_role WHERE role = #{roleId})=`data`.user AND data_class.name NOT IN ('私人类型')
+            AND user_role.role = #{roleId} AND data_class.flag<![CDATA[<>]]>2
         </if>
     </select>
 

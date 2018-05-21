@@ -47,9 +47,9 @@ public class DeanOfficeController {
     public String deanOfficeCurrent(HttpSession httpSession, Model model) {
         UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         UserRole userRole = (UserRole) httpSession.getAttribute("userRole");
-        Integer teacherPublicDataCount = deanOfficeService.selectDataCountByParams(1,null,"005");
-        Integer deanOfficePublicDataCount = deanOfficeService.selectDataCountByParams(1,null,"004");
-        Integer personDataCount = deanOfficeService.selectDataCountByParams(2,userInfo.getUser().getUsername(),null);
+        Integer teacherPublicDataCount = deanOfficeService.selectDataCountByParams(userInfo.getDepartment().getCode(),1,null,"005");
+        Integer deanOfficePublicDataCount = deanOfficeService.selectDataCountByParams(userInfo.getDepartment().getCode(),1,null,"004");
+        Integer personDataCount = deanOfficeService.selectDataCountByParams(userInfo.getDepartment().getCode(),2,userInfo.getUser().getUsername(),null);
         Integer dataClassCount = userService.selectDepartmentDataClassCount(userInfo.getDepartment().getCode(),userRole.getRole().getId());
         Integer noticeCount = userService.selectAllNoticeCount(userInfo.getDepartment().getCode());
         model.addAttribute("publicDataCount",teacherPublicDataCount+deanOfficePublicDataCount);

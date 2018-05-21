@@ -109,6 +109,9 @@
                 title: '提示',
                 content: '您确认驳回吗？<input style="margin-top:5px;" class="form-control" type="text" id="deleteReason" placeholder="请输入驳回原因(选填)"/>',
                 buttons: {
+                    关闭: function () {
+                        $('#myModal').modal("hide");
+                    },
                     确认: function () {
                         var description = $('#deleteReason').val();
                         $.ajax({
@@ -116,9 +119,15 @@
                             type:"POST",
                             dataType:"json",
                             success: function (result) {
+                                var ret = '';
+                                if(result['message']=='删除成功!'){
+                                    ret = '驳回成功!';
+                                }else {
+                                    ret = '驳回失败!';
+                                }
                                 $.confirm({
                                     title: '提示',
-                                    content: result['message'],
+                                    content: ret,
                                     buttons: {
                                         确定: function () {
                                             location.reload();
@@ -127,9 +136,6 @@
                                 });
                             }
                         })
-                    },
-                    关闭: function () {
-                        $('#myModal').modal("hide");
                     }
                 }
             })

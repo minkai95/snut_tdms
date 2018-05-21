@@ -208,7 +208,7 @@
             $('#handlerJob').text(tr.children('td').eq(8).text());
             $('#handlerPhone').text(tr.children('td').eq(9).text());
             $('#handlerEmail').text(tr.children('td').eq(10).text());
-            $('#handlerUsername').text(tr.children('td').eq(12).text());
+            $('#handlerUsername').text(tr.children('td:last').text());
             var operatedType = tr.children('td').eq(5).text();
             $('#operatedType').text(operatedType);
             var ul = $("#handler2")/*.children('table').eq(0)*/;

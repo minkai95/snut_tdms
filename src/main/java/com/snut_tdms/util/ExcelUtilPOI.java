@@ -24,7 +24,7 @@ public class ExcelUtilPOI {
     public static boolean createExcel(String rootPath,String departmentCode,String name, String style, List<String> titles, List<List<String>> values) {
         boolean result = false;
         //得到上传文件的保存目录，将上传的文件存放于WEB-INF目录下，不允许外界直接访问，保证上传文件的安全
-        String savePath = rootPath+"\\target\\snut_tdms\\WEB-INF\\backups";
+        String savePath = rootPath+"\\snut_tdms\\WEB-INF\\backups";
         String path = savePath+"\\"+departmentCode;
         // 创建工作簿
         Workbook workbook;

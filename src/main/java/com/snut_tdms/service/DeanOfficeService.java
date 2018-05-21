@@ -25,8 +25,9 @@ public class DeanOfficeService extends UserService{
         this.deanOfficeDao = deanOfficeDao;
     }
 
-    public Integer selectDataCountByParams(Integer dataClassFlag,String username,String roleId){
+    public Integer selectDataCountByParams(String departmentCode,Integer dataClassFlag,String username,String roleId){
         Map<String,Object> map = new HashMap<>();
+        map.put("departmentCode",departmentCode);
         map.put("dataClassFlag",dataClassFlag);
         map.put("username",username);
         map.put("roleId",roleId);

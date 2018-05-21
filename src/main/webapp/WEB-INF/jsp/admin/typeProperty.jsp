@@ -80,6 +80,8 @@
                     title: '提示',
                     content: '确认删除 '+typeText+' 类目属性？<input style="margin-top:5px;" class="form-control" type="text" id="deleteReason" placeholder="请输入删除原因(选填)"/>',
                     buttons: {
+                        取消: function() {
+                        },
                         确定: function(){
                             var description = $('#deleteReason').val();
                             $.ajax({
@@ -98,8 +100,6 @@
                                     })
                                 }
                             })
-                        },
-                        取消: function() {
                         }
                     }
                 })

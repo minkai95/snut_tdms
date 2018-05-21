@@ -115,7 +115,8 @@
                         }
                     })
                 }else {
-                    var name = filename.split(".")[1].toLowerCase();
+                    var len = filename.split(".").length;
+                    var name = filename.split(".")[len-1].toLowerCase();
                     var src = result['message'];
                     if (name=="png"||name=="jpg"||name=="jpeg"){
                         window.open(encodeURI("${ctx}/user/openPicture?saveFilename="+id+"_"+filename),"_blank");

@@ -7,7 +7,11 @@
           COUNT(1) as num
         FROM `data`
         LEFT JOIN data_class ON data_class.id = `data`.data_class
+        LEFT JOIN user_info ON user_info.user = `data`.user
         WHERE `data`.flag = 0 AND data_class.flag = ${dataClassFlag}
+        <if test="departmentCode != null and departmentCode != ''">
+            AND user_info.department = #{departmentCode}
+        </if>
         <if test="username != null and username != ''">
             AND `data`.user = #{username}
         </if>

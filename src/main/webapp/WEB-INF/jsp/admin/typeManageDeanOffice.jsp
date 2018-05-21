@@ -18,27 +18,34 @@
             </div>
         </div>
         <div class="typePropertyContent">
-            <c:forEach items="${dataClassHelpClass}" var="dataClassHelp">
-                <div id="${dataClassHelp.dataClass.id}" class="typeWrapper">
-                    <i class="icon-remove-sign removeIcon"></i>
-                    <i class="icon-angle-down dropDown"></i>
-                    <span>${dataClassHelp.dataClass.name}</span>
-                    <div class="propertyNameCont">
-                        <ul>
-                            <c:choose>
-                                <c:when test="${dataClassHelp.classTypeHelpClassList!=null && dataClassHelp.classTypeHelpClassList.size()!=0 && dataClassHelp.classTypeHelpClassList.get(0)!=null}">
-                                    <c:forEach items="${dataClassHelp.classTypeHelpClassList}" var="classTypeHelp">
-                                        <li>${classTypeHelp.classType.name}</li>
-                                    </c:forEach>
-                                </c:when>
-                                <c:otherwise>
-                                    <li style="text-align: center">暂无属性</li>
-                                </c:otherwise>
-                            </c:choose>
-                        </ul>
-                    </div>
-                </div>
-            </c:forEach>
+            <c:choose>
+                <c:when test="${dataClassHelpClass!=null && dataClassHelpClass.size()>0}">
+                    <c:forEach items="${dataClassHelpClass}" var="dataClassHelp">
+                        <div id="${dataClassHelp.dataClass.id}" class="typeWrapper">
+                            <i class="icon-remove-sign removeIcon"></i>
+                            <i class="icon-angle-down dropDown"></i>
+                            <span>${dataClassHelp.dataClass.name}</span>
+                            <div class="propertyNameCont">
+                                <ul>
+                                    <c:choose>
+                                        <c:when test="${dataClassHelp.classTypeHelpClassList!=null && dataClassHelp.classTypeHelpClassList.size()!=0 && dataClassHelp.classTypeHelpClassList.get(0)!=null}">
+                                            <c:forEach items="${dataClassHelp.classTypeHelpClassList}" var="classTypeHelp">
+                                                <li>${classTypeHelp.classType.name}</li>
+                                            </c:forEach>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <li style="text-align: center">暂无属性</li>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </ul>
+                            </div>
+                        </div>
+                    </c:forEach>
+                </c:when>
+                <c:otherwise>
+                     <p class="alert alert-info" style="text-align: center;font-size:16px;font-weight: bold;margin-top: 30px;">暂无数据</p>
+                </c:otherwise>
+            </c:choose>
         </div>
     </div>
 
