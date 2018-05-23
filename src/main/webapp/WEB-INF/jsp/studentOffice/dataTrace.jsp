@@ -54,6 +54,7 @@
                             <td style="display: none">${logHelp.operationUserInfo.phone}</td>
                             <td style="display: none">${logHelp.operationUserInfo.email}</td>
                             <td style="display:none">${logHelp.operatedType}</td>
+                            <td style="display:none">${logHelp.operationUserInfo.user.username}</td>
                             <c:if test="${logHelp.operatedType == '文件'}">
                                 <td style="display:none;">
                                     <span>${logHelp.operatedData.fileName}<c:if test="${logHelp.operatedData.fileName==null}">已被删除</c:if></span>
@@ -85,25 +86,39 @@
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="content">内容</label>
-                            <div id="content"></div>
+                           <span id="content" class="form-control"></span>
                         </div>
                         <div class="form-group">
                             <label for="description">描述</label>
-                            <div id="description"></div>
+                            <span id="description" class="form-control"></span>
                         </div>
                         <div class="form-group">
                             <label for="handler">操作者</label>
                             <div id="handler">
-                                <ul>
-                                    <li>姓名:<span id="handlerName"></span></li>
-                                    <li>职务:<span id="handlerJob"></span></li>
-                                    <li>电话:<span id="handlerPhone"></span></li>
-                                    <li>邮箱:<span id="handlerEmail"></span></li>
-                                </ul>
+                                <table class="table table-bordered">
+                                    <tbody>
+                                    <tr>
+                                        <th>用户名</th>
+                                        <th>姓名</th>
+                                        <th>职务</th>
+                                        <th>电话</th>
+                                        <th>邮箱</th>
+                                    </tr>
+                                    <tr>
+                                        <td><span id="handlerUsername"></span></td>
+                                        <td><span id="handlerName"></span></td>
+                                        <td><span id="handlerJob"></span></td>
+                                        <td><span id="handlerPhone"></span></td>
+                                        <td><span id="handlerEmail"></span></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
+                        </div>
+                        <div class="form-group">
                             <label for="handler2">被操作对象:<span id="operatedType"></span></label>
                             <div id="handler2">
-                                <ul></ul>
+                                <ul class="list-group"></ul>
                             </div>
                         </div>
                     </div>
@@ -126,6 +141,7 @@
         var tr = $('#'+logId+'');
         $('#content').text(tr.children().eq(3).text());
         $('#description').text(tr.children().eq(7).text());
+        $('#handlerUsername').text(tr.children().eq(13).text());
         $('#handlerName').text(tr.children().eq(6).text());
         $('#handlerJob').text(tr.children().eq(9).text());
         $('#handlerPhone').text(tr.children().eq(10).text());
@@ -134,14 +150,14 @@
         $('#operatedType').text(operatedType);
         var ul = $("#handler2").children('ul').eq(0);
         ul.html("");
-        var td = tr.children('td').eq(13);
+        var td = tr.children('td').eq(14);
         if (operatedType=='文件'){
-            ul.append("<li>文件名:"+td.children('span').eq(0).text()+"</li>");
-            ul.append("<li>文件类型:"+td.children('span').eq(1).text()+"</li>");
+            ul.append("<li class='list-group-item'>文件名:"+td.children('span').eq(0).text()+"</li>");
+            ul.append("<li class='list-group-item'>文件类型:"+td.children('span').eq(1).text()+"</li>");
         }else if (operatedType=='文件类型'){
-            ul.append("<li>类型名称:"+td.children('span').eq(0).text()+"</li>");
-            ul.append("<li>所属院系:"+td.children('span').eq(1).text()+"</li>");
-            ul.append("<li>所属角色:"+td.children('span').eq(2).text()+"</li>")
+            ul.append("<li class='list-group-item'>类型名称:"+td.children('span').eq(0).text()+"</li>");
+            ul.append("<li class='list-group-item'>所属院系:"+td.children('span').eq(1).text()+"</li>");
+            ul.append("<li class='list-group-item'>所属角色:"+td.children('span').eq(2).text()+"</li>")
         }
         $('#myModal').modal();
     }

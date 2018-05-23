@@ -170,19 +170,11 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <%--<ul>
-                                <li>用户名:<span id="handlerUsername"></span></li>
-                                <li>姓名:<span id="handlerName"></span></li>
-                                <li>职务:<span id="handlerJob"></span></li>
-                                <li>电话:<span id="handlerPhone"></span></li>
-                                <li>邮箱:<span id="handlerEmail"></span></li>
-                            </ul>--%>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="handler2">被操作对象:<span id="operatedType"></span></label>
                         <div id="handler2">
-                            <%--<ul></ul>--%>
                         </div>
                     </div>
                 </div>
@@ -225,11 +217,6 @@
                 handlerTable.children("tr").children("td").each(function(){
                     $(this).addClass("tableThStyle");
                 });
-                /*ul.append("<li>用户名:"+td.children('span').eq(0).text()+"</li>");
-                ul.append("<li>姓名:"+td.children('span').eq(1).text()+"</li>");
-                ul.append("<li>职务:"+td.children('span').eq(2).text()+"</li>");
-                ul.append("<li>电话:"+td.children('span').eq(3).text()+"</li>");
-                ul.append("<li>邮箱:"+td.children('span').eq(4).text()+"</li>")*/
             }else if (operatedType=='文件'){
                 ul.append("<p><span style='font-weight: bold'>文件名：</span>"+ td.children('span').eq(0).text()+ "</p>");
                 ul.append("<p><span style='font-weight: bold'>文件类型：</span>"+ td.children('span').eq(1).text()+ "</p>");
@@ -244,14 +231,6 @@
                 handlerTable.children("tr").children("td").each(function(){
                     $(this).addClass("tableThStyle");
                 });
-               /* ul.append("<li>文件名:"+td.children('span').eq(0).text()+"</li>");
-                ul.append("<li>文件类型:"+td.children('span').eq(1).text()+"</li>");
-                ul.append("<p style='font-weight: bold'>上传者:</p>");
-                ul.append("<li>用户名:"+td.children('span').eq(2).text()+"</li>");
-                ul.append("<li>姓名:"+td.children('span').eq(3).text()+"</li>");
-                ul.append("<li>职务:"+td.children('span').eq(4).text()+"</li>");
-                ul.append("<li>电话:"+td.children('span').eq(5).text()+"</li>");
-                ul.append("<li>邮箱:"+td.children('span').eq(6).text()+"</li>")*/
             }else if (operatedType=='院系'){
                 ul.append("<table id='handlerTable' class='table table-bordered'></table>");
                 var handlerTable = $("#handlerTable");
@@ -276,15 +255,10 @@
                 handlerTable.children("tr").children("td").each(function(){
                     $(this).addClass("tableThStyle");
                 });
-               /* ul.append("<li>类型名称:"+td.children('span').eq(0).text()+"</li>");
-                ul.append("<li>所属院系:"+td.children('span').eq(1).text()+"</li>");
-                ul.append("<li>所属角色:"+td.children('span').eq(2).text()+"</li>")*/
             }else if (operatedType=='公告'){
                 ul.append("<p><span style='font-weight: bold'>公共标题：</span>"+ td.children('span').eq(0).text()+ "</p>");
                 ul.append("<p><span style='font-weight: bold'>公共内容：</span></p>");
                 ul.append("<span class='spanControl'>"+ td.children('span').eq(1).text() +"</span>");
-                /*ul.append("<li><span class='liTitle'>公告标题:</span>"+td.children('span').eq(0).text()+"</li>");
-                ul.append("<li><span class='liTitle'>公告内容:</span>"+td.children('span').eq(1).text()+"</li>");*/
             }else if (operatedType=='类目属性'){
                 ul.append("<table id='handlerTable' class='table table-bordered'></table>");
                 var handlerTable = $("#handlerTable");
@@ -296,8 +270,6 @@
                 handlerTable.children("tr").children("td").each(function(){
                     $(this).addClass("tableThStyle");
                 });
-                /*ul.append("<li>属性名称:"+td.children('span').eq(0).text()+"</li>");
-                ul.append("<li>所属院系:"+td.children('span').eq(1).text()+"</li>");*/
             }else if (operatedType=='类目属性内容'){
                 ul.append("<table id='handlerTable' class='table table-bordered'></table>");
                 var handlerTable = $("#handlerTable");
@@ -309,8 +281,6 @@
                 handlerTable.children("tr").children("td").each(function(){
                     $(this).addClass("tableThStyle");
                 });
-                /*ul.append("<li>属性内容名称:"+td.children('span').eq(0).text()+"</li>");
-                ul.append("<li>所属类目属性:"+td.children('span').eq(1).text()+"</li>");*/
             }
             $("#myModal").modal();
         }
