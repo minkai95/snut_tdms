@@ -4,6 +4,9 @@
 <html>
 <head>
     <title>申请列表</title>
+    <style>
+        .btn-danger{padding: 3px 10px;}
+    </style>
 </head>
 <body>
 <div class="teacherCurrentWrapper">
@@ -72,16 +75,16 @@
                         <td style="width: 250px;  text-align: center;">
                             <c:choose>
                                 <c:when test="${dataClassHelp.dataClass.flag==0}">
-                                    <button type="button" class="btn btn-info btn-sm" onclick="handleDataClass('${dataClassHelp.dataClass.id}',1)"><i class="icon-pencil"> 同意</i></button>
-                                    <button type="button" class="btn btn-danger btn-sm" onclick="handleDataClass('${dataClassHelp.dataClass.id}',3)"><i class="icon-remove-circle"></i> 驳回</button>
+                                    <button type="button" class="btn btn-info btn-sm" onclick="handleDataClass('${dataClassHelp.dataClass.id}',1)"><i class="icon-ok"> 同意</i></button>
+                                    <button type="button" class="btn btn-danger btn-sm" onclick="handleDataClass('${dataClassHelp.dataClass.id}',3)"><i class="icon-remove"></i> 驳回</button>
                                 </c:when>
                                 <c:otherwise>
                                     <c:choose>
                                         <c:when test="${dataClassHelp.dataClass.flag==1}">
-                                            <button type="button" class="btn btn-info btn-sm" disabled><i class="icon-pencil"> 已同意</i></button>
+                                            <button type="button" class="btn btn-success btn-sm" disabled><i class="icon-ok-sign"> 已同意</i></button>
                                         </c:when>
                                         <c:otherwise>
-                                            <button type="button" class="btn btn-info btn-sm" disabled><i class="icon-pencil"> 已驳回</i></button>
+                                            <button type="button" class="btn btn-warning btn-sm" disabled><i class="icon-remove-sign"> 已驳回</i></button>
                                         </c:otherwise>
                                     </c:choose>
                                 </c:otherwise>
