@@ -53,7 +53,8 @@
                     </div>
                     <div class="form-group">
                         <label for="content">内容</label>
-                        <div id="content"></div>
+                        <pre id="content" style="white-space: pre-wrap;line-height: 26px;font-size: 14px;">
+                        </pre>
                     </div>
                     <div class="form-group">
                         <p class="date" style="text-align: right; margin-top: 30px; font-weight: bold;">
