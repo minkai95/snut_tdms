@@ -62,7 +62,8 @@
                     </div>
                     <div class="form-group">
                         <label for="content">内容</label>
-                        <div id="content"></div>
+                        <pre id="content" style="white-space: pre-wrap;line-height: 26px;font-size: 14px;">
+                        </pre>
                     </div>
                     <div class="form-group">
                         <p class="date" style="text-align: right; margin-top: 30px; font-weight: bold;">
@@ -121,7 +122,8 @@
         // 提交发布公告
         $("#publishNewsForm").on('valid.form', function () {
             var title = $('#newsTitle').val();
-            var content = $('#newsContent').val();
+            var content = $.trim($('#newsContent').val());
+            console.log(content);
             $.ajax({
                 url:encodeURI("${ctx}/admin/publishNews?title="+title+"&content="+content),
                 type:"POST",
