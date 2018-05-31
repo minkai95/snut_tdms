@@ -17,7 +17,7 @@
     <context:annotation-config/>
     <!-- 定时备份为每天固定时间点执行备份任务-->
     <task:scheduled-tasks>
-        <task:scheduled ref="quartzTestBean" method="timingBackup" cron="0 0 0 ? * *" />
+        <task:scheduled ref="quartzTestBean" method="timingBackup" cron="0 44 13 ? * *" />
     </task:scheduled-tasks>
 
     <bean id="quartzTestBean" class="com.snut_tdms.service.AdminService"/>

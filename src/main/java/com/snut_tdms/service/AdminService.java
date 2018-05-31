@@ -490,6 +490,7 @@ public class AdminService extends UserService{
      * 定时备份全校所有院系的文件数据
      */
     public void timingBackup(){
+        System.out.println("---自动备份开始---");
         String rootPath = AdminService.class.getResource("").getPath();
         rootPath = rootPath.substring(1,25);
         List<Department> departmentList = selectAllDepartment(null);
@@ -503,5 +504,6 @@ public class AdminService extends UserService{
                 copyFile(savePath, newPath);
             }
         }
+        System.out.println("---自动备份结束---");
     }
 }

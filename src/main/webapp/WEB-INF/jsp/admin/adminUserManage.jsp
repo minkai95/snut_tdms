@@ -6,7 +6,8 @@
     <title>用户管理</title>
     <style>
         .n-error{top: 5px !important;left: -150px !important;  }
-        .addUserModal div label{width: 90px !important;}
+        .addUserModal div label{min-width: 95px !important;}
+        .addUserModal{padding-bottom: 0;}
     </style>
 </head>
 <body>
