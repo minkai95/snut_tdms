@@ -122,7 +122,7 @@
         // 提交发布公告
         $("#publishNewsForm").on('valid.form', function () {
             var title = $('#newsTitle').val();
-            var content = $.trim($('#newsContent').val());
+            var content = $('#newsContent').val();
             console.log(content);
             $.ajax({
                 url:encodeURI("${ctx}/admin/publishNews?title="+title+"&content="+content),
