@@ -38,6 +38,9 @@
                 </div>
             </div>
         </c:forEach>
+        <c:if test="${haveDataClassList==null || haveDataClassList.size()==0 || haveDataClassList.get(0)==null}">
+            <p class="alert alert-info" style="text-align: center;font-size:16px;font-weight: bold;margin-top: 20px;">暂无数据</p>
+        </c:if>
     </div>
     <div class="waitCheckWrapper">
         <p class="uploadTitle">待审核类目属性列表</p>
@@ -62,6 +65,9 @@
                     </div>
                 </div>
             </c:forEach>
+            <c:if test="${applyingDataClassList==null || applyingDataClassList.size()==0 || applyingDataClassList.get(0)==null}">
+                <p class="alert alert-info" style="text-align: center;font-size:16px;font-weight: bold;margin-top: 20px;">暂无数据</p>
+            </c:if>
         </div>
     </div>
 </div>

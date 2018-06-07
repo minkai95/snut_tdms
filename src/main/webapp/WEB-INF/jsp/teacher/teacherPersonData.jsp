@@ -35,7 +35,7 @@
                         <td>${dataHelp.userInfo.name}</td>
                         <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${dataHelp.data.submitTime}"/></td>
                         <td>私有资料</td>
-                        <td style="width: 210px;  text-align: center;">
+                        <td style="min-width: 210px;  text-align: center;">
                             <button type="button" onclick="openFile('${dataHelp.data.id}')" class="btn btn-info btn-sm"><i class="icon-search"></i> 预览</button>
                             <button type="button" onclick="downloadFile('${dataHelp.data.id}')" class="btn btn-primary btn-sm"><i class="icon-download"></i> 下载</button>
                             <button type="button" onclick="deleteFile('${dataHelp.data.id}')" class="btn btn-danger btn-sm"><i class="icon-remove-circle"></i> 删除</button>

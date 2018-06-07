@@ -227,11 +227,7 @@ public class UserController {
     @RequestMapping(value = "/uploadFile",method = RequestMethod.POST)
     @ResponseBody
     public JSONObject uploadFile(HttpServletRequest request,HttpSession httpSession) {
-        UserInfo userInfo = (UserInfo) httpSession.getAttribute("userInfo");
         JSONObject jsonObject = new JSONObject();
-        String a = request.getParameter("fileType");
-        String b = request.getParameter("description");
-        String c = request.getParameter("typeContentStr");
         if (request.getParameter("fileType")==null){
             List<DataClass> list = userService.selectDataClass(null,null,"(2)",null);
             request.setAttribute("fileType",list.get(0).getId());
