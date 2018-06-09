@@ -126,6 +126,11 @@ public class SuperAdminService extends UserService {
                 reDepartmentCodeList.add(s);
             }
         }
+        for(String s:departmentCodeList){
+            if (superAdminDao.selectUserByDepartment(s)>0) {
+                return "删除失败，该学院用户数据不为空!";
+            }
+        }
         int count = superAdminDao.deleteDepartmentListByCodes(departmentCodeList);
         String result = "";
         if(count>0 && count<departmentCodeList.size()){

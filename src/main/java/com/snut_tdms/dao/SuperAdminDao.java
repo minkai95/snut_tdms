@@ -30,6 +30,8 @@ public interface SuperAdminDao extends UserDao{
 
     int recoverData(String dataId);
 
+    Integer selectUserByDepartment(String departmentCode);
+
     List<Log> selectAllLogsByPage(Map<String,Object> map);
 
     List<UserRole> selectAllAdminByPage(Map<String,Object> map);

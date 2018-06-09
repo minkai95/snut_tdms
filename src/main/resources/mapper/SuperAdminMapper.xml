@@ -127,5 +127,8 @@
         LEFT JOIN role ON role.id = user_role.role
         WHERE role.id = '002'
     </select>
+    <select id="selectUserByDepartment" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM user_info WHERE department = #{0}
+    </select>
 
 </mapper>
